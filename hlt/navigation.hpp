@@ -13,7 +13,7 @@ namespace hlt {
                 const Vector& target,
                 const Entity& entity_to_check)
         {
-            const Vector &location = entity_to_check.location;
+            const Vector &location = entity_to_check.pos;
             if (location == start || location == target) {
                 return;
             }
@@ -51,13 +51,13 @@ namespace hlt {
                 return { Move::noop(), false };
             }
 
-            const double distance = ship.location.dist(target);
-            const double angle = ship.location.angle_between(target);
+            const double distance = ship.pos.dist(target);
+            const double angle = ship.pos.angle_between(target);
 
-            if (avoid_obstacles && !objects_between(map, ship.location, target).empty()) {
+            if (avoid_obstacles && !objects_between(map, ship.pos, target).empty()) {
                 const double new_target_dx = std::cos(angle + angular_step_rad) * distance;
                 const double new_target_dy = std::sin(angle + angular_step_rad) * distance;
-                const Vector new_target = { ship.location.x + new_target_dx, ship.location.y + new_target_dy };
+                const Vector new_target = { ship.pos.x + new_target_dx, ship.pos.y + new_target_dy };
 
                 return navigate_ship_towards_target(
                         map, ship, new_target, max_thrust, true, (max_corrections - 1), angular_step_rad);
@@ -83,7 +83,7 @@ namespace hlt {
             const int max_corrections = constants::MAX_NAVIGATION_CORRECTIONS;
             const bool avoid_obstacles = true;
             const double angular_step_rad = M_PI / 180.0;
-            const Vector& target = ship.location.closest_point(dock_target.location, dock_target.radius);
+            const Vector& target = ship.pos.closest_point(dock_target.pos, dock_target.radius);
 
             return navigate_ship_towards_target(
                     map, ship, target, max_thrust, avoid_obstacles, max_corrections, angular_step_rad);

@@ -12,7 +12,7 @@ namespace hlt {
 
         EntityId entity_id{};
         PlayerId owner_id{};
-        Vector location{};
+        Vector pos{};
         int health{};
         double radius{};
 
@@ -64,7 +64,7 @@ namespace hlt {
 
         /// Check if this ship is close enough to dock to the given planet.
         bool can_dock(const Planet &planet) const {
-            return location.dist(planet.location) <= (constants::SHIP_RADIUS + constants::DOCK_RADIUS + planet.radius);
+            return pos.dist(planet.pos) <= (constants::SHIP_RADIUS + constants::DOCK_RADIUS + planet.radius);
         }
     };
 

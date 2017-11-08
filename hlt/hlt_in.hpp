@@ -18,8 +18,8 @@ namespace hlt {
             Ship ship;
 
             iss >> ship.entity_id;
-            iss >> ship.location.x;
-            iss >> ship.location.y;
+            iss >> ship.pos.x;
+            iss >> ship.pos.y;
             iss >> ship.health;
 
             // No longer in the game, but still part of protocol.
@@ -45,8 +45,8 @@ namespace hlt {
             Planet planet;
 
             iss >> planet.entity_id;
-            iss >> planet.location.x;
-            iss >> planet.location.y;
+            iss >> planet.pos.x;
+            iss >> planet.pos.y;
             iss >> planet.health;
             iss >> planet.radius;
             iss >> planet.docking_spots;
