@@ -28,25 +28,6 @@ namespace hlt {
         Undocking = 3,
     };
 
-    struct Ship : Entity {
-        /// The turns left before the ship can fire again.
-        int weapon_cooldown;
-
-        ShipDockingStatus docking_status;
-
-        /// The number of turns left to complete (un)docking.
-        int docking_progress;
-
-        /// The id of the planet this ship is docked to. Only valid if
-        /// Ship::docking_status is -not- DockingStatus::Undocked.
-        EntityId docked_planet;
-
-        /// Check if this ship is close enough to dock to the given planet.
-        bool can_dock(const Planet &planet) const {
-            return location.dist(planet.location) <= (constants::SHIP_RADIUS + constants::DOCK_RADIUS + planet.radius);
-        }
-    };
-
     struct Planet : Entity {
         bool owned;
 
@@ -67,6 +48,27 @@ namespace hlt {
             return docked_ships.size() == docking_spots;
         }
     };
+
+    struct Ship : Entity {
+        /// The turns left before the ship can fire again.
+        int weapon_cooldown{};
+
+        ShipDockingStatus docking_status;
+
+        /// The number of turns left to complete (un)docking.
+        int docking_progress{};
+
+        /// The id of the planet this ship is docked to. Only valid if
+        /// Ship::docking_status is -not- DockingStatus::Undocked.
+        EntityId docked_planet{};
+
+        /// Check if this ship is close enough to dock to the given planet.
+        bool can_dock(const Planet &planet) const {
+            return location.dist(planet.location) <= (constants::SHIP_RADIUS + constants::DOCK_RADIUS + planet.radius);
+        }
+    };
+
+
 }
 
 
