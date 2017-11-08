@@ -18,6 +18,8 @@ namespace hlt {
 
         double dist(const Vector &target) const;
 
+        double dist_sq(const Vector &target) const;
+
         Vector closest_point(const Vector &center, double radius) const;
 
         std::tuple<Vector, Vector> tangents(const Vector &center, double radius) const;
@@ -29,6 +31,12 @@ namespace hlt {
         double length() const;
 
         Vector normalize() const;
+
+        double dist_line(const Vector &a, const Vector &b) const;
+
+        double dot_prod(const Vector &v) const;
+
+        double cross_prod(const Vector &v) const;
 
         Vector operator-(const Vector &v) const;
 

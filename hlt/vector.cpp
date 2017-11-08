@@ -6,12 +6,16 @@
 namespace hlt {
     Vector::Vector(double x, double y) : x(x), y(y) {}
 
-    double Vector::dist(const Vector &target) const{
+    double Vector::dist_sq(const Vector &target) const {
         const Vector d = *this - target;
-        return std::sqrt(d.x * d.x + d.y * d.y);
+        return d.x * d.x + d.y * d.y;
     }
 
-    Vector Vector::closest_point(const Vector &center, double radius) const{
+    double Vector::dist(const Vector &target) const {
+        return std::sqrt(dist_sq(target));
+    }
+
+    Vector Vector::closest_point(const Vector &center, double radius) const {
         auto angle = center.angle_between(*this);
         return {center.x + radius * cos(angle), center.y + radius * sin(angle)};
     }
@@ -39,38 +43,53 @@ namespace hlt {
      * @param v
      * @return angle in <b>RAD</b>
      */
-    double Vector::angle_between(Vector v) const{
+    double Vector::angle_between(Vector v) const {
         return (v - *this).angle();
     }
 
-    double Vector::length()const {
+    double Vector::length() const {
         return sqrt(x * x + y * y);
     }
 
-    Vector Vector::normalize() const{
+    Vector Vector::normalize() const {
         auto l = length();
         return {x / l, y / l};
     }
 
-    Vector Vector::operator-(const Vector &v) const{
+    double Vector::dist_line(const Vector &a, const Vector &b) const {
+        auto end = b - a;
+        auto x = *this - a;
+        auto area = x.cross_prod(end);
+        return area / end.length();
+    }
+
+    Vector Vector::operator-(const Vector &v) const {
         return {x - v.x, y - v.y};
     }
 
-    Vector Vector::operator+(const Vector &v)const {
+    Vector Vector::operator+(const Vector &v) const {
         return {x + v.x, y + v.y};
     }
 
-    Vector Vector::operator/(double u) const{
+    Vector Vector::operator/(double u) const {
         return {x / u, y / u};
     }
 
-    Vector Vector::operator*(double u)const {
+    Vector Vector::operator*(double u) const {
         return {x * u, y * u};
     }
 
     std::ostream &operator<<(std::ostream &out, const Vector &location) {
         out << '(' << location.x << ", " << location.y << ')';
         return out;
+    }
+
+    double Vector::dot_prod(const Vector &v) const {
+        return x * v.x + y * v.y;
+    }
+
+    double Vector::cross_prod(const Vector &v) const {
+        return x * v.y - y * v.x;
     }
 
     double rad_to_deg(double rad) {
@@ -80,4 +99,5 @@ namespace hlt {
     double deg_to_rad(double deg) {
         return deg / 180 * M_PI;
     }
+
 }
