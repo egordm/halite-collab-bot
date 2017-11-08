@@ -47,7 +47,11 @@ compile_commands.json
 CTestTestfile.cmake
 
 *.filters
-*.sln
 *.vcxproj
 *.sdf
 *.suo
+*.ilk
+*.pdb
+*.idb
+*.tlog
+*.log
