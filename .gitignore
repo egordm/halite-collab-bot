@@ -46,3 +46,12 @@ install_manifest.txt
 compile_commands.json
 CTestTestfile.cmake
 
+*.filters
+*.vcxproj
+*.sdf
+*.suo
+*.ilk
+*.pdb
+*.idb
+*.tlog
+*.log
