@@ -1,6 +1,6 @@
 #pragma once
 
-#include "location.hpp"
+#include "vector.hpp"
 #include "types.hpp"
 
 namespace hlt {

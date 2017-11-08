@@ -3,7 +3,7 @@
 #include <algorithm>
 
 #include "entity.hpp"
-#include "location.hpp"
+#include "vector.hpp"
 
 namespace hlt {
     namespace collision {
@@ -30,12 +30,12 @@ namespace hlt {
             // and substitute into the equation of a circle
             // Solve for t
             const double circle_radius = circle.radius;
-            const double start_x = start.pos_x;
-            const double start_y = start.pos_y;
-            const double end_x = end.pos_x;
-            const double end_y = end.pos_y;
-            const double center_x = circle.location.pos_x;
-            const double center_y = circle.location.pos_y;
+            const double start_x = start.x;
+            const double start_y = start.y;
+            const double end_x = end.x;
+            const double end_y = end.y;
+            const double center_x = circle.location.x;
+            const double center_y = circle.location.y;
             const double dx = end_x - start_x;
             const double dy = end_y - start_y;
 
@@ -49,7 +49,7 @@ namespace hlt {
 
             if (a == 0.0) {
                 // Start and end are the same point
-                return start.get_distance_to(circle.location) <= circle_radius + fudge;
+                return start.dist(circle.location) <= circle_radius + fudge;
             }
 
             // Time along segment when closest to the circle (vertex of the quadratic)
@@ -60,7 +60,7 @@ namespace hlt {
 
             const double closest_x = start_x + dx * t;
             const double closest_y = start_y + dy * t;
-            const double closest_distance = Vector{ closest_x, closest_y }.get_distance_to(circle.location);
+            const double closest_distance = Vector{closest_x, closest_y}.dist(circle.location);
 
             return closest_distance <= circle_radius + fudge;
         }

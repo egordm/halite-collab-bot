@@ -51,13 +51,13 @@ namespace hlt {
                 return { Move::noop(), false };
             }
 
-            const double distance = ship.location.get_distance_to(target);
+            const double distance = ship.location.dist(target);
             const double angle_rad = ship.location.orient_towards_in_rad(target);
 
             if (avoid_obstacles && !objects_between(map, ship.location, target).empty()) {
                 const double new_target_dx = cos(angle_rad + angular_step_rad) * distance;
                 const double new_target_dy = sin(angle_rad + angular_step_rad) * distance;
-                const Vector new_target = { ship.location.pos_x + new_target_dx, ship.location.pos_y + new_target_dy };
+                const Vector new_target = { ship.location.x + new_target_dx, ship.location.y + new_target_dy };
 
                 return navigate_ship_towards_target(
                         map, ship, new_target, max_thrust, true, (max_corrections - 1), angular_step_rad);
