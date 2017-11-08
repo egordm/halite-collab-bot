@@ -2,8 +2,7 @@
 
 #include "map.hpp"
 #include "types.hpp"
-#include "ship.hpp"
-#include "planet.hpp"
+#include "entities.hpp"
 
 namespace hlt {
     class Map {

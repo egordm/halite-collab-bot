@@ -13,6 +13,8 @@ namespace hlt {
     struct Vector {
         double x, y;
 
+        Vector() : x(0), y(0) {};
+
         Vector(double x, double y);
 
         double dist(const Vector &target) const;

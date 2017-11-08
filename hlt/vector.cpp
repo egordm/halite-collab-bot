@@ -66,7 +66,7 @@ namespace hlt {
     }
 
     Vector Vector::normalize() {
-        auto length = length();
-        return {x / length, y / length};
+        auto l = length();
+        return {x / l, y / l};
     }
 }

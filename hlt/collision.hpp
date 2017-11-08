@@ -2,7 +2,6 @@
 
 #include <algorithm>
 
-#include "entity.hpp"
 #include "vector.hpp"
 
 namespace hlt {

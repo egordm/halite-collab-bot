@@ -4,6 +4,7 @@
 #include <iostream>
 
 #include "map.hpp"
+#include "entities.hpp"
 
 namespace hlt {
     namespace in {
