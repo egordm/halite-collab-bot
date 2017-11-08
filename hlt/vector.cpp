@@ -1,4 +1,5 @@
 #include <cmath>
+#include <tuple>
 
 #include "vector.hpp"
 
@@ -6,14 +7,25 @@ namespace hlt {
     Vector::Vector(double x, double y) : x(x), y(y) {}
 
     double Vector::dist(const Vector &target) const{
-        const double dx = x - target.x;
-        const double dy = y - target.y;
-        return std::sqrt(dx * dx + dy * dy);
+        const Vector d = *this - target;
+        return std::sqrt(d.x * d.x + d.y * d.y);
     }
 
-    Vector Vector::closest_point(const Vector &target, double radius) const{
-        auto angle = target.angle_between(*this);
-        return {target.x + radius * cos(angle), target.y + radius * sin(angle)};
+    Vector Vector::closest_point(const Vector &center, double radius) const{
+        auto angle = center.angle_between(*this);
+        return {center.x + radius * cos(angle), center.y + radius * sin(angle)};
+    }
+
+    std::tuple<Vector, Vector> Vector::tangents(const Vector &center, double radius) const {
+        auto diff = center - *this;
+        auto dst = dist(center);
+        auto a = asin(radius / dst);
+        auto b = atan2(diff.y, diff.x);
+        auto ta = b - a;
+        auto tb = b + a;
+
+        return std::make_tuple(center + Vector(radius * sin(ta), radius * -cos(ta)),
+                               center + Vector(radius * -sin(tb), radius * cos(tb)));
     }
 
     /***

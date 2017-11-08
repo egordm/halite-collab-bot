@@ -18,7 +18,9 @@ namespace hlt {
 
         double dist(const Vector &target) const;
 
-        Vector closest_point(const Vector &target, double radius) const;
+        Vector closest_point(const Vector &center, double radius) const;
+
+        std::tuple<Vector, Vector> tangents(const Vector &center, double radius) const;
 
         double angle() const;
 
