@@ -1,9 +1,9 @@
 #pragma once
 
+#include <cmath>
 #include "collision.hpp"
 #include "map.hpp"
 #include "move.hpp"
-#include "util.hpp"
 
 namespace hlt {
     namespace navigation {
@@ -52,11 +52,11 @@ namespace hlt {
             }
 
             const double distance = ship.location.dist(target);
-            const double angle_rad = ship.location.orient_towards_in_rad(target);
+            const double angle = ship.location.angle_between(target);
 
             if (avoid_obstacles && !objects_between(map, ship.location, target).empty()) {
-                const double new_target_dx = cos(angle_rad + angular_step_rad) * distance;
-                const double new_target_dy = sin(angle_rad + angular_step_rad) * distance;
+                const double new_target_dx = std::cos(angle + angular_step_rad) * distance;
+                const double new_target_dy = std::sin(angle + angular_step_rad) * distance;
                 const Vector new_target = { ship.location.x + new_target_dx, ship.location.y + new_target_dy };
 
                 return navigate_ship_towards_target(
@@ -71,9 +71,7 @@ namespace hlt {
                 thrust = max_thrust;
             }
 
-            const int angle_deg = util::angle_rad_to_deg_clipped(angle_rad);
-
-            return { Move::thrust(ship.entity_id, thrust, angle_deg), true };
+            return {Move::thrust(ship.entity_id, thrust, static_cast<const int>(rad_to_deg(angle))), true };
         }
 
         static possibly<Move> navigate_ship_to_dock(
@@ -85,7 +83,7 @@ namespace hlt {
             const int max_corrections = constants::MAX_NAVIGATION_CORRECTIONS;
             const bool avoid_obstacles = true;
             const double angular_step_rad = M_PI / 180.0;
-            const Vector& target = ship.location.get_closest_point(dock_target.location, dock_target.radius);
+            const Vector& target = ship.location.closest_point(dock_target.location, dock_target.radius);
 
             return navigate_ship_towards_target(
                     map, ship, target, max_thrust, avoid_obstacles, max_corrections, angular_step_rad);

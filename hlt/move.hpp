@@ -1,7 +1,6 @@
 #pragma once
 
 #include "types.hpp"
-#include "util.hpp"
 
 namespace hlt {
     enum class MoveType {
@@ -32,10 +31,6 @@ namespace hlt {
 
         static Move thrust(const EntityId ship_id, const int thrust, const int angle_deg) {
             return { MoveType::Thrust, ship_id, thrust, angle_deg, 0 };
-        }
-
-        static Move thrust_rad(const EntityId ship_id, const int thrust, const double angle_rad) {
-            return { MoveType::Thrust, ship_id, thrust, util::angle_rad_to_deg_clipped(angle_rad), 0 };
         }
     };
 }

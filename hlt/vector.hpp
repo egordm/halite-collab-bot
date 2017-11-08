@@ -3,7 +3,6 @@
 #include <ostream>
 
 #include "constants.hpp"
-#include "util.hpp"
 
 #ifndef M_PI
 #define M_PI (3.14159265358979323846)
@@ -19,32 +18,32 @@ namespace hlt {
 
         double dist(const Vector &target) const;
 
-        int orient_towards_in_deg(const Vector &target) const;
+        Vector closest_point(const Vector &target, double radius) const;
 
-        double orient_towards_in_rad(const Vector &target) const;
+        double angle() const;
 
-        Vector get_closest_point(const Vector &target, const double target_radius) const;
+        double angle_between(Vector v) const;
+
+        double length() const;
+
+        Vector normalize() const;
+
+        Vector operator-(const Vector &v) const;
+
+        Vector operator+(const Vector &v) const;
+
+        Vector operator/(double u) const;
+
+        Vector operator*(double u) const;
 
         friend std::ostream &operator<<(std::ostream &out, const Vector &location);
-
-        double angle();
-
-        double angle_between(Vector v);
-
-        Vector operator-(const Vector &v);
-
-        Vector operator+(const Vector &v);
-
-        Vector operator/(double u);
-
-        Vector operator*(double u);
-
-        double length();
-
-        Vector normalize();
     };
 
     static bool operator==(const Vector &l1, const Vector &l2) {
         return l1.x == l2.x && l1.y == l2.y;
     }
+
+    double rad_to_deg(double rad);
+
+    double deg_to_rad(double deg);
 }
