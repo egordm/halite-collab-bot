@@ -58,11 +58,8 @@ namespace hlt {
         /// The number of turns left to complete (un)docking.
         int docking_progress{};
 
-        /// The id of the planet this ship is docked to. Only valid if
-        /// Ship::docking_status is -not- DockingStatus::Undocked.
         EntityId docked_planet{};
 
-        /// Check if this ship is close enough to dock to the given planet.
         bool can_dock(const Planet &planet) const {
             return pos.dist(planet.pos) <= (constants::SHIP_RADIUS + constants::DOCK_RADIUS + planet.radius);
         }
