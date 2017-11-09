@@ -63,10 +63,11 @@ namespace bot{
             SortPlanets(map);
             RecordShipSpeed(map);
             for(const auto ship : map.ships.at(id)){
-                //hlt::Planet target = ClosestPlanet(emptyPlanets, ship.pos);
-                //hlt::Vector gotoPos = target.pos;
-                hlt::Move move = bot::navigation::move_towards(map, ship, hlt::Vector(0, 0), false);
-                moves.push_back(move);
+                hlt::Planet target = ClosestPlanet(emptyPlanets, ship.pos);
+                hlt::Vector gotoPos = target.pos;
+                //hlt::Move move = bot::navigation::move_towards(map, ship, gotoPos, false);
+                const hlt::possibly<hlt::Move> move = hlt::navigation::navigate_ship_to_dock(map, ship, target, 7);
+                if(move.second) moves.push_back(move.first);
             }
             round++;
         }
