@@ -2,7 +2,7 @@
 #include "hlt/navigation.hpp"
 
 int main() {
-    const hlt::Metadata metadata = hlt::initialize("IvanTheTerrible");
+    const hlt::Metadata metadata = hlt::initialize("Egornator");
     const hlt::PlayerId player_id = metadata.player_id;
 
     const hlt::Map& initial_map = metadata.initial_map;
@@ -36,9 +36,9 @@ int main() {
                     moves.push_back(hlt::Move::dock(ship.entity_id, planet.entity_id));
                     break;
                 }
-
+                
                 const hlt::possibly<hlt::Move> move =
-                        hlt::navigation::navigate_ship_to_dock(map, ship, planet, hlt::constants::MAX_SPEED / 2);
+                        hlt::navigation::navigate_ship_to_dock(map, ship, planet, hlt::constants::MAX_SPEED / 1);
                 if (move.second) {
                     moves.push_back(move.first);
                 }
