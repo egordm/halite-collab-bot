@@ -37,7 +37,7 @@ namespace bot {
         }
 
         hlt::Move dock_planet(const hlt::Map &map, const hlt::Ship &ship, const hlt::Planet &planet) {
-            if (planet.pos.dist(ship.pos) < planet.radius + hlt::constants::DOCK_RADIUS) {
+            if (ship.can_dock(planet)) {
                 return hlt::Move::dock(ship.entity_id, planet.entity_id);
             }
             return move_towards(map, ship, planet.pos, true); // TODO: use closest point to

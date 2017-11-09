@@ -11,7 +11,7 @@
 namespace bot {
     class Navigator {
     private:
-        const Observer observer;
+        Observer observer;
     public:
         explicit Navigator(const Observer &observer);
 
