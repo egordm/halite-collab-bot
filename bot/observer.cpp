@@ -23,27 +23,28 @@ namespace bot {
         return map;
     }
 
-    hlt::nullable<hlt::Planet> Observer::closest_planet(hlt::Vector pos) {
-        return closest_planet(pos, hlt::empty_mask);
+    std::vector<hlt::Ship> Observer::my_ships() {
+        return map.ships[my_id];
     }
 
-    hlt::nullable<hlt::Planet> Observer::closest_planet(hlt::Vector pos, unsigned short owner_mask) const {
-        double dist = 10000000;
-        hlt::nullable<hlt::Planet> ret;
-        for (const auto &planet : map.planets) {
-            if ((owner_mask & planet.owner_mask(my_id)) == 0) continue;
-
-            double d = pos.dist_sq(planet.pos);
-            if (d < dist) {
-                dist = d;
-                ret.first = planet;
-                ret.second = true;
-            }
+    std::vector<hlt::Planet> Observer::get_planets(unsigned short owner_mask) const {
+        std::vector<hlt::Planet> ret;
+        for (auto &planet : map.planets) {
+            if ((owner_mask & planet.owner_mask(my_id)) != 0) ret.push_back(planet);
         }
         return ret;
     }
 
-    const std::vector<hlt::Ship> Observer::my_ships() {
-        return map.ships[my_id];
+    std::vector<hlt::Ship> Observer::get_enemies() const {
+        std::vector<hlt::Ship> ret;
+        for (auto &key : map.ships) {
+            if(key.first != my_id) ret.insert(ret.end(), key.second.begin(), key.second.end());
+        }
+        return ret;
+    }
+
+    const hlt::Vector Observer::get_velocity(hlt::EntityId entity_id) const{
+        if(velocities.find(entity_id) == velocities.end()) return hlt::Vector(); // TODO: mb unneeded.
+        return velocities.at(entity_id);
     }
 }

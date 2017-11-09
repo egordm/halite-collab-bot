@@ -44,8 +44,8 @@ namespace bot {
     hlt::Move Navigator::attack_ship(const hlt::Ship &ship, const hlt::Ship &target, const hlt::Vector &target_vel) {
         const auto dist = ship.pos.dist(target.pos);
         if (dist < target.radius + hlt::constants::WEAPON_RADIUS) {
-            return hlt::Move::thrust(ship.entity_id, SINT(target_vel.length()),
-                                     SINT(hlt::rad_to_deg(target_vel.angle())));
+            auto speed = std::min(hlt::constants::MAX_SPEED, SINT(target_vel.length()));
+            return hlt::Move::thrust(ship.entity_id, speed, SINT(hlt::rad_to_deg(target_vel.angle())));
         }
         return move_towards(ship, target.pos, true); // TODO: find intersection point and lean slightly towards
     }

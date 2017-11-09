@@ -11,7 +11,7 @@ namespace bot {
     class Observer {
     private:
         hlt::Map &map;
-        std::unordered_map<unsigned int, hlt::Vector> velocities;
+        hlt::entity_map<hlt::Vector> velocities;
     public:
         const hlt::PlayerId my_id;
         unsigned int step;
@@ -20,13 +20,15 @@ namespace bot {
 
         void observe(const hlt::Map &new_map);
 
-        hlt::nullable<hlt::Planet> closest_planet(hlt::Vector pos);
-
-        hlt::nullable<hlt::Planet> closest_planet(hlt::Vector pos, unsigned short owner_mask) const;
+        const hlt::Vector get_velocity(hlt::EntityId entity_id) const;
 
         const hlt::Map &getMap() const;
 
-        const std::vector<hlt::Ship> my_ships();
+        std::vector<hlt::Ship> my_ships();
+
+        std::vector<hlt::Planet> get_planets(unsigned short owner_mask) const;
+
+        std::vector<hlt::Ship> get_enemies() const;
     };
 }
 
