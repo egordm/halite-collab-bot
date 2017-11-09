@@ -1,5 +1,5 @@
 #include "hlt/hlt.hpp"
-#include "hlt/navigation.hpp"
+#include "bot/BotAlgo.h"
 
 int main() {
     const hlt::Metadata metadata = hlt::initialize("ocdy1001");
@@ -18,12 +18,13 @@ int main() {
     hlt::Log::log(initial_map_intelligence.str());
 
     std::vector<hlt::Move> moves;
+    bot::BotAlgo bot(player_id);
     while(true) {
         //init
         moves.clear();
-        const hlt::Map map = hlt::in::get_map();
+        hlt::Map map = hlt::in::get_map();
         //moves
-
+        bot.Moves(map, moves);
         //check for errors
         if (!hlt::out::send_moves(moves)) {
             hlt::Log::log("send_moves failed; exiting");
