@@ -7,6 +7,7 @@
 #include "hlt/hlt.hpp"
 #include "bot/navigation.h"
 #include "types.hpp"
+#include "hlt/navigation.hpp"
 
 namespace bot{
     class BotAlgo{
@@ -40,6 +41,19 @@ namespace bot{
                 }
             }
         }
+        hlt::Planet ClosestPlanet(std::vector<hlt::Planet>& source, hlt::Vector pos){
+            double min = 100000000;
+            hlt::Planet minp;
+            for(const auto planet : source){
+                hlt::Vector diff = planet.pos - pos;
+                double len = diff.length();
+                if(len < min){
+                    min = len;
+                    minp = planet;
+                }
+            }
+            return minp;
+        }
     public:
         BotAlgo(hlt::PlayerId id){
             this->id = id;
@@ -48,9 +62,11 @@ namespace bot{
         void Moves(hlt::Map& map, std::vector<hlt::Move>& moves){
             SortPlanets(map);
             RecordShipSpeed(map);
-            if(round == 0){
-
-                //hlt::Move  move = bot::navigation::move_towards();
+            for(const auto ship : map.ships.at(id)){
+                //hlt::Planet target = ClosestPlanet(emptyPlanets, ship.pos);
+                //hlt::Vector gotoPos = target.pos;
+                hlt::Move move = bot::navigation::move_towards(map, ship, hlt::Vector(0, 0), false);
+                moves.push_back(move);
             }
             round++;
         }
