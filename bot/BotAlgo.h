@@ -63,9 +63,17 @@ namespace bot{
             SortPlanets(map);
             RecordShipSpeed(map);
             for(const auto ship : map.ships.at(id)){
+                if(ship.docking_status == hlt::ShipDockingStatus::Docking) continue;
                 hlt::Planet target = ClosestPlanet(emptyPlanets, ship.pos);
-                hlt::Vector gotoPos = target.pos;
-                //hlt::Move move = bot::navigation::move_towards(map, ship, gotoPos, false);
+                if(target.pos == hlt::Vector(0,0)){
+                    int r = rand() % 20;
+                    if(r < 10) target = ClosestPlanet(ourPlanets, ship.pos);
+                    else target = ClosestPlanet(enemyPlanets, ship.pos);
+                }
+                if(ship.can_dock(target)){
+                    moves.push_back(hlt::Move::dock(ship.entity_id, target.entity_id));
+                    continue;
+                }
                 const hlt::possibly<hlt::Move> move = hlt::navigation::navigate_ship_to_dock(map, ship, target, 7);
                 if(move.second) moves.push_back(move.first);
             }
