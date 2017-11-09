@@ -2,15 +2,19 @@
 // Created by egordm on 8-11-2017.
 //
 
+#include <log.hpp>
+#include <sstream>
 #include "navigation.h"
+#include "defines.h"
 
 namespace bot {
     namespace navigation {
 
         hlt::possibly<hlt::Planet> planet_between(const hlt::Map &map, const hlt::Vector &a, const hlt::Vector &b) {
             for (const auto &planet : map.planets) {
-                if (planet.pos.dist_line(a, b) < planet.radius + hlt::constants::BYPASS_PROXIMITY)
+                if (planet.pos.dist_line(a, b) <= planet.radius + hlt::constants::SHIP_RADIUS) {
                     return std::make_pair(planet, true);
+                }
             }
             return std::make_pair(hlt::Planet(), false);
         }
@@ -27,10 +31,9 @@ namespace bot {
                     return move_towards(map, ship, closest, avoid_obstacles);
                 }
             }
-            auto dist = ship.pos.dist(pos);
-            return hlt::Move::thrust(ship.entity_id,
-                                     std::min(hlt::constants::MAX_SPEED, static_cast<const int &>(dist)),
-                                     static_cast<const int>(hlt::rad_to_deg(pos.angle_between(pos))));
+
+            auto speed = std::min(hlt::constants::MAX_SPEED, SINT(ship.pos.dist(pos)));
+            return hlt::Move::thrust(ship.entity_id, speed, SINT(hlt::rad_to_deg(ship.pos.angle_between(pos))));
         }
 
         hlt::Move dock_planet(const hlt::Map &map, const hlt::Ship &ship, const hlt::Planet &planet) {
@@ -40,11 +43,13 @@ namespace bot {
             return move_towards(map, ship, planet.pos, true); // TODO: use closest point to
         }
 
-        hlt::Move attack_ship(const hlt::Map &map, const hlt::Ship &ship, const hlt::Ship &target, const hlt::Vector &target_vel) {
+        hlt::Move attack_ship(const hlt::Map &map, const hlt::Ship &ship, const hlt::Ship &target,
+                              const hlt::Vector &target_vel) {
             const auto dist = ship.pos.dist(target.pos);
-            if(dist < target.radius + hlt::constants::WEAPON_RADIUS)
-                return hlt::Move::thrust(ship.entity_id, static_cast<const int>(target_vel.length()),
-                                         static_cast<const int>(hlt::rad_to_deg(target_vel.angle())));
+            if (dist < target.radius + hlt::constants::WEAPON_RADIUS) {
+                return hlt::Move::thrust(ship.entity_id, SINT(target_vel.length()),
+                                         SINT(hlt::rad_to_deg(target_vel.angle())));
+            }
             return move_towards(map, ship, target.pos, true); // TODO: find intersection point and lean slightly towards
         }
     }

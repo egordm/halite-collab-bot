@@ -29,14 +29,14 @@ namespace hlt {
         auto tb = b + a;
 
         return std::make_pair(center + Vector(radius * sin(ta), radius * -cos(ta)),
-                               center + Vector(radius * -sin(tb), radius * cos(tb)));
+                              center + Vector(radius * -sin(tb), radius * cos(tb)));
     }
 
     /***
      * @return angle in <b>RAD</b>
      */
     double Vector::angle() const {
-        return atan2(y, x);
+        return atan2(y, x) + 2 * M_PI;
     }
 
     /***
@@ -57,10 +57,14 @@ namespace hlt {
     }
 
     double Vector::dist_line(const Vector &a, const Vector &b) const {
-        auto end = b - a;
-        auto x = *this - a;
-        auto area = x.cross_prod(end);
-        return area / end.length();
+        auto ds = a.dist_sq(b);
+        if (ds < 0.1) return dist(a);
+
+        auto delta = b - a;
+        auto t = std::fmax(0, std::fmin(1, (*this - a).dot_prod(delta) / ds));
+        auto projection = delta * t + a;
+
+        return dist(projection);
     }
 
     Vector Vector::operator-(const Vector &v) const {
