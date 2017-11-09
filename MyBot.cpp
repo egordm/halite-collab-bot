@@ -2,7 +2,7 @@
 #include "hlt/navigation.hpp"
 
 int main() {
-    const hlt::Metadata metadata = hlt::initialize("Egornator");
+    const hlt::Metadata metadata = hlt::initialize("ocdy1001");
     const hlt::PlayerId player_id = metadata.player_id;
 
     const hlt::Map& initial_map = metadata.initial_map;
@@ -18,35 +18,13 @@ int main() {
     hlt::Log::log(initial_map_intelligence.str());
 
     std::vector<hlt::Move> moves;
-    for (;;) {
+    while(true) {
+        //init
         moves.clear();
         const hlt::Map map = hlt::in::get_map();
+        //moves
 
-        for (const hlt::Ship& ship : map.ships.at(player_id)) {
-            if (ship.docking_status != hlt::ShipDockingStatus::Undocked) {
-                continue;
-            }
-
-            for (const hlt::Planet& planet : map.planets) {
-                if (planet.owned) {
-                    continue;
-                }
-
-                if (ship.can_dock(planet)) {
-                    moves.push_back(hlt::Move::dock(ship.entity_id, planet.entity_id));
-                    break;
-                }
-                
-                const hlt::possibly<hlt::Move> move =
-                        hlt::navigation::navigate_ship_to_dock(map, ship, planet, hlt::constants::MAX_SPEED / 1);
-                if (move.second) {
-                    moves.push_back(move.first);
-                }
-
-                break;
-            }
-        }
-
+        //check for errors
         if (!hlt::out::send_moves(moves)) {
             hlt::Log::log("send_moves failed; exiting");
             break;
