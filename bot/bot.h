@@ -9,12 +9,14 @@
 #include <map.hpp>
 #include "observer.h"
 #include "navigator.h"
+#include "commander.h"
 
 namespace bot {
     class Bot {
     private:
         Observer observer;
         Navigator navigator;
+        Commander commander;
         unsigned int step;
     public:
         Bot(hlt::PlayerId id, const hlt::Map &map);
