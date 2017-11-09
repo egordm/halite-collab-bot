@@ -30,7 +30,7 @@ namespace bot {
             auto dist = ship.pos.dist(pos);
             return hlt::Move::thrust(ship.entity_id,
                                      std::min(hlt::constants::MAX_SPEED, static_cast<const int &>(dist)),
-                                     static_cast<const int>(pos.angle_between(pos)));
+                                     static_cast<const int>(hlt::rad_to_deg(pos.angle_between(pos))));
         }
 
         hlt::Move dock_planet(const hlt::Map &map, const hlt::Ship &ship, const hlt::Planet &planet) {
@@ -38,6 +38,14 @@ namespace bot {
                 return hlt::Move::dock(ship.entity_id, planet.entity_id);
             }
             return move_towards(map, ship, planet.pos, true); // TODO: use closest point to
+        }
+
+        hlt::Move attack_ship(const hlt::Map &map, const hlt::Ship &ship, const hlt::Ship &target, const hlt::Vector &target_vel) {
+            const auto dist = ship.pos.dist(target.pos);
+            if(dist < target.radius + hlt::constants::WEAPON_RADIUS)
+                return hlt::Move::thrust(ship.entity_id, static_cast<const int>(target_vel.length()),
+                                         static_cast<const int>(hlt::rad_to_deg(target_vel.angle())));
+            return move_towards(map, ship, target.pos, true); // TODO: find intersection point and lean slightly towards
         }
     }
 }
