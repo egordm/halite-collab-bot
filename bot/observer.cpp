@@ -23,22 +23,27 @@ namespace bot {
         return map;
     }
 
-    hlt::Planet Observer::closest_planet(hlt::Vector pos) {
+    hlt::nullable<hlt::Planet> Observer::closest_planet(hlt::Vector pos) {
         return closest_planet(pos, empty_mask);
     }
 
-    hlt::Planet Observer::closest_planet(hlt::Vector pos, unsigned short owner_mask) const {
+    hlt::nullable<hlt::Planet> Observer::closest_planet(hlt::Vector pos, unsigned short owner_mask) const {
         double dist = 10000000;
-        hlt::Planet ret;
-        for(const auto &planet : map.planets) {
-            if(owner_mask & planet.owner_mask(my_id) == 0) continue;
+        hlt::nullable<hlt::Planet> ret;
+        for (const auto &planet : map.planets) {
+            if (owner_mask & planet.owner_mask(my_id) == 0) continue;
 
             double d = pos.dist_sq(planet.pos);
-            if(d < dist) {
+            if (d < dist) {
                 dist = d;
-                ret = planet;
+                ret.first = planet;
+                ret.second = true;
             }
         }
         return ret;
+    }
+
+    const std::vector<hlt::Ship> Observer::my_ships() {
+        return map.ships[my_id];
     }
 }

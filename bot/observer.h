@@ -24,10 +24,13 @@ namespace bot {
 
         void observe(const hlt::Map &new_map);
 
-        hlt::Planet closest_planet(hlt::Vector pos);
-        hlt::Planet closest_planet(hlt::Vector pos, unsigned short owner_mask) const;
+        hlt::nullable<hlt::Planet> closest_planet(hlt::Vector pos);
+
+        hlt::nullable<hlt::Planet> closest_planet(hlt::Vector pos, unsigned short owner_mask) const;
 
         const hlt::Map &getMap() const;
+
+        const std::vector<hlt::Ship> my_ships();
     };
 }
 
