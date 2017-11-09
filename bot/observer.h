@@ -5,22 +5,18 @@
 #ifndef MYBOT_OBSERVER_H
 #define MYBOT_OBSERVER_H
 
-#include <map.hpp>
+#include "map.hpp"
 
 namespace bot {
-    const unsigned short empty_mask = 0x01;
-    const unsigned short friendly_mask = 0x02;
-    const unsigned short enemy_mask = 0x03;
-
     class Observer {
     private:
-        hlt::Map map;
+        hlt::Map &map;
         std::unordered_map<unsigned int, hlt::Vector> velocities;
     public:
         const hlt::PlayerId my_id;
         unsigned int step;
 
-        Observer(hlt::PlayerId id, const hlt::Map &map);
+        Observer(hlt::PlayerId id, hlt::Map &map);
 
         void observe(const hlt::Map &new_map);
 

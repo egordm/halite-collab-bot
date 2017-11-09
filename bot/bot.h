@@ -19,7 +19,7 @@ namespace bot {
         Commander commander;
         unsigned int step;
     public:
-        Bot(hlt::PlayerId id, const hlt::Map &map);
+        Bot(hlt::PlayerId id, hlt::Map &map);
 
         std::vector<hlt::Move> do_step(const hlt::Map &map);
     };

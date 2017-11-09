@@ -3,11 +3,14 @@
 #define MYBOT_ENTITIES_H
 
 #include <vector>
-#include <observer.h>
 #include "vector.hpp"
 #include "types.hpp"
 
 namespace hlt {
+    const unsigned short empty_mask = 1;
+    const unsigned short friendly_mask = 2;
+    const unsigned short enemy_mask = 4;
+
     struct Entity {
         Entity() = default;
 
@@ -21,8 +24,8 @@ namespace hlt {
             return health > 0;
         }
 
-        virtual unsigned short owner_mask(const PlayerId &player_id) const{
-            return entity_id == player_id ? bot::friendly_mask : bot::enemy_mask;
+        virtual unsigned short owner_mask(const PlayerId &player_id) const {
+            return owner_id == player_id ? hlt::friendly_mask : hlt::enemy_mask;
         }
     };
 
@@ -54,7 +57,7 @@ namespace hlt {
         }
 
         unsigned short owner_mask(const PlayerId &player_id) const override {
-            if(!owned) return bot::empty_mask;
+            if (!owned) return hlt::empty_mask;
             return Entity::owner_mask(player_id);
         }
     };

@@ -7,7 +7,7 @@
 
 namespace bot {
 
-    Navigator::Navigator(const Observer &observer) : observer(observer) {}
+    Navigator::Navigator(Observer &observer) : observer(observer) {}
 
     hlt::nullable<hlt::Planet> Navigator::planet_between(const hlt::Vector &a, const hlt::Vector &b) {
         for (const auto &planet : observer.getMap().planets) {

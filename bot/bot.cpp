@@ -6,7 +6,7 @@
 
 
 namespace bot {
-    Bot::Bot(hlt::PlayerId id, const hlt::Map &map) : observer(Observer(id, map)), navigator(Navigator(observer)),
+    Bot::Bot(hlt::PlayerId id, hlt::Map &map) : observer(Observer(id, map)), navigator(Navigator(observer)),
                                                       commander(Commander(observer, navigator)) {
 
     }

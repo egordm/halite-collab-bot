@@ -5,12 +5,12 @@
 #include "observer.h"
 
 namespace bot {
-    Observer::Observer(hlt::PlayerId id, const hlt::Map &map) : my_id(id), map(map) {}
+    Observer::Observer(hlt::PlayerId id, hlt::Map &map) : my_id(id), map(map) {}
 
     void Observer::observe(const hlt::Map &new_map) {
-        for (int i = 0; i < new_map.ships.size(); ++i) {
-            for (int j = 0; j < new_map.ships[i].size(); ++j) {
-                const auto &ship = new_map.ships[i][j];
+        for (unsigned int i = 0; i < new_map.ships.size(); ++i) {
+            for (unsigned int j = 0; j < new_map.ships.at(i).size(); ++j) {
+                const auto &ship = new_map.ships.at(i)[j];
                 velocities.insert(std::make_pair(ship.entity_id, ship.pos - this->map.ships[i][j].pos));
             }
         }
@@ -24,14 +24,14 @@ namespace bot {
     }
 
     hlt::nullable<hlt::Planet> Observer::closest_planet(hlt::Vector pos) {
-        return closest_planet(pos, empty_mask);
+        return closest_planet(pos, hlt::empty_mask);
     }
 
     hlt::nullable<hlt::Planet> Observer::closest_planet(hlt::Vector pos, unsigned short owner_mask) const {
         double dist = 10000000;
         hlt::nullable<hlt::Planet> ret;
         for (const auto &planet : map.planets) {
-            if (owner_mask & planet.owner_mask(my_id) == 0) continue;
+            if ((owner_mask & planet.owner_mask(my_id)) == 0) continue;
 
             double d = pos.dist_sq(planet.pos);
             if (d < dist) {

@@ -11,10 +11,10 @@
 namespace bot {
     class Commander {
     private:
-        Observer observer;
-        Navigator navigator;
+        Observer &observer;
+        Navigator &navigator;
     public:
-        Commander(const Observer &observer, const Navigator &navigator);
+        Commander(Observer &observer, Navigator &navigator);
 
         hlt::Move command(const hlt::Ship &ship);
     };
