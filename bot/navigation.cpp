@@ -32,5 +32,12 @@ namespace bot {
                                      std::min(hlt::constants::MAX_SPEED, static_cast<const int &>(dist)),
                                      static_cast<const int>(pos.angle_between(pos)));
         }
+
+        hlt::Move dock_planet(const hlt::Map &map, const hlt::Ship &ship, const hlt::Planet &planet) {
+            if (planet.pos.dist(ship.pos) < planet.radius + hlt::constants::DOCK_RADIUS) {
+                return hlt::Move::dock(ship.entity_id, planet.entity_id);
+            }
+            return move_towards(map, ship, planet.pos, true); // TODO: use closest point to
+        }
     }
 }

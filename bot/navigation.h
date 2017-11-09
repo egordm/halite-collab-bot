@@ -16,6 +16,8 @@ namespace bot {
 
         hlt::Move
         move_towards(const hlt::Map &map, const hlt::Ship &ship, const hlt::Vector &pos, bool avoid_obstacles);
+
+        hlt::Move dock_planet(const hlt::Map &map, const hlt::Ship &ship, const hlt::Planet &planet);
     }
 }
 
