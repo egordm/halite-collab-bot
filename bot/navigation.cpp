@@ -10,7 +10,7 @@
 namespace bot {
     namespace navigation {
 
-        hlt::possibly<hlt::Planet> planet_between(const hlt::Map &map, const hlt::Vector &a, const hlt::Vector &b) {
+        hlt::nullable<hlt::Planet> planet_between(const hlt::Map &map, const hlt::Vector &a, const hlt::Vector &b) {
             for (const auto &planet : map.planets) {
                 if (planet.pos.dist_line(a, b) <= planet.radius + hlt::constants::SHIP_RADIUS) {
                     return std::make_pair(planet, true);

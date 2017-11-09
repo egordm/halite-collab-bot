@@ -9,7 +9,7 @@ namespace bot {
 
     Navigator::Navigator(const Observer &observer) : observer(observer) {}
 
-    hlt::possibly<hlt::Planet> Navigator::planet_between(const hlt::Vector &a, const hlt::Vector &b) {
+    hlt::nullable<hlt::Planet> Navigator::planet_between(const hlt::Vector &a, const hlt::Vector &b) {
         for (const auto &planet : observer.getMap().planets) {
             if (planet.pos.dist_line(a, b) <= planet.radius + hlt::constants::SHIP_RADIUS) {
                 return std::make_pair(planet, true);
