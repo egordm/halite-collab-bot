@@ -55,5 +55,7 @@ namespace hlt {
          * Minimum distance specified from the object's outer radius.
          */
         constexpr int MIN_DISTANCE_FOR_CLOSEST_POINT = 3;
+
+        constexpr double BYPASS_PROXIMITY = 2;
     }
 }

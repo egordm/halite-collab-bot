@@ -22,7 +22,7 @@ namespace hlt {
 
         Vector closest_point(const Vector &center, double radius) const;
 
-        std::tuple<Vector, Vector> tangents(const Vector &center, double radius) const;
+        std::pair<Vector, Vector> tangents(const Vector &center, double radius) const;
 
         double angle() const;
 

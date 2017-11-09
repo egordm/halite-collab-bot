@@ -20,7 +20,7 @@ namespace hlt {
         return {center.x + radius * cos(angle), center.y + radius * sin(angle)};
     }
 
-    std::tuple<Vector, Vector> Vector::tangents(const Vector &center, double radius) const {
+    std::pair<Vector, Vector> Vector::tangents(const Vector &center, double radius) const {
         auto diff = center - *this;
         auto dst = dist(center);
         auto a = asin(radius / dst);
@@ -28,7 +28,7 @@ namespace hlt {
         auto ta = b - a;
         auto tb = b + a;
 
-        return std::make_tuple(center + Vector(radius * sin(ta), radius * -cos(ta)),
+        return std::make_pair(center + Vector(radius * sin(ta), radius * -cos(ta)),
                                center + Vector(radius * -sin(tb), radius * cos(tb)));
     }
 
