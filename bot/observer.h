@@ -8,17 +8,24 @@
 #include <map.hpp>
 
 namespace bot {
+    const unsigned short empty_mask = 0x01;
+    const unsigned short friendly_mask = 0x02;
+    const unsigned short enemy_mask = 0x03;
+
     class Observer {
     private:
         hlt::Map map;
         std::unordered_map<unsigned int, hlt::Vector> velocities;
     public:
-        const hlt::PlayerId id;
+        const hlt::PlayerId my_id;
         unsigned int step;
 
         Observer(hlt::PlayerId id, const hlt::Map &map);
 
         void observe(const hlt::Map &new_map);
+
+        hlt::Planet closest_planet(hlt::Vector pos);
+        hlt::Planet closest_planet(hlt::Vector pos, unsigned short owner_mask) const;
 
         const hlt::Map &getMap() const;
     };

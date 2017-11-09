@@ -3,6 +3,7 @@
 #define MYBOT_ENTITIES_H
 
 #include <vector>
+#include <observer.h>
 #include "vector.hpp"
 #include "types.hpp"
 
@@ -18,6 +19,10 @@ namespace hlt {
 
         bool is_alive() const {
             return health > 0;
+        }
+
+        virtual unsigned short owner_mask(const PlayerId &player_id) const{
+            return entity_id == player_id ? bot::friendly_mask : bot::enemy_mask;
         }
     };
 
@@ -46,6 +51,11 @@ namespace hlt {
 
         bool is_full() const {
             return docked_ships.size() == docking_spots;
+        }
+
+        unsigned short owner_mask(const PlayerId &player_id) const override {
+            if(!owned) return bot::empty_mask;
+            return Entity::owner_mask(player_id);
         }
     };
 

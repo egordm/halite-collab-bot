@@ -5,7 +5,7 @@
 #include "observer.h"
 
 namespace bot {
-    Observer::Observer(hlt::PlayerId id, const hlt::Map &map) : id(id), map(map) {}
+    Observer::Observer(hlt::PlayerId id, const hlt::Map &map) : my_id(id), map(map) {}
 
     void Observer::observe(const hlt::Map &new_map) {
         for (int i = 0; i < new_map.ships.size(); ++i) {
@@ -21,5 +21,24 @@ namespace bot {
 
     const hlt::Map &Observer::getMap() const {
         return map;
+    }
+
+    hlt::Planet Observer::closest_planet(hlt::Vector pos) {
+        return closest_planet(pos, empty_mask);
+    }
+
+    hlt::Planet Observer::closest_planet(hlt::Vector pos, unsigned short owner_mask) const {
+        double dist = 10000000;
+        hlt::Planet ret;
+        for(const auto &planet : map.planets) {
+            if(owner_mask & planet.owner_mask(my_id) == 0) continue;
+
+            double d = pos.dist_sq(planet.pos);
+            if(d < dist) {
+                dist = d;
+                ret = planet;
+            }
+        }
+        return ret;
     }
 }
