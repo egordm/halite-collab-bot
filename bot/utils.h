@@ -25,7 +25,7 @@ namespace bot {
         }
         return ret;
     }
-};
+}
 
 
 #endif //MYBOT_UTILS_H
