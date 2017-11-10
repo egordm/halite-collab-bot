@@ -38,7 +38,7 @@ namespace hlt {
             return entities_found;
         }
 
-        static possibly<Move> navigate_ship_towards_target(
+        static nullable<Move> navigate_ship_towards_target(
                 const Map& map,
                 const Ship& ship,
                 const Vector& target,
@@ -74,7 +74,7 @@ namespace hlt {
             return {Move::thrust(ship.entity_id, thrust, static_cast<const int>(rad_to_deg(angle))), true };
         }
 
-        static possibly<Move> navigate_ship_to_dock(
+        static nullable<Move> navigate_ship_to_dock(
                 const Map& map,
                 const Ship& ship,
                 const Entity& dock_target,

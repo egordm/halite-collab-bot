@@ -11,11 +11,11 @@
 namespace bot {
     class Navigator {
     private:
-        Observer observer;
+        Observer &observer;
     public:
-        explicit Navigator(const Observer &observer);
+        explicit Navigator(Observer &observer);
 
-        hlt::possibly<hlt::Planet> planet_between(const hlt::Vector &a, const hlt::Vector &b);
+        hlt::nullable<hlt::Planet> planet_between(const hlt::Vector &a, const hlt::Vector &b);
 
         hlt::Move move_towards(const hlt::Ship &ship, const hlt::Vector &pos, bool avoid_obstacles);
 

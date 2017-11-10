@@ -7,9 +7,9 @@
 
 namespace bot {
 
-    Navigator::Navigator(const Observer &observer) : observer(observer) {}
+    Navigator::Navigator(Observer &observer) : observer(observer) {}
 
-    hlt::possibly<hlt::Planet> Navigator::planet_between(const hlt::Vector &a, const hlt::Vector &b) {
+    hlt::nullable<hlt::Planet> Navigator::planet_between(const hlt::Vector &a, const hlt::Vector &b) {
         for (const auto &planet : observer.getMap().planets) {
             if (planet.pos.dist_line(a, b) <= planet.radius + hlt::constants::SHIP_RADIUS) {
                 return std::make_pair(planet, true);
@@ -44,8 +44,8 @@ namespace bot {
     hlt::Move Navigator::attack_ship(const hlt::Ship &ship, const hlt::Ship &target, const hlt::Vector &target_vel) {
         const auto dist = ship.pos.dist(target.pos);
         if (dist < target.radius + hlt::constants::WEAPON_RADIUS) {
-            return hlt::Move::thrust(ship.entity_id, SINT(target_vel.length()),
-                                     SINT(hlt::rad_to_deg(target_vel.angle())));
+            auto speed = std::min(hlt::constants::MAX_SPEED, SINT(target_vel.length()));
+            return hlt::Move::thrust(ship.entity_id, speed, SINT(hlt::rad_to_deg(target_vel.angle())));
         }
         return move_towards(ship, target.pos, true); // TODO: find intersection point and lean slightly towards
     }

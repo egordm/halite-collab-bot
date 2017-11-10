@@ -43,7 +43,7 @@ namespace bot{
                     moves.push_back(hlt::Move::dock(ship.entity_id, target.entity_id));
                     continue;
                 }
-                const hlt::possibly<hlt::Move> move = hlt::navigation::navigate_ship_to_dock(map, ship, target, 7);
+                const hlt::nullable<hlt::Move> move = hlt::navigation::navigate_ship_to_dock(map, ship, target, 7);
                 if(move.second) moves.push_back(move.first);
             }
             info.EndCycle();

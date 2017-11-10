@@ -20,5 +20,5 @@ namespace hlt {
 
     /// A poor man's std::optional.
     template<typename T>
-    using possibly = std::pair<T, bool>;
+    using nullable = std::pair<T, bool>;
 }

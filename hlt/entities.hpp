@@ -7,6 +7,10 @@
 #include "types.hpp"
 
 namespace hlt {
+    const unsigned short empty_mask = 1;
+    const unsigned short friendly_mask = 2;
+    const unsigned short enemy_mask = 4;
+
     struct Entity {
         Entity() = default;
 
@@ -18,6 +22,10 @@ namespace hlt {
 
         bool is_alive() const {
             return health > 0;
+        }
+
+        virtual unsigned short owner_mask(const PlayerId &player_id) const {
+            return owner_id == player_id ? hlt::friendly_mask : hlt::enemy_mask;
         }
     };
 
@@ -46,6 +54,11 @@ namespace hlt {
 
         bool is_full() const {
             return docked_ships.size() == docking_spots;
+        }
+
+        unsigned short owner_mask(const PlayerId &player_id) const override {
+            if (!owned) return hlt::empty_mask;
+            return Entity::owner_mask(player_id);
         }
     };
 
