@@ -96,6 +96,16 @@ namespace hlt {
         return x * v.y - y * v.x;
     }
 
+    bool Vector::in_radius(const Vector &v, double radius) const {
+        return dist(v) < radius;
+    }
+
+    Vector Vector::avoid_point(const Vector &v, double radius) const {
+        if(in_radius(v, radius)) return closest_point(v, radius);
+        const auto tans = tangents(v, radius);
+        return dist(tans.first) < dist(tans.second) ? tans.first : tans.second;
+    }
+
     double rad_to_deg(double rad) {
         return rad * 180 / M_PI;
     }

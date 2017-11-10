@@ -38,6 +38,10 @@ namespace hlt {
 
         double cross_prod(const Vector &v) const;
 
+        bool in_radius(const Vector &v, double radius) const;
+
+        Vector avoid_point(const Vector &v, double radius) const;
+
         Vector operator-(const Vector &v) const;
 
         Vector operator+(const Vector &v) const;

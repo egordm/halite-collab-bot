@@ -56,6 +56,6 @@ namespace hlt {
          */
         constexpr int MIN_DISTANCE_FOR_CLOSEST_POINT = 3;
 
-        constexpr double BYPASS_PROXIMITY = 2;
+        constexpr double BYPASS_PROXIMITY = 1;
     }
 }
