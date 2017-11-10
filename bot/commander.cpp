@@ -111,7 +111,13 @@ bool bot::Commander::valid_assignment(bot::Assignment ass) {
         const auto &planet = observer.get_planet(ass.target_id);
         if(!planet.second) return false;
         if (!planet.first.is_alive() || planet.first.owner_mask(observer.my_id) == hlt::enemy_mask) return false;
-        return (!planet.first.is_full());
+
+        auto filled_docks = planet.first.docked_ships.size();
+        for(const auto &oass : assignments) {
+            if(oass.type == ass.type && oass.target_id == ass.target_id) filled_docks++;
+        }
+
+        return (filled_docks < planet.first.docking_spots);
     } else if (ass.type == Assignment::AttackPlanet) {
         const auto &planet = observer.get_planet(ass.target_id);
         if(!planet.second) return false;
