@@ -61,11 +61,18 @@ hlt::Move bot::Commander::produce_move(const bot::Assignment &assignment) {
     if (!ship.second) return hlt::Move::noop();
 
     switch (assignment.type) {
-        case Assignment::ColonizePlanet:
-            return navigator.dock_planet(ship.first, observer.get_planet(assignment.target_id));
+        case Assignment::ColonizePlanet: {
+            const auto &planet = observer.get_planet(assignment.target_id);
+            if (!planet.second) break;
+
+            return navigator.dock_planet(ship.first, planet.first);
+        }
         case Assignment::DefendPlanet:break;
         case Assignment::AttackPlanet: {
-            const auto &target = attack_planet(ship.first, observer.get_planet(assignment.target_id));
+            const auto &planet = observer.get_planet(assignment.target_id);
+            if(!planet.second) break;
+
+            const auto &target = attack_planet(ship.first, planet.first);
             if (!target.second) break;
             return navigator.attack_ship(ship.first, target.first, observer.get_velocity(assignment.target_id));
         }
@@ -102,12 +109,13 @@ bool bot::Commander::valid_assignment(bot::Assignment ass) {
 
     if (ass.type == Assignment::ColonizePlanet) {
         const auto &planet = observer.get_planet(ass.target_id);
-        if (!planet.is_alive() || planet.owner_mask(observer.my_id) == hlt::enemy_mask) return false;
-
-        return (!planet.is_full());
+        if(!planet.second) return false;
+        if (!planet.first.is_alive() || planet.first.owner_mask(observer.my_id) == hlt::enemy_mask) return false;
+        return (!planet.first.is_full());
     } else if (ass.type == Assignment::AttackPlanet) {
         const auto &planet = observer.get_planet(ass.target_id);
-        return (planet.health > 0 && planet.owned && planet.owner_id != observer.my_id);
+        if(!planet.second) return false;
+        return (planet.first.health > 0 && planet.first.owner_mask(observer.my_id) == hlt::enemy_mask);
     } else if (ass.type == Assignment::AttackShip) {
         const auto &ship = observer.get_ship(ass.target_id);
         return (ship.second || ship.first.health > 0);

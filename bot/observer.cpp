@@ -8,14 +8,14 @@ namespace bot {
     Observer::Observer(hlt::PlayerId id, hlt::Map &map) : map(map), my_id(id) {}
 
     void Observer::observe(const hlt::Map &new_map) {
-        for (unsigned int i = 0; i < new_map.ships.size(); ++i) {
-            for (unsigned int j = 0; j < new_map.ships.at(i).size(); ++j) {
-                const auto &ship = new_map.ships.at(i)[j];
-                velocities.insert(std::make_pair(ship.entity_id, ship.pos - this->map.ships[i][j].pos));
+        for(const auto &kv : new_map.ships) {
+            for(const auto &ship : kv.second) {
+                const auto &prev_ship = get_ship(kv.first, ship.entity_id);
+                if(prev_ship.second) velocities.insert(std::make_pair(ship.entity_id, ship.pos - prev_ship.first.pos));
             }
         }
 
-        this->map = new_map;
+        map = new_map;
         step++;
     }
 
@@ -73,8 +73,10 @@ namespace bot {
         return std::make_pair(map.get_ship(player_id, ship_id), true);
     }
 
-    hlt::Planet Observer::get_planet(hlt::EntityId planet_id) {
-        return map.get_planet(planet_id);
+    hlt::nullable<hlt::Planet> Observer::get_planet(hlt::EntityId planet_id) {
+        if (map.planet_map.find(planet_id) == map.planet_map.end())
+            return std::make_pair(hlt::Planet(), false);
+        return std::make_pair(map.get_planet(planet_id), true);
     }
 
     hlt::nullable<hlt::Ship> Observer::get_ship(hlt::EntityId ship_id) {

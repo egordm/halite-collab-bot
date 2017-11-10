@@ -38,7 +38,7 @@ namespace bot {
 
         std::vector<hlt::Planet> get_planets(unsigned short owner_mask) const;
 
-        hlt::Planet get_planet(hlt::EntityId planet_id);
+        hlt::nullable<hlt::Planet> get_planet(hlt::EntityId planet_id);
     };
 }
 

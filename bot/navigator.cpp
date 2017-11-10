@@ -3,8 +3,8 @@
 //
 
 #include <sstream>
-#include <log.hpp>
 #include <utility>
+#include <log.hpp>
 #include "navigator.h"
 #include "defines.h"
 #include "path.hpp"
@@ -32,6 +32,6 @@ namespace bot {
         }
 
         // TODO: find intersection point and lean slightly towards
-        return Path<hlt::Ship>(observer, ship, target).move(target.radius + hlt::constants::WEAPON_RADIUS / 2);
+        return Path<hlt::Ship>(observer, ship, target).move(target.radius + hlt::constants::WEAPON_RADIUS -2);
     }
 }
