@@ -20,3 +20,8 @@ hlt::Move bot::Commander::command(const hlt::Ship &ship) {
 
     return hlt::Move::noop();
 }
+
+hlt::Move bot::Commander::produce_move(const bot::Assignment &assignment) {
+    hlt::Ship ship = observer.get_ship(observer.my_id, assignment.ship_id); // May raise error
+    return hlt::Move::noop();
+}

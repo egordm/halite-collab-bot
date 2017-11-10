@@ -27,6 +27,8 @@ namespace bot {
         return map.ships[my_id];
     }
 
+
+
     std::vector<hlt::Planet> Observer::get_planets(unsigned short owner_mask) const {
         std::vector<hlt::Planet> ret;
         for (auto &planet : map.planets) {
@@ -46,5 +48,9 @@ namespace bot {
     const hlt::Vector Observer::get_velocity(hlt::EntityId entity_id) const{
         if(velocities.find(entity_id) == velocities.end()) return hlt::Vector(); // TODO: mb unneeded.
         return velocities.at(entity_id);
+    }
+
+    hlt::Ship Observer::get_ship(const hlt::PlayerId player_id, const hlt::EntityId ship_id) {
+        return map.get_ship(player_id, ship_id);
     }
 }
