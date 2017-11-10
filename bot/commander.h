@@ -21,7 +21,11 @@ namespace bot {
 
         hlt::Move command(const hlt::Ship &ship);
 
+        std::vector<hlt::Move> command();
+
         hlt::Move produce_move(const bot::Assignment &assignment);
+
+        hlt::nullable<hlt::Ship> attack_planet(const hlt::Ship &ship, const hlt::Planet &planet);
     };
 }
 

@@ -16,6 +16,7 @@ namespace bot {
         double dist = 10000000;
         hlt::nullable <T> ret;
         for (const auto &obj : objects) {
+            if(obj.health <= 0) continue;
             double d = pos.dist_sq(obj.pos);
             if (d < dist) {
                 dist = d;
