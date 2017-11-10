@@ -26,11 +26,15 @@ namespace bot {
 
         std::vector<hlt::Ship> my_ships();
 
-        hlt::Ship get_ship(const hlt::PlayerId player_id, const hlt::EntityId ship_id);
+        std::vector<hlt::Ship> get_enemies() const;
+
+        hlt::nullable<hlt::Ship> get_ship(hlt::PlayerId player_id, hlt::EntityId ship_id);
+
+        hlt::nullable<hlt::Ship> get_ship(hlt::EntityId ship_id);
 
         std::vector<hlt::Planet> get_planets(unsigned short owner_mask) const;
 
-        std::vector<hlt::Ship> get_enemies() const;
+        hlt::Planet get_planet(hlt::EntityId planet_id);
     };
 }
 
