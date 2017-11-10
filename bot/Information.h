@@ -10,7 +10,6 @@
 #include "types.hpp"
 
 namespace bot {
-    enum PLANETS{ EMPTY, OUR, ENEMY, NOTFULL };
     class Information {
     private:
         hlt::PlayerId id;

@@ -15,7 +15,7 @@ namespace bot {
     public:
         const hlt::PlayerId my_id;
         unsigned int step;
-
+        
         Observer(hlt::PlayerId id, hlt::Map &map);
 
         void observe(const hlt::Map &new_map);

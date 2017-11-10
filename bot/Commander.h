@@ -1,32 +1,29 @@
 //
-// Created by Cody on 10/11/2017.
+// Created by egordm on 9-11-2017.
 //
 
 #ifndef MYBOT_COMMANDER_H
 #define MYBOT_COMMANDER_H
 
-#include <vector>
-#include <entities.hpp>
-#include "hlt/map.hpp"
+#include "navigator.h"
+#include "observer.h"
+#include "assignment.h"
 
 namespace bot {
-    enum SIDE {
-        OUR, ENEMY, NEUTRAl
-    };
-    enum ACTION {
-        GROUP, DOCK, ATTACK
-    };
-
-    struct BotMove {
-        hlt::Entity target;
-        hlt::Vector pos;
-        SIDE side;
-        ACTION action;
-    };
-
     class Commander {
+    private:
+        Observer &observer;
+        Navigator &navigator;
+
+        std::vector<bot::Assignment> assignments;
     public:
-        std::vector<BotMove> GetMoves(hlt::Map& map);
+        Commander(Observer &observer, Navigator &navigator);
+
+        hlt::Move command(const hlt::Ship &ship);
+
+        hlt::Move produce_move(const bot::Assignment &assignment);
     };
 }
+
+
 #endif //MYBOT_COMMANDER_H
