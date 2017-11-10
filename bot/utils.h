@@ -6,9 +6,9 @@
 #define MYBOT_UTILS_H
 
 
-#include <types.hpp>
+#include "../hlt/types.hpp"
 #include <vector>
-#include <vector.hpp>
+#include "../hlt/vector.hpp"
 
 namespace bot {
     template<class T>

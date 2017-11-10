@@ -2,6 +2,8 @@ cmake-build-debug
 .idea
 *.hlt
 *.stackdump
+sandbox/hlt_client
+*.zip
 
 # Created by .ignore support plugin (hsz.mobi)
 ### C++ template

@@ -6,7 +6,7 @@
 #define MYBOT_ASSIGNMENT_H
 
 
-#include <types.hpp>
+#include "../hlt/types.hpp"
 
 namespace bot {
     struct Assignment {

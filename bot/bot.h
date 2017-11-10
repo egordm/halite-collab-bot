@@ -5,8 +5,7 @@
 #ifndef MYBOT_BOT_H
 #define MYBOT_BOT_H
 
-#include <types.hpp>
-#include <map.hpp>
+#include "../hlt/map.hpp"
 #include "observer.h"
 #include "navigator.h"
 #include "commander.h"

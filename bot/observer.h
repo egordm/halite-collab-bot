@@ -5,7 +5,7 @@
 #ifndef MYBOT_OBSERVER_H
 #define MYBOT_OBSERVER_H
 
-#include "map.hpp"
+#include "../hlt/map.hpp"
 
 namespace bot {
     class Observer {

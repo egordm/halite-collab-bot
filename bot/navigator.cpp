@@ -4,7 +4,7 @@
 
 #include <sstream>
 #include <utility>
-#include <log.hpp>
+#include "../hlt/log.hpp"
 #include "navigator.h"
 #include "defines.h"
 #include "path.hpp"

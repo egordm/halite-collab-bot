@@ -6,8 +6,8 @@
 #define MYBOT_PATH_H
 
 
-#include <entities.hpp>
-#include <move.hpp>
+#include "../hlt/entities.hpp"
+#include "../hlt/move.hpp"
 #include "observer.h"
 #include "constants.h"
 #include "defines.h"

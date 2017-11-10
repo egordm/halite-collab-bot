@@ -5,7 +5,7 @@
 #ifndef MYBOT_NAVIGATOR_H
 #define MYBOT_NAVIGATOR_H
 
-#include <move.hpp>
+#include "../hlt/move.hpp"
 #include "observer.h"
 
 

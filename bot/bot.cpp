@@ -3,7 +3,7 @@
 //
 
 #include <iostream>
-#include <log.hpp>
+#include "../hlt/log.hpp"
 #include "bot.h"
 
 
