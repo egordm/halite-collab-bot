@@ -22,6 +22,19 @@ hlt::Move bot::Commander::command(const hlt::Ship &ship) {
 }
 
 hlt::Move bot::Commander::produce_move(const bot::Assignment &assignment) {
-    hlt::Ship ship = observer.get_ship(observer.my_id, assignment.ship_id); // May raise error
+    auto ship = observer.get_ship(observer.my_id, assignment.ship_id);
+    if (!ship.second) return hlt::Move::noop();
+
+    switch (assignment.type) {
+        case Assignment::ColonizePlanet:
+            return navigator.dock_planet(ship.first, observer.get_planet(assignment.target_id));
+        case Assignment::DefendPlanet:break;
+        case Assignment::AttackPlanet:break;
+        case Assignment::DefendShip:break;
+        case Assignment::AttackShip:auto enemy = observer.get_ship(assignment.target_id);
+            if (!enemy.second) break;
+            return navigator.attack_ship(ship.first, enemy.first, observer.get_velocity(assignment.ship_id));
+    }
+
     return hlt::Move::noop();
 }
