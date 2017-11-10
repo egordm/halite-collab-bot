@@ -26,6 +26,15 @@ namespace bot {
         }
         return ret;
     }
+
+    template<class T>
+    void erase(std::vector<T> &v, T item) {
+        for (int i = static_cast<int>(v.size() - 1); i >= 0; --i) {
+            if(v[i].entity_id != item.entity_id) continue;
+            v.erase(v.begin() + i);
+            return;
+        }
+    }
 }
 
 
