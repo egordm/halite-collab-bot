@@ -30,7 +30,7 @@ std::vector<hlt::Move> bot::Commander::command() {
 }
 
 bot::Assignment bot::Commander::assign(const hlt::Ship &ship) {
-    auto empty_planets = observer.get_planets(hlt::empty_mask); // TODO: do what cody did
+    auto empty_planets = observer.get_planets(hlt::empty_mask + hlt::friendly_mask); // TODO: do what cody did
     while (!empty_planets.empty()) {
         auto planet = closest_object(empty_planets, ship.pos);
         if (!planet.second) continue;
@@ -97,18 +97,20 @@ hlt::nullable<hlt::Ship> bot::Commander::attack_planet(const hlt::Ship &ship, co
 }
 
 bool bot::Commander::valid_assignment(bot::Assignment ass) {
+    auto ship = observer.get_ship(observer.my_id, ass.ship_id);
+    if (!ship.second || !ship.first.is_alive()) return false;
+
     if (ass.type == Assignment::ColonizePlanet) {
         const auto &planet = observer.get_planet(ass.target_id);
-        if (planet.health <= 0 || planet.owner_mask(observer.my_id) == hlt::enemy_mask) return false;
+        if (!planet.is_alive() || planet.owner_mask(observer.my_id) == hlt::enemy_mask) return false;
 
-        auto spots_filled = planet.docked_ships.size();
-        for (const auto &oass : assignments) // TODO: add a method to comapare
-            if (oass.type == ass.type && oass.target_id == ass.target_id)
-                spots_filled++;
-        return (planet.docking_spots - spots_filled >= bot::constants::MIN_DOCK_SPOTS_FOR_COLONIZATION);
+        return (!planet.is_full());
     } else if (ass.type == Assignment::AttackPlanet) {
         const auto &planet = observer.get_planet(ass.target_id);
-        return (planet.health <= 0 || !planet.owned || planet.owner_id == observer.my_id);
+        return (planet.health > 0 && planet.owned && planet.owner_id != observer.my_id);
+    } else if (ass.type == Assignment::AttackShip) {
+        const auto &ship = observer.get_ship(ass.target_id);
+        return (ship.second || ship.first.health > 0);
     }
 
     return true;

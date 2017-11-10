@@ -10,6 +10,7 @@ namespace hlt {
     const unsigned short empty_mask = 1;
     const unsigned short friendly_mask = 2;
     const unsigned short enemy_mask = 4;
+    const unsigned short all_mask = enemy_mask + friendly_mask + empty_mask;
 
     struct Entity {
         Entity() = default;

@@ -43,6 +43,25 @@ namespace bot {
         return ret;
     }
 
+    std::vector<hlt::Ship> Observer::all_ships() const {
+        std::vector<hlt::Ship> ret;
+        for (auto &key : map.ships) {
+            ret.insert(ret.end(), key.second.begin(), key.second.end());
+        }
+        return ret;
+    }
+
+    std::vector<hlt::Ship> Observer::ships_around(const hlt::Vector &p, double radius, unsigned short owner_mask) const {
+        std::vector<hlt::Ship> ret;
+        for (auto &key : map.ships) {
+            for(const auto &ship : key.second) {
+                if(owner_mask & ship.owner_mask(my_id) == 0) continue;
+                if(ship.pos.dist(p) < radius) ret.push_back(ship);
+            }
+        }
+        return ret;
+    }
+
     const hlt::Vector Observer::get_velocity(hlt::EntityId entity_id) const {
         if (velocities.find(entity_id) == velocities.end()) return hlt::Vector(); // TODO: mb unneeded.
         return velocities.at(entity_id);

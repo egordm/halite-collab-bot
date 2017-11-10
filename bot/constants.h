@@ -8,7 +8,9 @@
 
 namespace bot {
     namespace constants {
-        constexpr unsigned int MIN_DOCK_SPOTS_FOR_COLONIZATION = 2;
+        constexpr unsigned int MIN_DOCK_SPOTS_FOR_COLONIZATION = 1;
+        constexpr double SHIP_AVOID_PROXIMITY = 10;
+        constexpr double AVOID_PROXIMITY_OFFSET = 1;
     }
 }
 

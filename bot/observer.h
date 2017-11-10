@@ -28,6 +28,10 @@ namespace bot {
 
         std::vector<hlt::Ship> get_enemies() const;
 
+        std::vector<hlt::Ship> all_ships() const;
+
+        std::vector<hlt::Ship> ships_around(const hlt::Vector &p, double radius, unsigned short owner_mask) const;
+
         hlt::nullable<hlt::Ship> get_ship(hlt::PlayerId player_id, hlt::EntityId ship_id);
 
         hlt::nullable<hlt::Ship> get_ship(hlt::EntityId ship_id);
