@@ -5,7 +5,6 @@
 #define MYBOT_BOTALGO_H
 
 #include "hlt/hlt.hpp"
-#include "bot/navigation.h"
 #include "types.hpp"
 #include "hlt/navigation.hpp"
 

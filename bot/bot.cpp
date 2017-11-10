@@ -2,6 +2,8 @@
 // Created by egordm on 9-11-2017.
 //
 
+#include <iostream>
+#include <log.hpp>
 #include "bot.h"
 
 
@@ -13,13 +15,13 @@ namespace bot {
 
     std::vector<hlt::Move> Bot::do_step(const hlt::Map &map) {
         observer.observe(map);
-
-        std::vector<hlt::Move> ret;
-        for (const auto &ship : observer.my_ships()) {
-            ret.push_back(commander.command(ship));
+        try {
+            return commander.command();
+        } catch (const std::exception &exc) {
+            hlt::Log::log(exc.what());
+            std::cerr << exc.what();
+            throw exc;
         }
-
-        return ret;
     }
 
 

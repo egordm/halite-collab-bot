@@ -2,6 +2,7 @@
 // Created by egordm on 9-11-2017.
 //
 
+#include <sstream>
 #include "navigator.h"
 #include "defines.h"
 
@@ -22,11 +23,7 @@ namespace bot {
         if (avoid_obstacles) {
             const auto obstacle = planet_between(ship.pos, pos);
             if (obstacle.second) {
-                const auto tangents = ship.pos.tangents(obstacle.first.pos,
-                                                        obstacle.first.radius + hlt::constants::BYPASS_PROXIMITY);
-                const auto closest =
-                        pos.dist(tangents.first) < pos.dist(tangents.second) ? tangents.first : tangents.second;
-                return move_towards(ship, closest, avoid_obstacles);
+                return move_towards(ship, ship.pos.avoid_point(obstacle.first.pos, obstacle.first.radius + hlt::constants::BYPASS_PROXIMITY), avoid_obstacles);
             }
         }
 
@@ -42,7 +39,8 @@ namespace bot {
     }
 
     hlt::Move Navigator::attack_ship(const hlt::Ship &ship, const hlt::Ship &target, const hlt::Vector &target_vel) {
-        const auto pos = ship.pos.closest_point(target.pos, hlt::constants::SHIP_RADIUS * 2); // TODO: crash if health < then enemy
+        const auto pos = ship.pos.closest_point(target.pos,
+                                                hlt::constants::SHIP_RADIUS * 2); // TODO: crash if health < then enemy
         const auto dist = ship.pos.dist(pos);
 
         if (dist < hlt::constants::WEAPON_RADIUS) {
