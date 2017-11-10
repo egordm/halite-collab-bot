@@ -25,7 +25,7 @@ namespace bot {
         Assignment(hlt::EntityId ship, hlt::EntityId target, Type type);
     };
 
-};
+}
 
 
 #endif //MYBOT_ASSIGNMENT_H
