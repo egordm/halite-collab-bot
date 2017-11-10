@@ -15,7 +15,8 @@ namespace bot {
             DefendPlanet = 1,
             AttackPlanet = 2,
             DefendShip = 3,
-            AttackShip = 4
+            AttackShip = 4,
+            NoOp = 5,
         };
 
         hlt::EntityId ship_id;
@@ -23,6 +24,8 @@ namespace bot {
         Type type;
 
         Assignment(hlt::EntityId ship, hlt::EntityId target, Type type);
+
+
     };
 
 }

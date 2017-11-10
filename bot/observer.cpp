@@ -60,8 +60,9 @@ namespace bot {
 
     hlt::nullable<hlt::Ship> Observer::get_ship(hlt::EntityId ship_id) {
         for (const auto &kv : map.ship_map) {
-            if (kv.second.find(ship_id) != kv.second.end())
-                return std::make_pair(map.ships.at(kv.first).at(ship_id), true);
+            if (kv.second.find(ship_id) != kv.second.end()) {
+                return std::make_pair(map.ships.at(kv.first).at(map.ship_map.at(kv.first).at(ship_id)), true);
+            }
         }
         return std::make_pair(hlt::Ship(), false);
     }
