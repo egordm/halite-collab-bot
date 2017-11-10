@@ -15,8 +15,8 @@ hlt::Move bot::Commander::command(const hlt::Ship &ship) {
 
     if (planet.second) return navigator.dock_planet(ship, planet.first);
 
-/*    auto enemy = closest_object(observer.get_enemies(), ship.pos); //TODO: overflow ex
-    if (enemy.second) return navigator.attack_ship(ship, enemy.first, observer.get_velocity(enemy.first.entity_id));*/
+    auto enemy = closest_object(observer.get_enemies(), ship.pos); //TODO: overflow ex
+    if (enemy.second) return navigator.attack_ship(ship, enemy.first, observer.get_velocity(enemy.first.entity_id));
 
     return hlt::Move::noop();
 }
