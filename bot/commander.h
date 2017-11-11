@@ -15,21 +15,19 @@ namespace bot {
         Observer &observer;
         Navigator *navigator;
 
-        std::vector<bot::Assignment> assignments;
+        hlt::entity_map<bot::Assignment*> assignments;
     public:
         Commander(Observer &observer, Navigator *navigator);
 
+        virtual ~Commander();
+
         std::vector<hlt::Move> command();
 
-        bot::Assignment assign(const hlt::Ship &ship);
+        bot::Assignment* assign(const hlt::Ship &ship);
 
-        hlt::Move produce_move(const bot::Assignment &assignment);
+        void add_assignment(bot::Assignment* assignment);
 
-        hlt::nullable<hlt::Ship> attack_planet(const hlt::Ship &ship, const hlt::Planet &planet);
-
-        bool valid_assignment(bot::Assignment ass);
-
-        hlt::nullable<bot::Assignment> get_assignment(const hlt::EntityId &ship_id);
+        bool can_assign(bot::Assignment* assignment);
     };
 }
 

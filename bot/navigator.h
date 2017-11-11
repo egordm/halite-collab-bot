@@ -18,6 +18,8 @@ namespace bot {
     public:
         explicit Navigator(Observer &observer);
 
+        virtual ~Navigator() = default;
+
         virtual hlt::Move dock_planet(const hlt::Ship &ship, const hlt::Planet &planet);
 
         virtual hlt::Move attack_ship(const hlt::Ship &ship, const hlt::Ship &target, const hlt::Vector &target_vel);
