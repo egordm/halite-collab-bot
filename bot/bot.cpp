@@ -8,7 +8,8 @@
 
 
 namespace bot {
-    Bot::Bot(hlt::PlayerId id, hlt::Map &map) : observer(Observer(id, map)), navigator(Navigator(observer)),
+    Bot::Bot(hlt::PlayerId id, hlt::Map &map) : observer(Observer(id, map)),
+                                                navigator(new LegacyNavigator(observer)),
                                                       commander(Commander(observer, navigator)) {
 
     }
@@ -24,5 +25,7 @@ namespace bot {
         }
     }
 
-
+    Bot::~Bot() {
+        delete navigator;
+    }
 }

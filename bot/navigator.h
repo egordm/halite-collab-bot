@@ -13,14 +13,23 @@ namespace bot {
 
 
     class Navigator {
-    private:
+    protected:
         Observer &observer;
     public:
         explicit Navigator(Observer &observer);
 
-        hlt::Move dock_planet(const hlt::Ship &ship, const hlt::Planet &planet);
+        virtual hlt::Move dock_planet(const hlt::Ship &ship, const hlt::Planet &planet);
 
-        hlt::Move attack_ship(const hlt::Ship &ship, const hlt::Ship &target, const hlt::Vector &target_vel);
+        virtual hlt::Move attack_ship(const hlt::Ship &ship, const hlt::Ship &target, const hlt::Vector &target_vel);
+    };
+
+    class LegacyNavigator : public Navigator{
+    public:
+        explicit LegacyNavigator(Observer &observer);
+
+        hlt::Move dock_planet(const hlt::Ship &ship, const hlt::Planet &planet) override;
+
+        hlt::Move attack_ship(const hlt::Ship &ship, const hlt::Ship &target, const hlt::Vector &target_vel) override;
     };
 }
 

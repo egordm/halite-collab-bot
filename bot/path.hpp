@@ -60,7 +60,8 @@ namespace bot {
                 if (sobs.second) return avoid(sobs.first);
             }
 
-            auto speed = std::min(hlt::constants::MAX_SPEED, std::max(1, SINT(ship.pos.dist(pos))));
+            auto speed = avoid_collision ?  std::min(hlt::constants::MAX_SPEED, std::max(1, SINT(ship.pos.dist(pos)))) :
+                         hlt::constants::MAX_SPEED;
             return hlt::Move::thrust(ship.entity_id, speed, SINT(hlt::rad_to_deg(ship.pos.angle_between(pos))));
         }
 

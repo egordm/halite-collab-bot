@@ -7,7 +7,7 @@
 #include "constants.h"
 
 
-bot::Commander::Commander(bot::Observer &observer, bot::Navigator &navigator) : observer(observer),
+bot::Commander::Commander(bot::Observer &observer, bot::Navigator *navigator) : observer(observer),
                                                                                 navigator(navigator) {}
 
 std::vector<hlt::Move> bot::Commander::command() {
@@ -65,7 +65,7 @@ hlt::Move bot::Commander::produce_move(const bot::Assignment &assignment) {
             const auto &planet = observer.get_planet(assignment.target_id);
             if (!planet.second) break;
 
-            return navigator.dock_planet(ship.first, planet.first);
+            return navigator->dock_planet(ship.first, planet.first);
         }
         case Assignment::DefendPlanet:break;
         case Assignment::AttackPlanet: {
@@ -74,13 +74,13 @@ hlt::Move bot::Commander::produce_move(const bot::Assignment &assignment) {
 
             const auto &target = attack_planet(ship.first, planet.first);
             if (!target.second) break;
-            return navigator.attack_ship(ship.first, target.first, observer.get_velocity(assignment.target_id));
+            return navigator->attack_ship(ship.first, target.first, observer.get_velocity(assignment.target_id));
         }
         case Assignment::DefendShip:break;
         case Assignment::AttackShip: {
             auto enemy = observer.get_ship(assignment.target_id);
             if (!enemy.second) break;
-            return navigator.attack_ship(ship.first, enemy.first, observer.get_velocity(assignment.ship_id));
+            return navigator->attack_ship(ship.first, enemy.first, observer.get_velocity(assignment.ship_id));
         }
     }
 

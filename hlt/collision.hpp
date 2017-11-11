@@ -3,6 +3,7 @@
 #include <algorithm>
 
 #include "vector.hpp"
+#include "entities.hpp"
 
 namespace hlt {
     namespace collision {

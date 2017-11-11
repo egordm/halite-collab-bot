@@ -13,11 +13,11 @@ namespace bot {
     class Commander {
     private:
         Observer &observer;
-        Navigator &navigator;
+        Navigator *navigator;
 
         std::vector<bot::Assignment> assignments;
     public:
-        Commander(Observer &observer, Navigator &navigator);
+        Commander(Observer &observer, Navigator *navigator);
 
         std::vector<hlt::Move> command();
 

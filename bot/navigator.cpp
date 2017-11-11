@@ -4,6 +4,7 @@
 
 #include <sstream>
 #include <utility>
+#include <navigation.hpp>
 #include "../hlt/log.hpp"
 #include "navigator.h"
 #include "defines.h"
@@ -33,5 +34,23 @@ namespace bot {
 
         // TODO: find intersection point and lean slightly towards
         return Path<hlt::Ship>(observer, ship, target).move(target.radius + hlt::constants::WEAPON_RADIUS -2);
+    }
+
+    LegacyNavigator::LegacyNavigator(Observer &observer) : Navigator(observer) {}
+
+    hlt::Move LegacyNavigator::dock_planet(const hlt::Ship &ship, const hlt::Planet &planet) {
+        if (ship.can_dock(planet)) {
+            return hlt::Move::dock(ship.entity_id, planet.entity_id);
+        }
+
+        auto ret = hlt::navigation::navigate_ship_to_dock(observer.getMap(), ship, planet, hlt::constants::MAX_SPEED);
+        return (ret.second) ? ret.first : hlt::Move::noop();
+    }
+
+    hlt::Move
+    LegacyNavigator::attack_ship(const hlt::Ship &ship, const hlt::Ship &target, const hlt::Vector &target_vel) {
+        auto taget_pos = ship.pos.closest_point(target.pos, target.radius + hlt::constants::WEAPON_RADIUS -2);
+        auto ret = hlt::navigation::navigate_ship_towards_target(observer.getMap(), ship, taget_pos, hlt::constants::MAX_SPEED, true, 100, 0.02);
+        return ret.second ? ret.first : hlt::Move::noop();
     }
 }
