@@ -2,7 +2,7 @@
 // Created by egordm on 9-11-2017.
 //
 
-#include <log.hpp>
+#include "../hlt/log.hpp"
 #include "commander.h"
 #include "utils.h"
 #include "constants.h"

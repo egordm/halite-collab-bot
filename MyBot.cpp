@@ -1,8 +1,9 @@
+#include "bot/defines.h"
 #include "bot/bot.h"
 #include "hlt/hlt.hpp"
 
 int main() {
-    const hlt::Metadata metadata = hlt::initialize("EgorDm-");
+    const hlt::Metadata metadata = hlt::initialize(BOT_NAME);
     const hlt::PlayerId player_id = metadata.player_id;
 
     hlt::Map initial_map = metadata.initial_map;

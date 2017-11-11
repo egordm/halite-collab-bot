@@ -6,6 +6,7 @@
 #define MYBOT_DEFINES_H
 
 #define SINT static_cast<const int &>
-#define DEBUG true
+#define BOT_NAME "EgorDm"
+#define DEBUG false
 
 #endif //MYBOT_DEFINES_H
