@@ -135,9 +135,19 @@ namespace bot {
 
         hlt::nullable<hlt::Ship> get_target(Observer &observer) override;
 
-
         Assignment::Type get_type() const override {
             return Assignment::Type::AttackPlanet;
+        }
+    };
+
+    class DefendPlanetAssignment : public AttackShipAssignment {
+    public:
+        DefendPlanetAssignment(hlt::EntityId ship_id, hlt::EntityId target_id) : AttackShipAssignment(ship_id, target_id) {}
+
+        hlt::nullable<hlt::Ship> get_target(Observer &observer) override;
+
+        Assignment::Type get_type() const override {
+            return Assignment::Type::DefendPlanet;
         }
     };
 

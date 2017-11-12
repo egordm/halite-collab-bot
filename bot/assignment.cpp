@@ -2,8 +2,11 @@
 // Created by egordm on 10-11-2017.
 //
 
+#include <algorithm>
 #include "assignment.h"
 #include "utils.h"
+#include "constants.h"
+#include "sorting.h"
 
 hlt::nullable<hlt::Ship> bot::Assignment::get_ship(bot::Observer &observer) {
     return observer.get_ship(observer.my_id, ship_id);
@@ -28,7 +31,7 @@ hlt::nullable<hlt::Move> bot::ColonizeAssignment::get_move(bot::Observer &observ
 }
 
 bool bot::ColonizeAssignment::is_valid(bot::Observer &observer) {
-    if(!TargetedAssignment::is_valid(observer)) return false;
+    if (!TargetedAssignment::is_valid(observer)) return false;
     auto target = get_target(observer);
     return !target.first.is_full() && target.first.owner_mask(observer.my_id) != hlt::enemy_mask;
 }
@@ -51,11 +54,13 @@ hlt::nullable<hlt::Ship> bot::AttackShipAssignment::get_target(bot::Observer &ob
 }
 
 hlt::nullable<hlt::Ship> bot::AttackPlanetAssignment::get_target(bot::Observer &observer) {
-    std::vector<hlt::Ship> weakest;
     const auto &planet = observer.get_planet(target_id);
-    if (!planet.second || planet.first.owner_mask(observer.my_id) != hlt::enemy_mask)
+    if (!planet.second || planet.first.owner_mask(observer.my_id) != hlt::enemy_mask) {
         return std::make_pair(hlt::Ship(), false);
+    }
 
+    // Find the weakest enemy
+    std::vector<hlt::Ship> weakest;
     for (const auto &ship_id : planet.first.docked_ships) {
         const auto &enemy = observer.get_ship(planet.first.owner_id, ship_id);
         if (!enemy.second) continue;
@@ -68,4 +73,18 @@ hlt::nullable<hlt::Ship> bot::AttackPlanetAssignment::get_target(bot::Observer &
     }
 
     return closest_object(weakest, get_ship(observer).first.pos);
+}
+
+hlt::nullable<hlt::Ship> bot::DefendPlanetAssignment::get_target(bot::Observer &observer) {
+    const auto &planet = observer.get_planet(target_id);
+    const auto &ship = get_ship(observer);
+    if (!ship.second || !planet.second || planet.first.owner_mask(observer.my_id) != hlt::friendly_mask)
+        return std::make_pair(hlt::Ship(), false);
+
+    const auto &enemies = Observer::filter(observer.ships_around(planet.first.pos, planet.first.radius + constants::DEFEND_RADIUS,
+                                              hlt::enemy_mask), hlt::ShipDockingStatus::Undocked);
+    if(enemies.empty()) return std::make_pair(hlt::Ship(), false);
+    const auto &enemy = std::min_element(enemies.begin(), enemies.end(), sorting::SortByDistance(ship.first.pos));
+
+    return std::make_pair(*enemy, true);
 }
