@@ -4,5 +4,8 @@ IF EXIST *.log del /S *.log
 SET root=cmake-build-debug
 SET enemy=enemy
 SET /p enemy="Enemy bot: "
-.\halite.exe -d "240 160" "..\%root%\MyBot.exe" ".\version\%enemy%.exe"
+SET /A width=%RANDOM% * 264 / 32768 + 120
+SET /A height=%RANDOM% * 136 / 32768 + 120
+
+.\halite.exe -d "%width% %height%" "..\%root%\MyBot.exe" ".\version\%enemy%.exe"
 PAUSE
