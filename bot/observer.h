@@ -39,6 +39,10 @@ namespace bot {
         std::vector<hlt::Planet> get_planets(unsigned short owner_mask) const;
 
         hlt::nullable<hlt::Planet> get_planet(hlt::EntityId planet_id);
+
+        std::vector<hlt::Planet> get_attacked_planets();
+
+        static std::vector<hlt::Ship> filter(std::vector<hlt::Ship> v, hlt::ShipDockingStatus status);
     };
 }
 
