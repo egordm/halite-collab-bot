@@ -9,16 +9,15 @@
 
 
 namespace bot {
-    Bot::Bot(hlt::PlayerId id, hlt::Map &map)
-            : observer(Observer(id, map)), navigator(new LegacyNavigator(observer)),
-              commander(Commander(observer, navigator)) {
+    Bot::Bot(hlt::PlayerId id, hlt::Map *map)
+            : observer(Observer(id, map)), commander(new JuniorCommander(observer, new navigation::LegacyNavigator(observer))) {
 
     }
 
     std::vector<hlt::Move> Bot::do_step() {
         observer.observe();
         try {
-            return commander.command();
+            return commander->command();
         } catch (const std::exception &exc) {
             hlt::Log::log(exc.what());
             std::cerr << exc.what();
@@ -26,7 +25,7 @@ namespace bot {
         }
     }
 
-    Bot::~Bot() {
-        delete navigator;
-    }
+	Bot::~Bot() {
+		delete commander;
+	}
 }

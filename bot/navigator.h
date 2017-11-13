@@ -13,11 +13,9 @@ namespace bot {
 	namespace navigation {
 		class Navigator {
 		protected:
-			const Observer &observer;
+			Observer &observer;
 		public:
-			explicit Navigator(const Observer &observer) : observer(observer) {}
-
-			virtual ~Navigator() = default;
+			explicit Navigator(Observer &observer) : observer(observer) {}
 
 			virtual hlt::Move
 			dock_planet(const std::shared_ptr<hlt::Ship> &ship, const std::shared_ptr<hlt::Planet> &planet) { return hlt::Move::noop(); }
@@ -27,7 +25,7 @@ namespace bot {
 
 		class LegacyNavigator : public Navigator {
 		public:
-			explicit LegacyNavigator(const Observer &observer) : Navigator(observer) {}
+			explicit LegacyNavigator(Observer &observer) : Navigator(observer) {}
 
 			hlt::Move dock_planet(const std::shared_ptr<hlt::Ship> &ship, const std::shared_ptr<hlt::Planet> &planet) override;
 

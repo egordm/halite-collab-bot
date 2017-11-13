@@ -10,7 +10,7 @@
 namespace bot {
     class Observer {
     private:
-        const hlt::Map &map;
+        hlt::Map *map;
 	    std::vector<std::shared_ptr<hlt::Ship>> ships;
 	    std::vector<std::shared_ptr<hlt::Ship>> my_ships;
 	    std::vector<std::shared_ptr<hlt::Ship>> enemy_ships;
@@ -19,31 +19,33 @@ namespace bot {
         const hlt::PlayerId my_id;
         unsigned int step;
 
-        Observer(hlt::PlayerId id, const hlt::Map &map);
+        Observer(hlt::PlayerId id, hlt::Map *map);
 
-        void observe();
+	    virtual ~Observer();
 
-        const hlt::Map &getMap() const;
+	    void observe();
 
-        std::vector<std::shared_ptr<hlt::Ship>> &get_my_ships() const;
+        const hlt::Map *getMap();
 
-        std::vector<std::shared_ptr<hlt::Ship>> &get_enemies() const;
+        std::vector<std::shared_ptr<hlt::Ship>> &get_my_ships();
 
-        std::vector<std::shared_ptr<hlt::Ship>> &get_ships() const;
+        std::vector<std::shared_ptr<hlt::Ship>> &get_enemies();
 
-	    std::vector<std::shared_ptr<hlt::Ship>> get_ships(const hlt::Vector &p, double radius, unsigned short owner_mask) const;
+        std::vector<std::shared_ptr<hlt::Ship>> &get_ships();
 
-        std::shared_ptr<hlt::Ship> get_ship(hlt::EntityId ship_id) const;
+	    std::vector<std::shared_ptr<hlt::Ship>> get_ships(const hlt::Vector &p, double radius, unsigned short owner_mask);
 
-	    std::vector<std::shared_ptr<hlt::Planet>> &get_planets() const;
+        std::shared_ptr<hlt::Ship> get_ship(hlt::EntityId ship_id);
 
-	    std::vector<std::shared_ptr<hlt::Planet>> get_planets(unsigned short owner_mask) const;
+	    std::vector<std::shared_ptr<hlt::Planet>> &get_planets();
+
+	    std::vector<std::shared_ptr<hlt::Planet>> get_planets(unsigned short owner_mask);
 
 	    std::shared_ptr<hlt::Planet> get_planet(hlt::EntityId planet_id);
 
-	    std::vector<std::shared_ptr<hlt::Ship>> get_attackers(hlt::Planet * planet) const;
+	    std::vector<std::shared_ptr<hlt::Ship>> get_attackers(hlt::Planet * planet);
 
-        std::vector<std::shared_ptr<hlt::Planet>> get_attacked_planets() const;
+        std::vector<std::shared_ptr<hlt::Planet>> get_attacked_planets();
     };
 }
 

@@ -14,15 +14,14 @@ namespace bot {
     class Bot {
     private:
         Observer observer;
-        Navigator *navigator;
-        Commander commander;
+        Commander *commander;
         unsigned int step;
     public:
-        Bot(hlt::PlayerId id, hlt::Map &map);
-
-        std::vector<hlt::Move> do_step();
+        Bot(hlt::PlayerId id, hlt::Map *map);
 
         virtual ~Bot();
+
+        std::vector<hlt::Move> do_step();
     };
 }
 

@@ -2,19 +2,24 @@
 // Created by egordm on 13-11-2017.
 //10
 
+#include <algorithm>
 #include "assignment.h"
 #include "sorting.h"
 
 namespace bot {
-	hlt::Move ColonizeAssignment::move(const Observer &observer, navigation::Navigator *navigator) const {
+	hlt::Move ColonizeAssignment::move(Observer &observer, navigation::Navigator *navigator) const {
 		return navigator->dock_planet(get_ship(), get_target(observer));
 	}
 
-	hlt::Move AttackShipAssignment::move(const Observer &observer, navigation::Navigator *navigator) const {
+	hlt::Move AttackShipAssignment::move(Observer &observer, navigation::Navigator *navigator) const {
 		return navigator->attack_ship(get_ship(), get_target(observer));
 	}
 
-	const std::shared_ptr<hlt::Ship> &AttackPlanetAssignment::get_target(const Observer &observer) const {
+	static bool comparator(const std::shared_ptr<hlt::Ship> &a, const std::shared_ptr<hlt::Ship> &b) {
+		return true;
+	}
+
+	const std::shared_ptr<hlt::Ship> AttackPlanetAssignment::get_target(Observer &observer) const {
 		// Find the weakest enemy TODO: weigh health, status and distance
 		std::vector<std::shared_ptr<hlt::Ship>> weakest;
 		for (const auto &ship_id : get_target_planet()->docked_ships) {
@@ -27,6 +32,8 @@ namespace bot {
 			}
 		}
 
-		return *std::min(weakest.begin(), weakest.end(), sorting::SortByDistance(get_ship()->pos));
+		sorting::SortByDistance distance_sort(get_ship()->pos);
+		if(weakest.empty()) return nullptr;
+		return *std::min_element(weakest.begin(), weakest.end(), distance_sort);
 	}
 }

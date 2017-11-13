@@ -6,9 +6,9 @@
 #define MYBOT_DEFINES_H
 
 #define SINT static_cast<const int &>
-#define DEBUG true
+#define DEBUG_BOT true
 
-#if DEBUG
+#if DEBUG_BOT
 #define BOT_NAME "Debug"
 #else
 #define BOT_NAME "EgorDm"

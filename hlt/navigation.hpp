@@ -22,14 +22,14 @@ namespace hlt {
             }
         }
 
-        static std::vector<const Entity *> objects_between(const Map& map, const Vector& start, const Vector& target) {
+        static std::vector<const Entity *> objects_between(const Map* map, const Vector& start, const Vector& target) {
             std::vector<const Entity *> entities_found;
 
-            for(const auto &pl : map.planets) {
+            for(const auto &pl : map->planets) {
                 check_and_add_entity_between(entities_found, start, target, pl.second.get());
             }
 
-            for (const auto& sh : map.ships) {
+            for (const auto& sh : map->ships) {
                 check_and_add_entity_between(entities_found, start, target, sh.second.get());
             }
 
@@ -37,7 +37,7 @@ namespace hlt {
         }
 
         static nullable <Move> navigate_ship_towards_target(
-                const Map& map,
+                const Map* map,
                 const Ship* ship,
                 const Vector& target,
                 const int max_thrust,
@@ -73,7 +73,7 @@ namespace hlt {
         }
 
         static nullable<Move> navigate_ship_to_dock(
-                const Map& map,
+                const Map* map,
                 const Ship* ship,
                 const Entity* dock_target,
                 const int max_thrust)

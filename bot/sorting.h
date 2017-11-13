@@ -9,20 +9,21 @@
 #include <vector.hpp>
 #include <types.hpp>
 #include <entities.hpp>
-#include <w32api/commctrl.h>
 
 namespace bot {
     namespace sorting {
+
         struct SortByDistance {
             hlt::Vector pos;
 
             explicit SortByDistance(const hlt::Vector &pos) : pos(pos) {}
 
-            template<class T>
+	        template<class T>
             inline bool operator()(const T &e1, const T &e2) {
-                return (pos.dist_sq(e1->pos) < pos.dist_sq(e2->pos));
+                return (pos.dist_sq(e1->pos) < pos.dist_sq(e2->pos)) && e1->is_alive();
             }
         };
+
 
         struct FilterOwnerMask {
             hlt::PlayerId owner_id;
@@ -31,9 +32,9 @@ namespace bot {
             explicit FilterOwnerMask(hlt::PlayerId owner_id, short owner_mask)
                     : owner_id(owner_id), owner_mask(owner_mask) {};
 
-            template<class T>
+	        template<class T>
             inline bool operator()(const T &el) {
-                return (owner_mask & el->owner_mask(owner_id)) != 0;
+                return (owner_mask & el->owner_mask(owner_id)) != 0 && el->is_alive();
             }
         };
 
@@ -45,7 +46,7 @@ namespace bot {
 
 		    template<class T>
 		    inline bool operator()(const T &el) {
-			    return pos.dist_sq(el->pos) < distance;
+			    return pos.dist_sq(el->pos) < distance && el->is_alive();
 		    }
 	    };
 
@@ -56,7 +57,7 @@ namespace bot {
 
 		    template<class T>
 		    inline bool operator()(const T &el) {
-			    return el->docking_status == status;
+			    return el->docking_status == status && el->is_alive();
 		    }
 	    };
     }

@@ -9,7 +9,7 @@
 namespace hlt {
     struct Metadata {
         const PlayerId player_id;
-        Map &initial_map;
+        Map *initial_map;
     };
 
     /// Initialize our bot with the given name, getting back some metadata.
@@ -29,7 +29,7 @@ namespace hlt {
 
         in::setup(bot_name, map_width, map_height);
 
-        Map map(map_width, map_height);
+        Map *map = new Map(map_width, map_height);
         hlt::in::update_map(map);
 
         return {static_cast<PlayerId>(player_id), map};

@@ -15,40 +15,18 @@ namespace hlt {
 			g_map_height = map_height;
 		}
 
-		void update_map(const Map &map) {
-			if (g_turn == 1) {
-				out::send_string(g_bot_name);
-			}
-
-			const std::string input = get_string();
-
-			if (!std::cin.good()) {
-				// This is needed on Windows to detect that game engine is done.
-				std::exit(0);
-			}
-
-			if (g_turn == 0) {
-				Log::log("--- PRE-GAME ---");
-			} else {
-				Log::log("--- TURN " + std::to_string(g_turn) + " ---");
-			}
-			++g_turn;
-
-			update_map(input, map);
-		}
-
-		static std::shared_ptr<Ship> parse_ship(std::stringstream &iss, const PlayerId owner_id, const Map &map) {
+		static std::shared_ptr<Ship> parse_ship(std::stringstream &iss, const PlayerId owner_id, const Map *map) {
 			EntityId entity_id;
 			iss >> entity_id;
 
-			bool new_entity = (map.ships.find(entity_id) == map.ships.end());
-			auto ship = (!new_entity) ? map.ships.at(entity_id) : std::make_shared<Ship>();
+			bool new_entity = (map->ships.find(entity_id) == map->ships.end());
+			auto ship = (!new_entity) ? map->ships.at(entity_id) : std::make_shared<Ship>();
 			ship->entity_id = entity_id;
 
 			Vector pos;
 			iss >> pos.x;
 			iss >> pos.y;
-			if (!new_entity) ship->velocity = pos - ship->pos;
+			if (!new_entity) ship->vel = pos - ship->pos;
 			ship->pos = pos;
 
 			iss >> ship->health;
@@ -72,11 +50,11 @@ namespace hlt {
 			return ship;
 		}
 
-		static std::shared_ptr<Planet> parse_planet(std::istream &iss, const Map &map) {
+		static std::shared_ptr<Planet> parse_planet(std::istream &iss, const Map *map) {
 			EntityId entity_id;
 			iss >> entity_id;
-			auto planet = (map.planets.find(entity_id) != map.planets.end())
-			              ? map.planets.at(entity_id) : std::make_shared<Planet>();
+			auto planet = (map->planets.find(entity_id) != map->planets.end())
+			              ? map->planets.at(entity_id) : std::make_shared<Planet>();
 			planet->entity_id = entity_id;
 
 			iss >> planet->pos.x;
@@ -115,17 +93,19 @@ namespace hlt {
 			return planet;
 		}
 
-		static void update_map(const std::string &input, const Map &map) {
+		static void update_map(const std::string &input, Map *map) {
 			std::stringstream iss(input);
+
+			auto fuck = (map->players.size() > 0);
 
 			int num_players;
 			iss >> num_players;
 
 			// TODO: this is just a workaround for missing ships. Mayby there isa betetr approach
-			for (auto kv : map.ships) {
+			for (auto kv : map->ships) {
 				kv.second->health = 0;
 			}
-			for (auto kv : map.planets) {
+			for (auto kv : map->planets) {
 				kv.second->health = 0;
 			}
 			entity_map<std::shared_ptr<Ship>> ships;
@@ -148,9 +128,11 @@ namespace hlt {
 					ships.insert(std::make_pair(ship->entity_id, ship));
 					player.push_back(ship);
 				}
-				map.players[player_id] = player;
+
+				if(map->players.find(player_id) != map->players.end()) map->players.erase(map->players.find(player_id));
+				map->players.insert(std::make_pair(player_id, player)); //TODO: fuckfuck
 			}
-			map.ships = ships;
+			map->ships = ships;
 
 			// Parse planets
 			unsigned int num_planets;
@@ -161,7 +143,30 @@ namespace hlt {
 				const auto &planet = parse_planet(iss, map);
 				planets.insert(std::make_pair(planet->entity_id, planet));
 			}
-			map.planets = planets;
+			map->planets = planets;
+		}
+
+		void update_map(Map *map) {
+			if (g_turn == 1) {
+				out::send_string(g_bot_name);
+			}
+
+			const std::string input = get_string();
+
+			if (!std::cin.good()) {
+				// This is needed on Windows to detect that game engine is done.
+				std::exit(0);
+			}
+
+
+			if (g_turn == 0) {
+				Log::log("--- PRE-GAME ---");
+			} else {
+				Log::log("--- TURN " + std::to_string(g_turn) + " ---");
+			}
+			++g_turn;
+
+			update_map(input, map);
 		}
 	}
 }
