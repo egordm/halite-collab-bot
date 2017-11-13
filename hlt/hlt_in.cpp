@@ -101,7 +101,7 @@ namespace hlt {
 			int num_players;
 			iss >> num_players;
 
-			// TODO: this is just a workaround for missing ships. Mayby there isa betetr approach
+			// TODO: this is just a workaround for missing ships. Mayby there isa better approach
 			for (auto kv : map->ships) {
 				kv.second->health = 0;
 			}
@@ -128,9 +128,7 @@ namespace hlt {
 					ships.insert(std::make_pair(ship->entity_id, ship));
 					player.push_back(ship);
 				}
-
-				if(map->players.find(player_id) != map->players.end()) map->players.erase(map->players.find(player_id));
-				map->players.insert(std::make_pair(player_id, player)); //TODO: fuckfuck
+				map->players[player_id] = player;
 			}
 			map->ships = ships;
 
