@@ -47,14 +47,16 @@ namespace hlt {
         int current_production;
 
         /// The maximum number of ships that may be docked.
-        unsigned int docking_spots;
+        unsigned int max_docking_spots;
 
         /// Contains IDs of all ships in the process of docking or undocking,
         /// as well as docked ships.
         std::vector<EntityId> docked_ships;
 
+	    unsigned int spots_left() { return static_cast<unsigned int>(max_docking_spots - docked_ships.size()); }
+
         bool is_full() const {
-            return docked_ships.size() == docking_spots;
+            return docked_ships.size() == max_docking_spots;
         }
 
         unsigned short owner_mask(const PlayerId &player_id) const override {

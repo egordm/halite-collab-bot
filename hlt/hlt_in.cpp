@@ -83,7 +83,7 @@ namespace hlt {
 			iss >> planet->pos.y;
 			iss >> planet->health;
 			iss >> planet->radius;
-			iss >> planet->docking_spots;
+			iss >> planet->max_docking_spots;
 			iss >> planet->current_production;
 			iss >> planet->remaining_production;
 
