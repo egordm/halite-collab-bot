@@ -33,9 +33,9 @@ namespace bot {
 
 	    std::vector<std::shared_ptr<hlt::Ship>> get_ships(const hlt::Vector &p, double radius, unsigned short owner_mask) const;
 
-        std::shared_ptr<hlt::Ship> get_ship(hlt::EntityId ship_id);
+        std::shared_ptr<hlt::Ship> get_ship(hlt::EntityId ship_id) const;
 
-	    std::vector<std::shared_ptr<hlt::Planet>> &get_planets();
+	    std::vector<std::shared_ptr<hlt::Planet>> &get_planets() const;
 
 	    std::vector<std::shared_ptr<hlt::Planet>> get_planets(unsigned short owner_mask) const;
 

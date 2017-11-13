@@ -59,12 +59,12 @@ namespace bot {
 		return ret;
 	}
 
-	std::shared_ptr<hlt::Ship> Observer::get_ship(hlt::EntityId ship_id) {
+	std::shared_ptr<hlt::Ship> Observer::get_ship(hlt::EntityId ship_id) const {
 		if (map.ships.find(ship_id) == map.ships.end()) return nullptr;
 		return map.ships.at(ship_id);
 	}
 
-	std::vector<std::shared_ptr<hlt::Planet>> &Observer::get_planets() {
+	std::vector<std::shared_ptr<hlt::Planet>> &Observer::get_planets() const {
 		return planets;
 	}
 
