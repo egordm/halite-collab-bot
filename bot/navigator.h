@@ -13,27 +13,25 @@ namespace bot {
 	namespace navigation {
 		class Navigator {
 		protected:
-			Observer &observer;
+			const Observer &observer;
 		public:
-			explicit Navigator(Observer &observer) : observer(observer) {}
+			explicit Navigator(const Observer &observer) : observer(observer) {}
 
 			virtual ~Navigator() = default;
 
 			virtual hlt::Move
 			dock_planet(const std::shared_ptr<hlt::Ship> &ship, const std::shared_ptr<hlt::Planet> &planet) { return hlt::Move::noop(); }
 
-			virtual hlt::Move attack_ship(const std::shared_ptr<hlt::Ship> &ship, const std::shared_ptr<hlt::Ship> &target,
-			                              const hlt::Vector &target_vel) { return hlt::Move::noop(); }
+			virtual hlt::Move attack_ship(const std::shared_ptr<hlt::Ship> &ship, const std::shared_ptr<hlt::Ship> &target) { return hlt::Move::noop(); }
 		};
 
 		class LegacyNavigator : public Navigator {
 		public:
-			explicit LegacyNavigator(Observer &observer) : Navigator(observer) {}
+			explicit LegacyNavigator(const Observer &observer) : Navigator(observer) {}
 
 			hlt::Move dock_planet(const std::shared_ptr<hlt::Ship> &ship, const std::shared_ptr<hlt::Planet> &planet) override;
 
-			hlt::Move attack_ship(const std::shared_ptr<hlt::Ship> &ship, const std::shared_ptr<hlt::Ship> &target,
-			                      const hlt::Vector &target_vel) override;
+			hlt::Move attack_ship(const std::shared_ptr<hlt::Ship> &ship, const std::shared_ptr<hlt::Ship> &target) override;
 
 		};
 	}

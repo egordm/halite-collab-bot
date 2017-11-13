@@ -17,8 +17,7 @@ namespace bot {
 			return (ret.second) ? ret.first : hlt::Move::noop();
 		}
 
-		hlt::Move LegacyNavigator::attack_ship(const std::shared_ptr<hlt::Ship> &ship, const std::shared_ptr<hlt::Ship> &target,
-		                                       const hlt::Vector &target_vel) {
+		hlt::Move LegacyNavigator::attack_ship(const std::shared_ptr<hlt::Ship> &ship, const std::shared_ptr<hlt::Ship> &target) {
 			auto taget_pos = ship->pos.closest_point(target->pos, target->radius + hlt::constants::WEAPON_RADIUS - 2);
 			auto ret = hlt::navigation::navigate_ship_towards_target(observer.getMap(), ship.get(), taget_pos, hlt::constants::MAX_SPEED,
 			                                                         true, 100, 0.02);
