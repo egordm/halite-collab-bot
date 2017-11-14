@@ -30,6 +30,7 @@ void bot::Commander::clean() {
 
 void bot::Commander::assign() {
 	for (const auto &ship : observer.get_my_ships()) {
+		if(assignments.find(ship->entity_id) != assignments.end()) continue;
 		if (ship->docking_status != hlt::ShipDockingStatus::Undocked) continue;
 		assign(ship);
 	}

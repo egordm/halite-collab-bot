@@ -66,7 +66,7 @@ namespace bot {
 
 		bool is_same(const std::shared_ptr<Assignment> &ass) override {
 			return Assignment::is_same(ass) &&
-					target->entity_id == dynamic_cast<TargetedAssignment<T>*>(ass.get())->target->entity_id;
+			       target->entity_id == dynamic_cast<TargetedAssignment<T> *>(ass.get())->target->entity_id;
 		}
 	};
 
@@ -96,7 +96,7 @@ namespace bot {
 
 		hlt::Move move(Observer &observer, navigation::Navigator *navigator) const override;
 
-		unsigned int max_count(Observer &observer) const override { return 2;}
+		unsigned int max_count(Observer &observer) const override { return 2; }
 
 		Type get_type() override {
 			return Type::AttackShip;
@@ -127,7 +127,7 @@ namespace bot {
 
 		bool is_same(const std::shared_ptr<Assignment> &ass) override {
 			return Assignment::is_same(ass) &&
-			       get_target_planet()->entity_id == dynamic_cast<AttackPlanetAssignment*>(ass.get())->get_target_planet()->entity_id;
+			       get_target_planet()->entity_id == dynamic_cast<AttackPlanetAssignment *>(ass.get())->get_target_planet()->entity_id;
 		}
 	};
 
@@ -137,6 +137,20 @@ namespace bot {
 				: AttackPlanetAssignment(ship, target) {}
 
 		const std::shared_ptr<hlt::Ship> get_target(Observer &observer) const override;
+
+		bool is_valid(Observer &observer) const override {
+			return TargetedAssignment::is_valid(observer) && get_target_planet()->is_alive() &&
+			       get_target_planet()->owner_mask(get_ship()->owner_id) == hlt::friendly_mask &&
+					!observer.get_attackers(get_target_planet().get()).empty();
+		}
+
+		unsigned int max_count(Observer &observer) const override {
+			return static_cast<unsigned int>(observer.get_attackers(get_target_planet().get()).size() + 1);
+		}
+
+		Type get_type() override {
+			return Type::DefendPlanet;
+		}
 	};
 };
 

@@ -7,6 +7,9 @@
 #include "assignment.h"
 #include "sorting.h"
 #include "constants.h"
+#include "utils.h"
+
+using namespace std::placeholders;
 
 namespace bot {
 	hlt::Move ColonizeAssignment::move(Observer &observer, navigation::Navigator *navigator) const {
@@ -34,8 +37,8 @@ namespace bot {
 			}
 		}
 
-		sorting::SortByDistance distance_sort(get_ship()->pos);
 		if (weakest.empty()) return nullptr;
+		sorting::SortByDistance distance_sort(get_ship()->pos);
 		return *std::min_element(weakest.begin(), weakest.end(), distance_sort);
 	}
 
@@ -51,6 +54,13 @@ namespace bot {
 	}
 
 	const std::shared_ptr<hlt::Ship> DefendPlanetAssignment::get_target(Observer &observer) const {
-		return AttackPlanetAssignment::get_target(observer);// TODO
+		auto attackers = observer.get_ships(get_target_planet()->pos, get_target_planet()->radius + constants::DEFEND_RADIUS, hlt::enemy_mask);
+		if(attackers.empty()) return nullptr;
+
+		utils::erase_if_not(attackers, std::bind(sorting::filter_by_status, hlt::ShipDockingStatus::Undocked, _1));
+		sorting::SortByDistance distance_sort(get_ship()->pos);
+		return *std::min_element(attackers.begin(), attackers.end(), distance_sort);
 	}
+
+
 }

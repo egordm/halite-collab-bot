@@ -13,9 +13,11 @@ namespace bot {
 		protected:
 			std::shared_ptr<hlt::Planet> home_base = nullptr;
 
+			void clean() override;
+
 			void assign() override;
 
-			void clean() override;
+			void defend_pass();
 
 			void assign(const std::shared_ptr<hlt::Ship> &ship) override;
 

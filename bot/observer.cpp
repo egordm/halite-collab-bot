@@ -7,7 +7,9 @@
 #include "sorting.h"
 #include "../hlt/hlt_in.hpp"
 #include "constants.h"
+#include "utils.h"
 
+using namespace std::placeholders;
 
 namespace bot {
 	Observer::Observer(hlt::PlayerId id, hlt::Map *map) : map(map), my_id(id) {}
@@ -50,14 +52,9 @@ namespace bot {
 	}
 
 	std::vector<std::shared_ptr<hlt::Ship>> Observer::get_ships(const hlt::Vector &p, double radius, unsigned short owner_mask) {
-		sorting::FilterOwnerMask owner_filter(my_id, owner_mask);
-		sorting::FilterByDistance distance_filter(p, radius);
-		std::vector<std::shared_ptr<hlt::Ship>> ret;
-
-		std::copy_if(ships.begin(), ships.end(), std::back_inserter(ret),
-		             [&owner_filter, &distance_filter](const std::shared_ptr<hlt::Ship> &el) {
-			             return owner_filter(el) && distance_filter(el);
-		             });
+		std::vector<std::shared_ptr<hlt::Ship>> ret = ships;
+		utils::erase_if_not(ret, std::bind(sorting::filter_by_owner_mask, my_id, owner_mask, _1));
+		utils::erase_if_not(ret, std::bind(sorting::filter_by_distance, p, radius, _1));
 
 		return ret;
 	}
@@ -88,14 +85,19 @@ namespace bot {
 	 * @return
 	 */
 	std::vector<std::shared_ptr<hlt::Ship>> Observer::get_attackers(hlt::Planet *planet) {
-		sorting::FilterByDistance distance_filter(planet->pos, planet->radius + constants::DEFEND_RADIUS);
 		sorting::FilterByStatus status_filter(hlt::ShipDockingStatus::Undocked);
 
+		auto enemies = get_ships(planet->pos, planet->radius + constants::DEFEND_RADIUS, hlt::enemy_mask);
 		std::vector<std::shared_ptr<hlt::Ship>> ret;
 
-		std::copy_if(enemy_ships.begin(), enemy_ships.end(), std::back_inserter(ret),
-		             [&distance_filter, &status_filter](const std::shared_ptr<hlt::Ship> &el) {
-			             return distance_filter(el) && status_filter(el);
+		std::stringstream ss;
+		ss << "Getting attackers for" << planet->entity_id << " enemy count: " << enemies.size();
+		hlt::Log::log(ss.str());
+
+		//if(!enemy_ships.empty())
+		std::copy_if(enemies.begin(), enemies.end(), std::back_inserter(ret),
+		             [&status_filter](const std::shared_ptr<hlt::Ship> &el) {
+			             return  status_filter(el);
 		             });
 
 		return ret;
@@ -109,7 +111,7 @@ namespace bot {
 			return !get_attackers(el.get()).empty();
 		});
 
-		return planets;
+		return ret;
 	}
 
 	Observer::~Observer() {
