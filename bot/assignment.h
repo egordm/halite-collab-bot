@@ -130,6 +130,14 @@ namespace bot {
 			       get_target_planet()->entity_id == dynamic_cast<AttackPlanetAssignment*>(ass.get())->get_target_planet()->entity_id;
 		}
 	};
+
+	class DefendPlanetAssignment : public AttackPlanetAssignment {
+	public:
+		DefendPlanetAssignment(const std::shared_ptr<hlt::Ship> &ship, const std::shared_ptr<hlt::Planet> &target)
+				: AttackPlanetAssignment(ship, target) {}
+
+		const std::shared_ptr<hlt::Ship> get_target(Observer &observer) const override;
+	};
 };
 
 

@@ -49,4 +49,8 @@ namespace bot {
 
 		return static_cast<unsigned int>(std::ceil(ndocked + nproduction + nenemies));
 	}
+
+	const std::shared_ptr<hlt::Ship> DefendPlanetAssignment::get_target(Observer &observer) const {
+		return AttackPlanetAssignment::get_target(observer);// TODO
+	}
 }
