@@ -37,6 +37,14 @@ namespace bot {
 		};
 
 		template<typename T, typename P>
+		void erase_if_not(T &items, const P &predicate) {
+			for (auto it = items.begin(); it != items.end();) {
+				if (!predicate(*it)) it = items.erase(it);
+				else ++it;
+			}
+		};
+
+		template<typename T, typename P>
 		unsigned int count(T &items, const P &predicate) {
 			unsigned int ret = 0;
 			for (auto it = items.begin(); it != items.end();) if (predicate(*it)) ret++;

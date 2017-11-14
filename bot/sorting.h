@@ -14,6 +14,11 @@
 namespace bot {
     namespace sorting {
 
+	    template<class T>
+	    static bool sort_by_distance(const hlt::Vector &pos, const T &e1, const T &e2) {
+		    return (pos.dist_sq(e1->pos)) < pos.dist_sq(e2->pos) && e1->is_alive();
+	    }
+
         struct SortByDistance {
             hlt::Vector pos;
 
@@ -64,6 +69,10 @@ namespace bot {
 			    return el->docking_status == status && el->is_alive();
 		    }
 	    };
+
+	    static bool filter_by_status(const hlt::ShipDockingStatus &status, const std::shared_ptr<hlt::Ship> &el) {
+		    return el->docking_status == status;
+	    }
 
 	    static bool filter_by_size(const std::shared_ptr<hlt::Planet> &e1, const std::shared_ptr<hlt::Planet> &e2) {
 		    return e1->radius > e2->radius;
