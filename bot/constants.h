@@ -14,7 +14,7 @@ namespace bot {
 
         constexpr double DEFEND_RADIUS = hlt::constants::DOCK_RADIUS + hlt::constants::WEAPON_RADIUS + hlt::constants::SHIP_RADIUS*2; // TODO: wont work it there are enemy planets closeby
         constexpr double DEFEND_SEARCH_RADIUS = DEFEND_RADIUS * 2;
-        constexpr double DEFEND_RATIO = 0.4; // Optimal 0.4
+        constexpr double DEFEND_RATIO = 0.4; // Optimal 0.4 TODO: change overtime
 	    constexpr double DEFENDERS_PER_ATTACKER = 0.6; // Optimal 0.6
 
         constexpr unsigned int ATTACK_PLANET_ASSIGNMENT_MULTIPLIER = 3;

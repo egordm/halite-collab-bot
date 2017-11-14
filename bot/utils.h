@@ -11,12 +11,15 @@
 #include "../hlt/vector.hpp"
 #include "sorting.h"
 
+using namespace std::placeholders;
+
 namespace bot {
 	namespace utils {
 		template<class T>
 		hlt::nullable<T> closest_object(std::vector<T> objects, hlt::Vector pos) {
 			if (objects.size() == 0) return std::make_pair(T(), false);
-			return std::make_pair(*std::min_element(objects.begin(), objects.end(), sorting::SortByDistance(pos)), true);
+			return std::make_pair(*std::min_element(objects.begin(), objects.end(),
+			std::bind(sorting::sort_by_corrected_distance, pos, _1, _2)), true);
 		}
 
 		template<class T>

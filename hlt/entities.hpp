@@ -67,7 +67,7 @@ namespace hlt {
 
 
 		bool can_build_ships() {
-			return (constants::RESOURCES_FOR_SHIP - current_production % constants::RESOURCES_FOR_SHIP) >= remaining_production;
+			return (constants::RESOURCES_FOR_SHIP - current_production % constants::RESOURCES_FOR_SHIP) <= remaining_production;
 		}
 	};
 
