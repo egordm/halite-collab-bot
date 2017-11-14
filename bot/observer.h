@@ -27,17 +27,17 @@ namespace bot {
 
         const hlt::Map *getMap();
 
-        std::vector<std::shared_ptr<hlt::Ship>> &get_my_ships();
+        std::vector<std::shared_ptr<hlt::Ship>> get_my_ships();
 
-        std::vector<std::shared_ptr<hlt::Ship>> &get_enemies();
+        std::vector<std::shared_ptr<hlt::Ship>> get_enemies();
 
-        std::vector<std::shared_ptr<hlt::Ship>> &get_ships();
+        std::vector<std::shared_ptr<hlt::Ship>> get_ships();
 
 	    std::vector<std::shared_ptr<hlt::Ship>> get_ships(const hlt::Vector &p, double radius, unsigned short owner_mask);
 
         std::shared_ptr<hlt::Ship> get_ship(hlt::EntityId ship_id);
 
-	    std::vector<std::shared_ptr<hlt::Planet>> &get_planets();
+	    std::vector<std::shared_ptr<hlt::Planet>> get_planets();
 
 	    std::vector<std::shared_ptr<hlt::Planet>> get_planets(unsigned short owner_mask);
 

@@ -37,15 +37,15 @@ namespace bot {
 		return map;
 	}
 
-	std::vector<std::shared_ptr<hlt::Ship>> &Observer::get_my_ships() {
+	std::vector<std::shared_ptr<hlt::Ship>> Observer::get_my_ships() {
 		return my_ships;
 	}
 
-	std::vector<std::shared_ptr<hlt::Ship>> &Observer::get_enemies() {
+	std::vector<std::shared_ptr<hlt::Ship>> Observer::get_enemies() {
 		return enemy_ships;
 	}
 
-	std::vector<std::shared_ptr<hlt::Ship>> &Observer::get_ships() {
+	std::vector<std::shared_ptr<hlt::Ship>> Observer::get_ships() {
 		return ships;
 	}
 
@@ -67,7 +67,7 @@ namespace bot {
 		return map->ships.at(ship_id);
 	}
 
-	std::vector<std::shared_ptr<hlt::Planet>> &Observer::get_planets() {
+	std::vector<std::shared_ptr<hlt::Planet>> Observer::get_planets() {
 		return planets;
 	}
 
