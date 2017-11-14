@@ -14,6 +14,9 @@ namespace bot {
         constexpr double DEFEND_RADIUS = 8; // TODO: wont work it there are enemy planets closeby
         constexpr double DEFEND_SEARCH_RADIUS = 32;
         constexpr double DEFEND_RATIO = 0.4;
+
+        constexpr unsigned int ATTACK_PLANET_ASSIGNMENT_MULTIPLIER = 3;
+        constexpr unsigned int ATTACK_PLANET_CHECK_RADIUS = 4;
     }
 }
 
