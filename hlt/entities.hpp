@@ -64,6 +64,11 @@ namespace hlt {
 			if (!owned) return hlt::empty_mask;
 			return Entity::owner_mask(player_id);
 		}
+
+
+		bool can_build_ships() {
+			return (constants::RESOURCES_FOR_SHIP - current_production % constants::RESOURCES_FOR_SHIP) >= remaining_production;
+		}
 	};
 
 	struct Ship : public Entity {

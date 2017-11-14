@@ -79,7 +79,7 @@ namespace bot {
 
 		bool is_valid(Observer &observer) const override {
 			return TargetedAssignment::is_valid(observer) && !get_target(observer)->is_full()
-			       && !get_target(observer)->owner_mask(get_ship()->owner_id) != hlt::enemy_mask;
+			       && !get_target(observer)->owner_mask(get_ship()->owner_id) != hlt::enemy_mask && get_target(observer)->can_build_ships();
 		}
 
 		unsigned int max_count(Observer &observer) const override { return get_target(observer)->spots_left(); }

@@ -69,6 +69,13 @@ namespace bot {
 
 		std::vector<hlt::Move> SmarterCommander::produce_moves() {
 			std::vector<hlt::Move> ret;
+			for(const auto &ship : observer.get_my_ships()) {
+				if(ship->docking_status == hlt::ShipDockingStatus::Undocked) continue;
+				if(observer.get_planet(ship->docked_planet)->can_build_ships()) continue;
+				ret.push_back(hlt::Move::undock(ship->entity_id));
+				hlt::Log::log("Undocking");
+			}
+
 			for (const auto &kv : assignments) {
 				const auto &move = kv.second->move(observer, navigator);
 				if(move.type == hlt::MoveType::Thrust) {

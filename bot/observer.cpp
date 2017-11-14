@@ -90,10 +90,6 @@ namespace bot {
 		auto enemies = get_ships(planet->pos, planet->radius + constants::DEFEND_RADIUS, hlt::enemy_mask);
 		std::vector<std::shared_ptr<hlt::Ship>> ret;
 
-		std::stringstream ss;
-		ss << "Getting attackers for" << planet->entity_id << " enemy count: " << enemies.size();
-		hlt::Log::log(ss.str());
-
 		//if(!enemy_ships.empty())
 		std::copy_if(enemies.begin(), enemies.end(), std::back_inserter(ret),
 		             [&status_filter](const std::shared_ptr<hlt::Ship> &el) {
