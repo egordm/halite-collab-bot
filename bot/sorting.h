@@ -9,6 +9,7 @@
 #include "../hlt/vector.hpp"
 #include "../hlt/types.hpp"
 #include "../hlt/entities.hpp"
+#include <memory>
 
 namespace bot {
     namespace sorting {
@@ -63,6 +64,10 @@ namespace bot {
 			    return el->docking_status == status && el->is_alive();
 		    }
 	    };
+
+	    static bool filter_by_size(const std::shared_ptr<hlt::Planet> &e1, const std::shared_ptr<hlt::Planet> &e2) {
+		    return e1->radius > e2->radius;
+	    }
     }
 };
 

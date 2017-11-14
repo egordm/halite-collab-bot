@@ -35,6 +35,13 @@ namespace bot {
 				else ++it;
 			}
 		};
+
+		template<typename T, typename P>
+		unsigned int count(T &items, const P &predicate) {
+			unsigned int ret = 0;
+			for (auto it = items.begin(); it != items.end();) if (predicate(*it)) ret++;
+			return ret;
+		};
 	}
 }
 
