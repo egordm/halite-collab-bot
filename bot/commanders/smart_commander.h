@@ -21,6 +21,8 @@ namespace bot {
 
 			void assign(const std::shared_ptr<hlt::Ship> &ship) override;
 
+			std::vector<hlt::Move> produce_moves() override;
+
 		public:
 			SmarterCommander(Observer &observer, navigation::Navigator *navigator) : StrongerCommander(observer, navigator) {}
 		};

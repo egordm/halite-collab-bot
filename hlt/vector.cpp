@@ -6,6 +6,21 @@
 namespace hlt {
     Vector::Vector(double x, double y) : x(x), y(y) {}
 
+    /**
+     * Create vector from angle in RAD
+     * @param angle
+     * @param magnitude
+     * @return
+     */
+    Vector Vector::from_angle(double angle, double magnitude) {
+        Vector ret;
+        angle -= 2 * M_PI;
+        ret.x = cos(angle);
+        ret.y = sin(angle);
+        ret = ret * magnitude;
+        return ret;
+    }
+
     double Vector::dist_sq(const Vector &target) const {
         const Vector d = *this - target;
         return d.x * d.x + d.y * d.y;

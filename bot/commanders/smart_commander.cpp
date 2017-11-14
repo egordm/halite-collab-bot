@@ -66,5 +66,19 @@ namespace bot {
 		void SmarterCommander::assign(const std::shared_ptr<hlt::Ship> &ship) {
 			StrongerCommander::assign(ship);
 		}
+
+		std::vector<hlt::Move> SmarterCommander::produce_moves() {
+			std::vector<hlt::Move> ret;
+			for (const auto &kv : assignments) {
+				const auto &move = kv.second->move(observer, navigator);
+				if(move.type == hlt::MoveType::Thrust) {
+					kv.second->get_ship()->pos =
+							kv.second->get_ship()->pos + hlt::Vector::from_angle(hlt::deg_to_rad(move.move_angle_deg), move.move_thrust);
+				}
+				ret.push_back(move);
+			}
+
+			return ret;
+		}
 	};
 }

@@ -16,6 +16,8 @@ namespace hlt {
 
         Vector(double x, double y);
 
+        static Vector from_angle(double angle, double magnitude);
+
         double dist(const Vector &target) const;
 
         double dist_sq(const Vector &target) const;
