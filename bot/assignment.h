@@ -6,11 +6,11 @@
 #define HALITE_ORION_ASSIGNMENT_H
 
 
-#include <entities.hpp>
+#include "../hlt/entities.hpp"
 #include <memory>
-#include <move.hpp>
+#include "../hlt/move.hpp"
 #include <sstream>
-#include <log.hpp>
+#include "../hlt/log.hpp"
 #include "observer.h"
 #include "navigator.h"
 

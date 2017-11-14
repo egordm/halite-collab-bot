@@ -3,7 +3,7 @@
 //
 
 #include <algorithm>
-#include <log.hpp>
+#include "../hlt/log.hpp"
 #include "commander.h"
 #include "utils.h"
 
@@ -64,6 +64,24 @@ void bot::JuniorCommander::assign(const std::shared_ptr<hlt::Ship> &ship) {
 		utils::erase(enemy_planets, planet.first);
 
 		if(add_assignment(std::make_shared<AttackPlanetAssignment>(ship, planet.first))) return;
+	}
+
+	auto enemy = utils::closest_object(observer.get_enemies(), ship->pos);
+	if (enemy.second) add_assignment(std::make_shared<AttackShipAssignment>(ship, enemy.first));
+}
+
+void bot::StrongerCommander::assign(const std::shared_ptr<hlt::Ship> &ship) {
+	auto planets = observer.get_planets(hlt::all_mask);
+	while (!planets.empty()) {
+		auto planet = utils::closest_object(planets, ship->pos);
+		if (!planet.second) continue;
+		utils::erase(planets, planet.first);
+
+		if((hlt::empty_mask + hlt::friendly_mask) & planet.first->owner_mask(observer.my_id)) {
+			if(add_assignment(std::make_shared<ColonizeAssignment>(ship, planet.first))) return;
+		} else {
+			if(add_assignment(std::make_shared<AttackPlanetAssignment>(ship, planet.first))) return;
+		}
 	}
 
 	auto enemy = utils::closest_object(observer.get_enemies(), ship->pos);

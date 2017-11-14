@@ -37,6 +37,13 @@ namespace bot {
 
 		void assign(const std::shared_ptr<hlt::Ship> &ship) override;
 	};
+
+	class StrongerCommander : public Commander {
+	public:
+		StrongerCommander(Observer &observer, navigation::Navigator *navigator) : Commander(observer, navigator) {}
+
+		void assign(const std::shared_ptr<hlt::Ship> &ship) override;
+	};
 };
 
 

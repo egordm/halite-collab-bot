@@ -1,7 +1,7 @@
 #include <iostream>
-#include <hlt.hpp>
-#include <defines.h>
-#include <bot.h>
+#include "hlt/hlt.hpp"
+#include "bot/defines.h"
+#include "bot/bot.h"
 
 int main() {
     const hlt::Metadata metadata = hlt::initialize(BOT_NAME);

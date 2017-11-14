@@ -2,7 +2,7 @@
 // Created by egordm on 13-11-2017.
 //
 
-#include <navigation.hpp>
+#include "../hlt/navigation.hpp"
 #include "navigator.h"
 
 namespace bot {

@@ -3,14 +3,14 @@
 //
 
 #include <iostream>
-#include <move.hpp>
+#include "../hlt/move.hpp"
 #include "../hlt/log.hpp"
 #include "bot.h"
 
 
 namespace bot {
     Bot::Bot(hlt::PlayerId id, hlt::Map *map)
-            : observer(Observer(id, map)), commander(new JuniorCommander(observer, new navigation::LegacyNavigator(observer))) {
+            : observer(Observer(id, map)), commander(new StrongerCommander(observer, new navigation::LegacyNavigator(observer))) {
 
     }
 

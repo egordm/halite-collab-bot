@@ -6,9 +6,9 @@
 #define MYBOT_SORTING_H
 
 
-#include <vector.hpp>
-#include <types.hpp>
-#include <entities.hpp>
+#include "../hlt/vector.hpp"
+#include "../hlt/types.hpp"
+#include "../hlt/entities.hpp"
 
 namespace bot {
     namespace sorting {
@@ -20,7 +20,10 @@ namespace bot {
 
 	        template<class T>
             inline bool operator()(const T &e1, const T &e2) {
-                return (pos.dist_sq(e1->pos) < pos.dist_sq(e2->pos)) && e1->is_alive();
+		        return (pos.dist_sq(e1->pos)) < pos.dist_sq(e2->pos) && e1->is_alive();
+
+               /* return (pos.dist_sq(pos.closest_point(e1->pos, e1->radius)) < pos.dist_sq(pos.closest_point(e2->pos, e2->radius))) &&
+		                e1->is_alive();*/
             }
         };
 
