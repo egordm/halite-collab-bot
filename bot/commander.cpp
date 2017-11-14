@@ -14,16 +14,29 @@ bot::Commander::~Commander() {
 
 std::vector<hlt::Move> bot::Commander::command() {
 	//TODO: split into clean, assign, produce moves
+	clean();
+	assign();
+
+	return produce_moves();
+}
+
+
+void bot::Commander::clean() {
 	assignments.clear();
 	utils::erase_if(assignments, [this](std::pair<hlt::EntityId, std::shared_ptr<Assignment>> ass) {
 		return !ass.second->is_valid(observer);
 	});
+}
 
+void bot::Commander::assign() {
 	for (const auto &ship : observer.get_my_ships()) {
 		if (ship->docking_status != hlt::ShipDockingStatus::Undocked) continue;
 		assign(ship);
 	}
+}
 
+
+std::vector<hlt::Move> bot::Commander::produce_moves() {
 	std::vector<hlt::Move> ret;
 	for (const auto &kv : assignments) {
 #if DEBUG_BOT
@@ -38,10 +51,10 @@ std::vector<hlt::Move> bot::Commander::command() {
 bool bot::Commander::add_assignment(const std::shared_ptr<bot::Assignment> &assignment) {
 	if (assignment != nullptr && !assignment->is_valid(observer)) return false; // Als if exceeds assignment count
 	unsigned int assigned_count = 0;
-	for(const auto &ass : assignments) {
-		if( assignment->is_same(ass.second)) assigned_count++;
+	for (const auto &ass : assignments) {
+		if (assignment->is_same(ass.second)) assigned_count++;
 	}
-	if(assigned_count >= assignment->max_count(observer)) return false;
+	if (assigned_count >= assignment->max_count(observer)) return false;
 
 	assignments.insert(std::make_pair(assignment->get_ship()->entity_id, assignment));
 	return true;
@@ -54,7 +67,7 @@ void bot::JuniorCommander::assign(const std::shared_ptr<hlt::Ship> &ship) {
 		if (!planet.second) continue;
 		utils::erase(empty_planets, planet.first);
 
-		if(add_assignment(std::make_shared<ColonizeAssignment>(ship, planet.first))) return;
+		if (add_assignment(std::make_shared<ColonizeAssignment>(ship, planet.first))) return;
 	}
 
 	auto enemy_planets = observer.get_planets(hlt::empty_mask);
@@ -63,7 +76,7 @@ void bot::JuniorCommander::assign(const std::shared_ptr<hlt::Ship> &ship) {
 		if (!planet.second) continue;
 		utils::erase(enemy_planets, planet.first);
 
-		if(add_assignment(std::make_shared<AttackPlanetAssignment>(ship, planet.first))) return;
+		if (add_assignment(std::make_shared<AttackPlanetAssignment>(ship, planet.first))) return;
 	}
 
 	auto enemy = utils::closest_object(observer.get_enemies(), ship->pos);
@@ -77,10 +90,10 @@ void bot::StrongerCommander::assign(const std::shared_ptr<hlt::Ship> &ship) {
 		if (!planet.second) continue;
 		utils::erase(planets, planet.first);
 
-		if((hlt::empty_mask + hlt::friendly_mask) & planet.first->owner_mask(observer.my_id)) {
-			if(add_assignment(std::make_shared<ColonizeAssignment>(ship, planet.first))) return;
+		if ((hlt::empty_mask + hlt::friendly_mask) & planet.first->owner_mask(observer.my_id)) {
+			if (add_assignment(std::make_shared<ColonizeAssignment>(ship, planet.first))) return;
 		} else {
-			if(add_assignment(std::make_shared<AttackPlanetAssignment>(ship, planet.first))) return;
+			if (add_assignment(std::make_shared<AttackPlanetAssignment>(ship, planet.first))) return;
 		}
 	}
 
