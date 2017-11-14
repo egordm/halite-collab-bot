@@ -96,6 +96,8 @@ namespace bot {
 
 		hlt::Move move(Observer &observer, navigation::Navigator *navigator) const override;
 
+		unsigned int max_count(Observer &observer) const override { return 2;}
+
 		Type get_type() override {
 			return Type::AttackShip;
 		}
@@ -116,6 +118,8 @@ namespace bot {
 			return TargetedAssignment::is_valid(observer) && get_target_planet()->is_alive() &&
 			       get_target_planet()->owner_mask(get_ship()->owner_id) == hlt::enemy_mask;
 		}
+
+		unsigned int max_count(Observer &observer) const override;
 
 		Type get_type() override {
 			return Type::AttackPlanet;

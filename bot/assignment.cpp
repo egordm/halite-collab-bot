@@ -3,8 +3,10 @@
 //10
 
 #include <algorithm>
+#include <cmath>
 #include "assignment.h"
 #include "sorting.h"
+#include "constants.h"
 
 namespace bot {
 	hlt::Move ColonizeAssignment::move(Observer &observer, navigation::Navigator *navigator) const {
@@ -33,7 +35,18 @@ namespace bot {
 		}
 
 		sorting::SortByDistance distance_sort(get_ship()->pos);
-		if(weakest.empty()) return nullptr;
+		if (weakest.empty()) return nullptr;
 		return *std::min_element(weakest.begin(), weakest.end(), distance_sort);
+	}
+
+	unsigned int AttackPlanetAssignment::max_count(Observer &observer) const {
+		return 9001;
+		// TODO: revisit
+		auto ndocked = get_target_planet()->docked_ships.size();
+		auto nproduction = ndocked * hlt::constants::PER_SHIP_PRODUCTION * constants::ATTACK_PLANET_ASSIGNMENT_MULTIPLIER;
+		auto nenemies = observer.get_ships(get_target_planet()->pos, get_target_planet()->radius + constants::ATTACK_PLANET_CHECK_RADIUS,
+		                                   hlt::enemy_mask).size();
+
+		return static_cast<unsigned int>(std::ceil(ndocked + nproduction + nenemies));
 	}
 }
