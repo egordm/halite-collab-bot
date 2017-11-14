@@ -11,6 +11,7 @@ namespace bot {
         constexpr unsigned int MIN_DOCK_SPOTS_FOR_COLONIZATION = 1;
         constexpr double SHIP_AVOID_PROXIMITY = 10;
         constexpr double AVOID_PROXIMITY_OFFSET = 0.2;
+
         constexpr double DEFEND_RADIUS = 8; // TODO: wont work it there are enemy planets closeby
         constexpr double DEFEND_SEARCH_RADIUS = 32;
         constexpr double DEFEND_RATIO = 0.4;
