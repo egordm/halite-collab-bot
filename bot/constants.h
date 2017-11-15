@@ -19,6 +19,8 @@ namespace bot {
 
         constexpr unsigned int ATTACK_PLANET_ASSIGNMENT_MULTIPLIER = 3;
         constexpr unsigned int ATTACK_PLANET_CHECK_RADIUS = 4;
+
+	    constexpr bool ALLOW_KAMIKAZE = true;
     }
 }
 

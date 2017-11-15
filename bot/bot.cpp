@@ -3,7 +3,7 @@
 //
 
 #include <iostream>
-#include <commanders/smart_commander.h>
+#include "commanders/smart_commander.h"
 #include "../hlt/move.hpp"
 #include "../hlt/log.hpp"
 #include "bot.h"

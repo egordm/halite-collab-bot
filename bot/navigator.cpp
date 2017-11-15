@@ -4,6 +4,7 @@
 
 #include "../hlt/navigation.hpp"
 #include "navigator.h"
+#include "constants.h"
 
 namespace bot {
 	namespace navigation {
@@ -18,8 +19,11 @@ namespace bot {
 		}
 
 		hlt::Move LegacyNavigator::attack_ship(const std::shared_ptr<hlt::Ship> &ship, const std::shared_ptr<hlt::Ship> &target) {
-			auto taget_pos = ship->pos.closest_point(target->pos, target->radius + hlt::constants::WEAPON_RADIUS - 2);
-			auto ret = hlt::navigation::navigate_ship_towards_target(observer.getMap(), ship.get(), taget_pos, hlt::constants::MAX_SPEED,
+			auto target_pos = ship->pos.closest_point(target->pos, target->radius + hlt::constants::WEAPON_RADIUS - 2);
+			if(constants::ALLOW_KAMIKAZE && ship->health < target->health) {
+				target_pos = target->pos;
+			}
+			auto ret = hlt::navigation::navigate_ship_towards_target(observer.getMap(), ship.get(), target_pos, hlt::constants::MAX_SPEED,
 			                                                         true, 100, 0.02);
 			return ret.second ? ret.first : hlt::Move::noop();
 		}

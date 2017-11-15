@@ -7,5 +7,5 @@ SET /p enemy="Enemy bot: "
 SET /A width=%RANDOM% * 264 / 32768 + 120
 SET /A height=%RANDOM% * 136 / 32768 + 120
 
-.\halite.exe -d "%width% %height%" "..\%root%\halite_orion.exe" ".\version\%enemy%.exe" -q
+.\halite.exe -d "%width% %height%" "..\%root%\halite_orion.exe" ".\version\%enemy%.exe"
 PAUSE
