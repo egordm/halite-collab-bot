@@ -79,6 +79,10 @@ namespace bot {
 			return pos.dist(el->pos) < distance && el->is_alive();
 		}
 
+		static bool filter_by_identifier(const hlt::EntityIdentifier &identifier, const std::shared_ptr<hlt::Entity> &el) {
+			return el->get_type() == identifier.second && el->entity_id == identifier.first;
+		}
+
 		static bool filter_by_owner_mask(const hlt::PlayerId owner_id, const unsigned short owner_mask, const std::shared_ptr<hlt::Entity> &el) {
 			return (owner_mask & el->owner_mask(owner_id)) != 0 && el->is_alive();
 		}

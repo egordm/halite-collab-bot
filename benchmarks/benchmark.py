@@ -7,7 +7,8 @@ import os
 player = r'..\cmake-build-debug\halite_orion.exe'
 
 enemies = {
-    'v3': r'..\sandbox\version\v3.exe'
+    'v3': r'..\sandbox\version\v3.exe',
+    'v4': r'..\sandbox\version\v4.exe'
 }
 
 client = '..\sandbox\halite.exe'

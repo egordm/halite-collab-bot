@@ -13,6 +13,14 @@ namespace hlt {
 	const unsigned short enemy_mask = 4;
 	const unsigned short all_mask = enemy_mask + friendly_mask + empty_mask;
 
+	enum class EntityType {
+		None = 0,
+		Ship = 1,
+		Planet = 2
+	};
+
+	using EntityIdentifier = std::pair<EntityId, EntityType>;
+
 	struct Entity {
 		Entity() = default;
 
@@ -29,6 +37,10 @@ namespace hlt {
 		virtual unsigned short owner_mask(const PlayerId &player_id) const {
 			return owner_id == player_id ? hlt::friendly_mask : hlt::enemy_mask;
 		}
+
+		virtual EntityType get_type() { return EntityType::None; }
+
+		virtual EntityIdentifier identify() { return {entity_id, get_type()};}
 	};
 
 	enum class ShipDockingStatus {
@@ -69,6 +81,10 @@ namespace hlt {
 		bool can_build_ships() {
 			return (constants::RESOURCES_FOR_SHIP - current_production % constants::RESOURCES_FOR_SHIP) <= remaining_production;
 		}
+
+		EntityType get_type() override {
+			return EntityType::Planet;
+		}
 	};
 
 	struct Ship : public Entity {
@@ -86,6 +102,10 @@ namespace hlt {
 
 		bool can_dock(const Planet *planet) const {
 			return pos.dist(planet->pos) <= (constants::SHIP_RADIUS + constants::DOCK_RADIUS + planet->radius);
+		}
+
+		EntityType get_type() override {
+			return EntityType::Ship;
 		}
 	};
 

@@ -7,7 +7,7 @@
 
 
 #include "observer.h"
-#include "navigator.h"
+#include "navigation/navigator.h"
 #include "assignment.h"
 
 namespace bot {

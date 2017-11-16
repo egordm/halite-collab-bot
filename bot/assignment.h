@@ -12,7 +12,7 @@
 #include <sstream>
 #include "../hlt/log.hpp"
 #include "observer.h"
-#include "navigator.h"
+#include "navigation/navigator.h"
 
 namespace bot {
 	class Assignment {

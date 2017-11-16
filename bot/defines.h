@@ -9,7 +9,7 @@
 #define DEBUG_BOT true
 
 #if DEBUG_BOT
-#define BOT_NAME "V4"
+#define BOT_NAME "V5"
 #else
 #define BOT_NAME "EgorDm"
 #endif
