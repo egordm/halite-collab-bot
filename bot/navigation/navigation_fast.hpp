@@ -19,7 +19,7 @@ namespace bot {
 		namespace fast {
 			//TODO: idea. Pick one tangent left or right and keep picking till a clear trajectory is set
 
-			constexpr double BYPASS_MARGIN = 0.2;
+			constexpr double BYPASS_MARGIN = 0.05;
 
 			static std::pair<bool, hlt::Vector>
 			correct_route(const hlt::Map *map, const hlt::Vector &a, const hlt::Vector &b, bool correct_left,
@@ -66,7 +66,7 @@ namespace bot {
 
 				const double angle = ship->pos.angle_between(corrected_target);
 				const unsigned int speed = static_cast<const unsigned int>(std::min(7, std::max(0,
-				                                                                                static_cast<const int &>(std::round(ship->pos.dist(target))))));
+				                                                                                static_cast<const int &>(ship->pos.dist(target)))));
 
 				return hlt::Move::thrust(ship->entity_id, speed, static_cast<const int>(hlt::rad_to_deg(angle)));
 			}

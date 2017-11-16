@@ -53,10 +53,12 @@ namespace hlt {
             const double angle = ship->pos.angle_between(target);
 
             if (avoid_obstacles && !objects_between(map, ship->pos, target).empty()) {
+                // rotate rotate target point angular_step_rad degress around the ship
                 const double new_target_dx = std::cos(angle + angular_step_rad) * distance;
                 const double new_target_dy = std::sin(angle + angular_step_rad) * distance;
                 const Vector new_target = { ship->pos.x + new_target_dx, ship->pos.y + new_target_dy };
 
+                // check path to the new point
                 return navigate_ship_towards_target(
                         map, ship, new_target, max_thrust, true, (max_corrections - 1), angular_step_rad);
             }
