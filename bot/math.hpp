@@ -16,19 +16,19 @@ namespace bot {
 			Line(double slope, double intercept) : slope(slope), intercept(intercept) {}
 		};
 
-		Line find_line(const hlt::Vector &a, const hlt::Vector &b) {
+		static Line find_line(const hlt::Vector &a, const hlt::Vector &b) {
 			auto diff = b - a;
 			auto slope = diff.y / diff.x;
 			return {slope, a.y - slope * a.x};
 		};
 
-		hlt::Vector intersection(const Line &l1, const Line &l2) {
+		static hlt::Vector intersection(const Line &l1, const Line &l2) {
 			if (l1.slope == l2.slope) return hlt::Vector::NAN_VEC;
 			auto ix = (l2.intercept - l1.intercept) / (l1.slope - l2.slope);
 			return {ix, l1.slope * ix + l1.intercept};
 		}
 
-		std::pair<hlt::Vector, hlt::Vector>
+		static std::pair<hlt::Vector, hlt::Vector>
 		tangent_intersections(const hlt::Vector &a, const hlt::Vector &b, const hlt::Vector &c, const double r) {
 			auto tana = a.tangents(c, r);
 			auto tanb = b.tangents(c, r);
@@ -46,7 +46,7 @@ namespace bot {
 			return {inter1, inter2};
 		};
 
-		hlt::Vector shorten_line(const hlt::Vector &a, const hlt::Vector &b, const double length) {
+		static hlt::Vector resize_line(const hlt::Vector &a, const hlt::Vector &b, const double length) {
 			return a + (b - a).normalize() * length;
 		}
 	}
