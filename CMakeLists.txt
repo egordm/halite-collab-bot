@@ -3,6 +3,7 @@ project(halite_orion)
 
 set(CMAKE_CXX_STANDARD 11)
 set(TEST 0)
+add_definitions(-DDEBUG)
 
 include_directories(${CMAKE_SOURCE_DIR}/hlt ${CMAKE_SOURCE_DIR}/bot)
 
