@@ -107,6 +107,7 @@ namespace bot {
 
 				auto target_point = get_route(ship->pos, target);
 
+
 				if (target_point.isnan()) {
 #if !NAVIGATION_BACKUP_LEGACY_MOVE
 					return hlt::Move::noop();
@@ -119,6 +120,15 @@ namespace bot {
 
 				const double angle = std::round(hlt::rad_to_deg(ship->pos.angle_between(target_point)));
 				const auto speed = std::min(7, std::max(0, static_cast<const int &>(std::round(ship->pos.dist(target)))));
+
+/*				const double angular_step_rad = M_PI / 180.0;
+				auto move1 = hlt::navigation::navigate_ship_towards_target(observer.getMap(), ship, target_point, hlt::constants::MAX_SPEED, true,
+				                                                     hlt::constants::MAX_NAVIGATION_CORRECTIONS, angular_step_rad).first;
+				auto move2 = hlt::navigation::navigate_ship_towards_target(observer.getMap(), ship, target_point, hlt::constants::MAX_SPEED, true,
+				                                                           hlt::constants::MAX_NAVIGATION_CORRECTIONS, -angular_step_rad).first;
+
+				if(fabs(move1.move_angle_deg - angle) < fabs(move2.move_angle_deg - angle)) return move1;
+				return move2;*/
 
 				return hlt::Move::thrust(ship->entity_id, speed, static_cast<const int>(angle));
 			}
