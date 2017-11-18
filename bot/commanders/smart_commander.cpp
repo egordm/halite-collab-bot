@@ -4,7 +4,7 @@
 
 #include <algorithm>
 #include <cmath>
-#include <navigation/navigation_advanced.hpp>
+#include "../navigation/navigation_advanced.hpp"
 #include "../sorting.h"
 #include "../constants.h"
 #include "../utils.h"

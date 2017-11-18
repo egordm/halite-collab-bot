@@ -6,7 +6,7 @@
 #define HALITE_ORION_NAVIGATOR_H
 
 
-#include "../hlt/move.hpp"
+#include "../../hlt/move.hpp"
 #include "../observer.h"
 
 namespace bot {

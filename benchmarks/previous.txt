@@ -27,6 +27,10 @@ Ran benchmark: "1v1" with result: 48/100 overall acc 48.0
 Ran benchmark: "1v3" with result: 29/100 overall acc 28.999999999999996
 
 
+- v4 vs v4
+Ran benchmark: "1v1" with result: 45/100 overall acc 45.0
+Ran benchmark: "1v3" with result: 23/100 overall acc 23.0
+
 =============v5 NEW NAV=================
 with no move
 Ran benchmark: "1v1" with result: 67/99 overall acc 67.67676767676768
