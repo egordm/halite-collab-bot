@@ -5,12 +5,12 @@
 #ifndef HALITE_ORION_NAVIGATION_HPP_H
 #define HALITE_ORION_NAVIGATION_HPP_H
 
-#include <move.hpp>
-#include <map.hpp>
-#include <algorithm>
-#include <utils.h>
 #include <sstream>
-#include "sorting.h"
+#include <algorithm>
+#include "../../hlt/move.hpp"
+#include "../../hlt/map.hpp"
+#include "../utils.h"
+#include "../sorting.h"
 
 using namespace std::placeholders;
 
@@ -19,7 +19,7 @@ namespace bot {
 		namespace fast {
 			//TODO: idea. Pick one tangent left or right and keep picking till a clear trajectory is set
 
-			constexpr double BYPASS_MARGIN = 0.05;
+			constexpr double BYPASS_MARGIN = 0.1;
 
 			static std::pair<bool, hlt::Vector>
 			correct_route(const hlt::Map *map, const hlt::Vector &a, const hlt::Vector &b, bool correct_left,
@@ -64,11 +64,11 @@ namespace bot {
 					if (correction_right.first) corrected_target = correction_right.second;
 				}
 
-				const double angle = ship->pos.angle_between(corrected_target);
+				const double angle = std::round(hlt::rad_to_deg(ship->pos.angle_between(corrected_target)));
 				const unsigned int speed = static_cast<const unsigned int>(std::min(7, std::max(0,
-				                                                                                static_cast<const int &>(ship->pos.dist(target)))));
+				                                                                                static_cast<const int &>(std::round(ship->pos.dist(target))))));
 
-				return hlt::Move::thrust(ship->entity_id, speed, static_cast<const int>(hlt::rad_to_deg(angle)));
+				return hlt::Move::thrust(ship->entity_id, speed, static_cast<const int>(angle));
 			}
 		}
 	}

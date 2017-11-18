@@ -2,13 +2,13 @@
 // Created by egordm on 15-11-2017.
 //
 
-#ifndef HALITE_ORION_NAVIGATION_HPP_H
-#define HALITE_ORION_NAVIGATION_HPP_H
+#ifndef HALITE_ORION_NAVIGATION_SMART_HPP_H
+#define HALITE_ORION_NAVIGATION_SMART_HPP_H
 
-#include <move.hpp>
-#include <map.hpp>
+#include "../../hlt/move.hpp"
+#include "../../hlt/map.hpp"
 #include <algorithm>
-#include "sorting.h"
+#include "../sorting.h"
 
 using namespace std::placeholders;
 
@@ -89,4 +89,4 @@ namespace bot {
 	}
 }
 
-#endif //HALITE_ORION_NAVIGATION_HPP_H
+#endif //HALITE_ORION_NAVIGATION_SMART_HPP_H

@@ -7,7 +7,7 @@
 
 
 #include "../hlt/move.hpp"
-#include "observer.h"
+#include "../observer.h"
 
 namespace bot {
 	namespace navigation {
