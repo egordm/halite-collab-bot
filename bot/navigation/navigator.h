@@ -6,7 +6,7 @@
 #define HALITE_ORION_NAVIGATOR_H
 
 
-#include "move.hpp"
+#include "../hlt/move.hpp"
 #include "observer.h"
 
 namespace bot {
@@ -37,6 +37,15 @@ namespace bot {
 		class FastNavigator : public Navigator {
 		public:
 			explicit FastNavigator(Observer &observer) : Navigator(observer) {}
+
+			hlt::Move dock_planet(const std::shared_ptr<hlt::Ship> &ship, const std::shared_ptr<hlt::Planet> &planet) override;
+
+			hlt::Move attack_ship(const std::shared_ptr<hlt::Ship> &ship, const std::shared_ptr<hlt::Ship> &target) override;
+		};
+
+		class FastSmartNavigator : public Navigator {
+		public:
+			explicit FastSmartNavigator(Observer &observer) : Navigator(observer) {}
 
 			hlt::Move dock_planet(const std::shared_ptr<hlt::Ship> &ship, const std::shared_ptr<hlt::Planet> &planet) override;
 

@@ -6,6 +6,7 @@
 #define MYBOT_CONSTANTS_H
 
 #define NAVIGATION_BACKUP_LEGACY_MOVE false
+#define ALLOW_KAMIKAZE false
 
 namespace bot {
     namespace constants {
@@ -27,7 +28,6 @@ namespace bot {
 		constexpr unsigned int ATTACK_PLANET_ASSIGNMENT_MULTIPLIER = 3;
 
         constexpr unsigned int ATTACK_PLANET_CHECK_RADIUS = 4;
-		constexpr bool ALLOW_KAMIKAZE = false;
     }
 }
 
