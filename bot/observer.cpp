@@ -59,6 +59,13 @@ namespace bot {
 		return ret;
 	}
 
+	std::vector<std::shared_ptr<hlt::Ship>> Observer::get_ships(hlt::ShipDockingStatus status) {
+		auto undocked_ships = get_my_ships();
+		if (undocked_ships.empty()) return std::vector<std::shared_ptr<hlt::Ship>>();
+		utils::erase_if_not(undocked_ships, std::bind(sorting::filter_by_status, status, _1));
+		return undocked_ships;
+	}
+
 	std::shared_ptr<hlt::Ship> Observer::get_ship(hlt::EntityId ship_id) {
 		if (map->ships.find(ship_id) == map->ships.end()) return nullptr;
 		return map->ships.at(ship_id);
@@ -74,11 +81,17 @@ namespace bot {
 		return ret;
 	}
 
+	std::vector<std::shared_ptr<hlt::Planet>> Observer::get_planets(const hlt::Vector &p, double radius, unsigned short owner_mask) {
+		std::vector<std::shared_ptr<hlt::Planet>> ret = planets;
+		utils::erase_if_not(ret, std::bind(sorting::filter_by_owner_mask, my_id, owner_mask, _1));
+		utils::erase_if_not(ret, std::bind(sorting::filter_by_distance, p, radius, _1));
+		return ret;
+	}
+
 	std::shared_ptr<hlt::Planet> Observer::get_planet(hlt::EntityId planet_id) {
 		if (map->planets.find(planet_id) == map->planets.end()) return nullptr;
 		return map->planets.at(planet_id);
 	}
-
 
 	/**
 	 * Definition of attacked: enemy ships is undocked and within defend range
@@ -93,7 +106,7 @@ namespace bot {
 		//if(!enemy_ships.empty())
 		std::copy_if(enemies.begin(), enemies.end(), std::back_inserter(ret),
 		             [&status_filter](const std::shared_ptr<hlt::Ship> &el) {
-			             return  status_filter(el);
+			             return status_filter(el);
 		             });
 
 		return ret;
@@ -112,5 +125,24 @@ namespace bot {
 
 	Observer::~Observer() {
 		delete map;
+	}
+
+	double Observer::get_production_share(hlt::PlayerId player_id) {
+		double shares[map->players.size()]; // TODO: finish
+		double sum = 0;
+		for (const auto &planet  : get_planets()) {
+			if (!planet->owned) continue;
+			shares[planet->owner_id] += planet->docked_ships.size();
+			sum += planet->docked_ships.size();
+		}
+		return shares[player_id] / sum;
+	}
+
+	double Observer::get_ship_share(hlt::PlayerId player_id) {
+		double sum = 0;
+		for(const auto &player : map->players) {
+			sum += player.second.size();
+		}
+		return map->players[player_id].size() / sum;
 	}
 }

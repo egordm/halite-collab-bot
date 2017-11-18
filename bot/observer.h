@@ -35,9 +35,13 @@ namespace bot {
 
 	    std::vector<std::shared_ptr<hlt::Ship>> get_ships(const hlt::Vector &p, double radius, unsigned short owner_mask);
 
+	    std::vector<std::shared_ptr<hlt::Ship>> get_ships(hlt::ShipDockingStatus status);
+
         std::shared_ptr<hlt::Ship> get_ship(hlt::EntityId ship_id);
 
 	    std::vector<std::shared_ptr<hlt::Planet>> get_planets();
+
+	    std::vector<std::shared_ptr<hlt::Planet>> get_planets(const hlt::Vector &p, double radius, unsigned short owner_mask);
 
 	    std::vector<std::shared_ptr<hlt::Planet>> get_planets(unsigned short owner_mask);
 
@@ -46,6 +50,10 @@ namespace bot {
 	    std::vector<std::shared_ptr<hlt::Ship>> get_attackers(hlt::Planet * planet);
 
         std::vector<std::shared_ptr<hlt::Planet>> get_attacked_planets();
+
+	    double get_production_share(hlt::PlayerId player_id);
+
+	    double get_ship_share(hlt::PlayerId player_id);
     };
 }
 
