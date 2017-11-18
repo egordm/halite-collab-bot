@@ -5,7 +5,7 @@
 #ifndef HALITE_ORION_MATH_H
 #define HALITE_ORION_MATH_H
 
-#include <vector.hpp>
+#include "../hlt/vector.hpp"
 
 namespace bot {
 	namespace math {

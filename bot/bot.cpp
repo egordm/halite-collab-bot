@@ -4,15 +4,13 @@
 
 #include <iostream>
 #include "commanders/smart_commander.h"
-#include "../hlt/move.hpp"
-#include "../hlt/log.hpp"
 #include "bot.h"
 
 
 namespace bot {
 	Bot::Bot(hlt::PlayerId id, hlt::Map *map)
 			: observer(Observer(id, map)),
-			  commander(new commanding::SmarterCommander(observer, new navigation::FastNavigator(observer))) {
+			  commander(new commanding::SmarterCommander(observer, new navigation::FastSmartNavigator(observer))) {
 
 	}
 
