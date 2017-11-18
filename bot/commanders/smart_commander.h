@@ -19,6 +19,8 @@ namespace bot {
 
 			void defend_pass();
 
+			void discovery_pass();
+
 			void assign(const std::shared_ptr<hlt::Ship> &ship) override;
 
 			std::vector<hlt::Move> produce_moves() override;
