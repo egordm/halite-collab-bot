@@ -1,13 +1,16 @@
+import multiprocessing
 import shutil
 from random import randint
 from subprocess import Popen, PIPE
 import json
 import os
 
+n_async_games = int(multiprocessing.cpu_count() / 2)
+
 player = r'..\cmake-build-debug\halite_orion.exe'
 
 enemies = {
-    'v3': r'..\sandbox\version\v3.exe',
+    # 'v3': r'..\sandbox\version\v3.exe',
     'v4': r'..\sandbox\version\v4.exe'
 }
 
@@ -20,16 +23,14 @@ benchmarks = {
         'agents': 2,
         'width': 'rand',
         'height': 'rand',
-        'seed': 'rand',
-        'enemy': enemies['v3']
+        'seed': 'rand'
     },
     '1v3': {
         'games': 100,
         'agents': 4,
         'width': 'rand',
         'height': 'rand',
-        'seed': 'rand',
-        'enemy': enemies['v3']
+        'seed': 'rand'
     }
 }
 
@@ -64,9 +65,16 @@ def create_command(benchmark, enemy, replay_subdir):
 for enemy_name, enemy in enemies.items():
     benchmark_results[enemy_name] = {}
     for name, benchmark in benchmarks.items():
+        games_run = n_async_games
+        processes = []
+
         benchmark_results[enemy_name][name] = {'win': 0, 'loss': 0, 'lost_games': []}
-        processes = [Popen(create_command(benchmark, enemy, name), stdout=PIPE, bufsize=1, universal_newlines=True)
-                     for i in range(benchmark['games'])]
+
+        def start_game():
+            processes.append(Popen(create_command(benchmark, enemy, name), stdout=PIPE, bufsize=1, universal_newlines=True))
+
+
+        for i in range(n_async_games): start_game()
         print('Benchmarking: {} against {}'.format(name, enemy_name))
 
         timeout = 60
@@ -81,6 +89,8 @@ for enemy_name, enemy in enemies.items():
                     benchmark_results[enemy_name][name]['lost_games'].append(result['replay'])
                 p.stdout.close()
                 processes.remove(p)
+                games_run += 1
+                if benchmark['games'] > games_run: start_game()
 
 print('====== FINISHED BENCHMARKING ======')
 for enemy_name, results in benchmark_results.items():
