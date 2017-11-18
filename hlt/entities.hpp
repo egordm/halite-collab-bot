@@ -38,9 +38,13 @@ namespace hlt {
 			return owner_id == player_id ? hlt::friendly_mask : hlt::enemy_mask;
 		}
 
-		virtual EntityType get_type() { return EntityType::None; }
+		virtual EntityType get_type() const { return EntityType::None; }
 
-		virtual EntityIdentifier identify() { return {entity_id, get_type()};}
+		virtual EntityIdentifier identify() const { return {entity_id, get_type()};}
+
+		bool is_same(const Entity * entity) {
+			return entity->get_type() == get_type() && entity->entity_id == entity_id;
+		}
 	};
 
 	enum class ShipDockingStatus {
@@ -82,7 +86,7 @@ namespace hlt {
 			return (constants::RESOURCES_FOR_SHIP - current_production % constants::RESOURCES_FOR_SHIP) <= remaining_production;
 		}
 
-		EntityType get_type() override {
+		EntityType get_type() const override {
 			return EntityType::Planet;
 		}
 	};
@@ -104,7 +108,7 @@ namespace hlt {
 			return pos.dist(planet->pos) <= (constants::SHIP_RADIUS + constants::DOCK_RADIUS + planet->radius);
 		}
 
-		EntityType get_type() override {
+		EntityType get_type() const override {
 			return EntityType::Ship;
 		}
 	};

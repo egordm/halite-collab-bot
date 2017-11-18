@@ -1,5 +1,6 @@
 #include <cmath>
 #include <tuple>
+#include <limits>
 
 #include "vector.hpp"
 
@@ -62,12 +63,22 @@ namespace hlt {
         return (v - *this).angle();
     }
 
+	double Vector::angle_between(Vector v1, Vector v2) const {
+		auto diffa = v1 - *this;
+		auto diffb = v1 - v2;
+
+		auto dot = diffa.dot_prod(diffb);
+		auto cross = diffa.cross_prod(diffb);
+		return atan2(cross, dot) + 2 * M_PI;
+	}
+
     double Vector::length() const {
         return sqrt(x * x + y * y);
     }
 
     Vector Vector::normalize() const {
         auto l = length();
+	    if(l == 0) return {};
         return {x / l, y / l};
     }
 
@@ -128,4 +139,10 @@ namespace hlt {
     double deg_to_rad(double deg) {
         return deg / 180 * M_PI;
     }
+
+    Vector Vector::NAN_VEC = Vector(std::numeric_limits<double>::quiet_NaN(), std::numeric_limits<double>::quiet_NaN());
+
+	bool Vector::isnan() {
+		return std::isnan(x) || std::isnan(y);
+	}
 }

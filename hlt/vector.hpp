@@ -30,6 +30,8 @@ namespace hlt {
 
         double angle_between(Vector v) const;
 
+        double angle_between(Vector v1, Vector v2) const;
+
         double length() const;
 
         Vector normalize() const;
@@ -52,11 +54,19 @@ namespace hlt {
 
         Vector operator*(double u) const;
 
+	    bool isnan();
+
         friend std::ostream &operator<<(std::ostream &out, const Vector &location);
+
+	    static hlt::Vector NAN_VEC;
     };
 
     static bool operator==(const Vector &l1, const Vector &l2) {
         return l1.x == l2.x && l1.y == l2.y;
+    }
+
+    static bool operator!=(const Vector &l1, const Vector &l2) {
+        return !(l1 == l2);
     }
 
     double rad_to_deg(double rad);
