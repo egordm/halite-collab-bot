@@ -38,6 +38,8 @@ namespace hlt {
 
         double dist_line(const Vector &a, const Vector &b) const;
 
+        Vector closest_point_line(const Vector &a, const Vector &b) const;
+
         double dot_prod(const Vector &v) const;
 
         double cross_prod(const Vector &v) const;

@@ -83,14 +83,18 @@ namespace hlt {
     }
 
     double Vector::dist_line(const Vector &a, const Vector &b) const {
+        return dist(closest_point_line(a, b));
+    }
+
+    Vector Vector::closest_point_line(const Vector &a, const Vector &b) const {
         auto ds = a.dist_sq(b);
-        if (ds < 0.1) return dist(a);
+        if (ds < 0.1) return a;
 
         auto delta = b - a;
         auto t = std::fmax(0, std::fmin(1, (*this - a).dot_prod(delta) / ds));
         auto projection = delta * t + a;
 
-        return dist(projection);
+        return projection;
     }
 
     Vector Vector::operator-(const Vector &v) const {
