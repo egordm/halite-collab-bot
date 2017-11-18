@@ -1,0 +1,2 @@
+Ran benchmark: "1v1" with result: 63/100 overall acc 63.0
+Ran benchmark: "1v3" with result: 21/100 overall acc 21.0
