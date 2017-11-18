@@ -90,7 +90,7 @@ for enemy_name, enemy in enemies.items():
                 p.stdout.close()
                 processes.remove(p)
                 games_run += 1
-                if benchmark['games'] > games_run: start_game()
+                if benchmark['games'] >= games_run: start_game()
 
 print('====== FINISHED BENCHMARKING ======')
 for enemy_name, results in benchmark_results.items():
