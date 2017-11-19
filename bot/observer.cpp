@@ -3,11 +3,13 @@
 //
 
 #include <algorithm>
+#include <navigation/collision_avoidance.hpp>
 #include "observer.h"
 #include "sorting.h"
 #include "../hlt/hlt_in.hpp"
 #include "constants.h"
 #include "utils.h"
+#include "math.hpp"
 
 using namespace std::placeholders;
 
@@ -103,11 +105,24 @@ namespace bot {
 		auto enemies = get_ships(planet->pos, planet->radius + constants::DEFEND_RADIUS, hlt::enemy_mask);
 		std::vector<std::shared_ptr<hlt::Ship>> ret;
 
-		//if(!enemy_ships.empty())
 		std::copy_if(enemies.begin(), enemies.end(), std::back_inserter(ret),
-		             [&status_filter](const std::shared_ptr<hlt::Ship> &el) {
-			             return status_filter(el);
-		             });
+		             std::bind(sorting::filter_by_status, hlt::ShipDockingStatus::Undocked, _1));
+
+		// Check if moving in direction of
+		enemies = get_ships(planet->pos, planet->radius + constants::DEFEND_SEARCH_RADIUS_DIRECTIONAL, hlt::enemy_mask);
+		utils::erase_if_not(enemies, std::bind(sorting::filter_by_status, hlt::ShipDockingStatus::Undocked, _1));
+
+		for(const auto &enemy : enemies) {
+			if(std::find(ret.begin(), ret.end(), enemy) != ret.end()) continue;
+			auto target_point = math::resize_line(enemy->pos, enemy->pos + enemy->vel, constants::DEFEND_SEARCH_RADIUS_DIRECTIONAL);
+			std::vector <hlt::EntityIdentifier> ignore;
+			auto obstacles = navigation::check_collisions(planets, enemy->pos, target_point, ignore);
+			if(obstacles.size() != 1) continue;
+			if(obstacles.begin()->first->is_same(planet)) {
+				ret.push_back(enemy);
+				hlt::Log::log("Enemy is targeting us!");
+			}
+		}
 
 		return ret;
 	}
