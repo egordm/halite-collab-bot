@@ -3,7 +3,7 @@
 //
 
 #include <algorithm>
-#include <navigation/collision_avoidance.hpp>
+#include <navigation/collision_checking.hpp>
 #include "observer.h"
 #include "sorting.h"
 #include "../hlt/hlt_in.hpp"

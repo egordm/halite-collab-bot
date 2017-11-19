@@ -2,16 +2,16 @@
 // Created by egordm on 19-11-2017.
 //
 
-#ifndef HALITE_ORION_COLLISION_AVOIDANCE_HPP
-#define HALITE_ORION_COLLISION_AVOIDANCE_HPP
+#ifndef HALITE_ORION_COLLISION_CHECKING_HPP
+#define HALITE_ORION_COLLISION_CHECKING_HPP
 
+#include <entities.hpp>
 #include <memory>
 #include <algorithm>
-#include "../../hlt/entities.hpp"
 
 namespace bot {
 	namespace navigation {
-		template <typename T>
+		template<typename T>
 		static std::vector <std::pair<hlt::Entity *, hlt::Vector>> check_collisions(std::vector <std::shared_ptr<T>> &objects,
 		                                                                            const hlt::Vector &a, const hlt::Vector &b,
 		                                                                            std::vector <hlt::EntityIdentifier> &ignore) {
@@ -26,5 +26,4 @@ namespace bot {
 		}
 	}
 }
-
-#endif //HALITE_ORION_COLLISION_AVOIDANCE_HPP
+#endif //HALITE_ORION_COLLISION_CHECKING_HPP
