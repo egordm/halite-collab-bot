@@ -2,10 +2,10 @@ cmake_minimum_required(VERSION 3.8)
 project(halite_orion)
 
 set(CMAKE_CXX_STANDARD 11)
-set(TEST 0)
+set(testing/test 0)
 add_definitions(-DDEBUG)
 
-include_directories(${CMAKE_SOURCE_DIR}/hlt ${CMAKE_SOURCE_DIR}/bot)
+include_directories(${CMAKE_SOURCE_DIR}/hlt ${CMAKE_SOURCE_DIR}/bot ${CMAKE_SOURCE_DIR}/lib)
 
 
 get_property(dirs DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR} PROPERTY INCLUDE_DIRECTORIES)
@@ -17,7 +17,7 @@ endforeach ()
 
 include_directories(${CMAKE_SOURCE_DIR})
 
-if (TEST)
+if (testing/test)
     set(SOURCE_FILES "${SOURCE_FILES}" test.cpp)
 else ()
     set(SOURCE_FILES "${SOURCE_FILES}" MyBot.cpp)
