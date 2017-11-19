@@ -7,6 +7,7 @@
 
 
 #include "navigation_advanced.hpp"
+#include "collision_avoidance.hpp"
 
 using namespace std::placeholders;
 
@@ -27,15 +28,8 @@ namespace bot {
 			 * @return
 			 */
 			std::vector<std::pair<hlt::Entity *, hlt::Vector>> check_planet_collisions(const hlt::Vector &a, const hlt::Vector &b) {
-				std::vector<std::pair<hlt::Entity *, hlt::Vector>> ret;
-				for (const auto &kv : observer.get_planets()) {
-					if (std::find(ignore.begin(), ignore.end(), kv->identify()) != ignore.end()) continue;
-					auto plane = kv.get();
-
-					const auto dist_trajec = kv->pos.dist_line(a, b);
-					if (dist_trajec < hlt::constants::SHIP_RADIUS + kv->radius) ret.emplace_back(kv.get(), kv->pos);
-				}
-				return ret;
+				auto planets = observer.get_planets();
+				return navigation::check_collisions(planets, a, b, ignore);
 			}
 
 			std::vector<std::pair<hlt::Entity *, hlt::Vector>> check_ship_collisions(const hlt::Vector &a, const hlt::Vector &b) {
