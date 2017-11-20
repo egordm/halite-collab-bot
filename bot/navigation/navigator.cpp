@@ -6,7 +6,6 @@
 #include "navigator.h"
 #include "../constants.h"
 #include "navigation_fast.hpp"
-#include "navigation_fast_smart.hpp"
 
 namespace bot {
 	namespace navigation {
@@ -43,24 +42,6 @@ namespace bot {
 
 			std::vector<hlt::EntityIdentifier> ignore_list {target->identify()};
 			return navigation::fast::navigate_towards(observer, ship.get(), target_pos, ignore_list);
-		}
-
-		hlt::Move FastSmartNavigator::dock_planet(const std::shared_ptr<hlt::Ship> &ship, const std::shared_ptr<hlt::Planet> &planet) {
-			if (ship->can_dock(planet.get())) {
-				return hlt::Move::dock(ship->entity_id, planet->entity_id);
-			}
-
-			auto target_pos = ship->pos.closest_point(planet->pos, planet->radius + 3);
-			std::vector<hlt::EntityIdentifier> ignore_list {planet->identify()};
-
-			return navigation::FastPath(observer, ignore_list).navigate(ship.get(), target_pos);
-		}
-
-		hlt::Move FastSmartNavigator::attack_ship(const std::shared_ptr<hlt::Ship> &ship, const std::shared_ptr<hlt::Ship> &target) {
-			auto target_pos = ship->pos.closest_point(target->pos, target->radius + hlt::constants::WEAPON_RADIUS - 4);
-			std::vector<hlt::EntityIdentifier> ignore_list {/*target->identify()*/};
-
-			return navigation::FastPath(observer, ignore_list).navigate(ship.get(), target_pos);
 		}
 	}
 }
