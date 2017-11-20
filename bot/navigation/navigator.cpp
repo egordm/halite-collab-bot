@@ -15,7 +15,7 @@ namespace bot {
 			}
 
 			auto ret = hlt::navigation::navigate_ship_to_dock(observer.getMap(), ship, planet, hlt::constants::MAX_SPEED);
-			return (ret.second) ? MovePromise::thrust(ship->entity_id, ret.first.get_velocity()) : MovePromise::noop();
+			return (ret.second) ? MovePromise::thrust(ship->entity_id, ret.first.get_velocity(), planet->pos) : MovePromise::noop();
 		}
 
 		MovePromise LegacyNavigator::promise_attack_ship(const hlt::Ship *ship, const hlt::Ship *target) {
@@ -23,7 +23,7 @@ namespace bot {
 			auto ret = hlt::navigation::navigate_ship_towards_target(observer.getMap(), ship, target_pos, hlt::constants::MAX_SPEED,
 			                                                         true, 100, 0.02);
 
-			return ret.second ? MovePromise::thrust(ship->entity_id, ret.first.get_velocity()) : MovePromise::noop();
+			return ret.second ? MovePromise::thrust(ship->entity_id, ret.first.get_velocity(), target_pos) : MovePromise::noop();
 		}
 
 		MovePromise FastNavigator::promise_dock_planet(const hlt::Ship *ship, const hlt::Planet *planet) {
@@ -31,14 +31,14 @@ namespace bot {
 				return MovePromise::dock(ship->entity_id, planet->entity_id);
 			}
 
-			auto target_pos = ship->pos.closest_point(planet->pos, ship->radius + planet->radius+ 1);
+			auto target_pos = ship->pos.closest_point(planet->pos, ship->radius + planet->radius+ hlt::constants::DOCK_RADIUS - 1);
 			std::vector<hlt::EntityIdentifier> ignore_list {planet->identify()};
 
 			return navigation::fast::Path(observer, ignore_list).navigate(ship, target_pos);
 		}
 
 		MovePromise FastNavigator::promise_attack_ship(const hlt::Ship *ship, const hlt::Ship *target) {
-			auto target_pos = ship->pos.closest_point(target->pos, ship->radius + target->radius + hlt::constants::WEAPON_RADIUS/2);
+			auto target_pos = ship->pos.closest_point(target->pos, ship->radius + target->radius + hlt::constants::WEAPON_RADIUS - 1);
 
 			std::vector<hlt::EntityIdentifier> ignore_list {target->identify()};
 			return navigation::fast::Path(observer, ignore_list).navigate(ship, target_pos);
@@ -62,17 +62,8 @@ namespace bot {
 				}
 			}
 
-			coordinator.sync_observations();
-			const auto new_velocities = coordinator.calculate_velocities();
-
 			for (const auto &kv : move_map) {
 				auto promise = kv.second;
-				std::stringstream ss;
-				ss << "Ship: " << promise.ship_id << " COLAV Corrected: " << new_velocities.at(kv.first) << " Length: " << new_velocities.at(kv.first).length()
-				   << " Old len: " << promise.velocity.length() << " Old " << promise.velocity << " diff " << (new_velocities.at(kv.first) -  promise.velocity);
-				hlt::Log::log(ss.str());
-
-				promise.velocity = new_velocities.at(kv.first);
 				ret.push_back(promise.produce());
 			}
 

@@ -19,7 +19,7 @@ using namespace std::placeholders;
 namespace bot {
 	namespace navigation {
 		namespace fast {
-			constexpr double BYPASS_MARGIN = 0.1;
+			constexpr double BYPASS_MARGIN = 0.2;
 
 			class Path {
 			protected:
@@ -32,7 +32,6 @@ namespace bot {
 
 					std::vector<std::pair<hlt::Entity *, hlt::Vector>> obst;
 					check_collisions(observer.get_planets(), a, b, ignore_list, obst);
-					check_collisions(observer.get_ships(), a, b, ignore_list, obst);
 					if (obst.empty()) return {b, true};
 
 					auto closest_obstacle = *std::min_element(obst.begin(), obst.end(),
@@ -41,8 +40,10 @@ namespace bot {
 					auto tangents = a.tangents(closest_obstacle.second,
 					                           closest_obstacle.first->radius + hlt::constants::SHIP_RADIUS + BYPASS_MARGIN);
 
-					if(a.in_radius(closest_obstacle.second, closest_obstacle.first->radius + hlt::constants::SHIP_RADIUS + BYPASS_MARGIN)) {
-						return {a.closest_point(closest_obstacle.second, closest_obstacle.first->radius + hlt::constants::SHIP_RADIUS + BYPASS_MARGIN), true};
+					if (a.in_radius(closest_obstacle.second,
+					                closest_obstacle.first->radius + hlt::constants::SHIP_RADIUS + BYPASS_MARGIN)) {
+						return {a.closest_point(closest_obstacle.second,
+						                        closest_obstacle.first->radius + hlt::constants::SHIP_RADIUS + BYPASS_MARGIN), true};
 					}
 
 					return correct_route(a, correct_left ? tangents.first : tangents.second, correct_left, max_corrections - 1);
@@ -69,8 +70,9 @@ namespace bot {
 						if (correction_right.second) corrected_target = correction_right.first;
 					}
 
-					return MovePromise::thrust(ship->entity_id,
-					                           math::resize_line(ship->pos, corrected_target, hlt::constants::MAX_SPEED) - ship->pos);
+					auto speed = std::min(ship->pos.dist(target), (double)hlt::constants::MAX_SPEED);
+					auto vel = math::resize_line(ship->pos, corrected_target, speed) - ship->pos;
+					return MovePromise::thrust(ship->entity_id, vel, target);
 				}
 			};
 		}

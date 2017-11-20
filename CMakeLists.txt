@@ -5,7 +5,7 @@ set(CMAKE_CXX_STANDARD 11)
 set(testing/test 0)
 add_definitions(-DDEBUG)
 
-include_directories(${CMAKE_SOURCE_DIR}/hlt ${CMAKE_SOURCE_DIR}/bot ${CMAKE_SOURCE_DIR}/lib)
+include_directories(${CMAKE_SOURCE_DIR}/hlt ${CMAKE_SOURCE_DIR}/bot ${CMAKE_SOURCE_DIR}/libs)
 
 
 get_property(dirs DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR} PROPERTY INCLUDE_DIRECTORIES)

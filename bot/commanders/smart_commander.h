@@ -5,7 +5,6 @@
 #ifndef HALITE_ORION_SMART_COMMANDER_H
 #define HALITE_ORION_SMART_COMMANDER_H
 
-#include <navigation/collision_avoidance.h>
 #include "../commander.h"
 
 namespace bot {

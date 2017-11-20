@@ -31,13 +31,6 @@ namespace bot {
 
 		constexpr unsigned int ATTACK_PLANET_CHECK_RADIUS = 4;
 
-		// NAVIGATION
-		constexpr float TIME_HORIZON = 1;
-		constexpr float TIME_HORIZON_OBSTACLE = 1;
-		constexpr float NEIGHBOR_DIST = TIME_HORIZON * (hlt::constants::MAX_SPEED * 2);
-		constexpr unsigned int MAX_NEIGHBOURS = 500;
-		constexpr float RADIUS_MARGIN = 0;
-		constexpr unsigned int PLANET_VERTICES = 30;
 	}
 }
 

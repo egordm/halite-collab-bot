@@ -8,7 +8,6 @@
 
 #include "../../hlt/move.hpp"
 #include "../observer.h"
-#include "collision_avoidance.h"
 #include <cmath>
 
 namespace bot {
@@ -16,11 +15,12 @@ namespace bot {
 		struct MovePromise {
 			const hlt::EntityId ship_id;
 			const hlt::MoveType type;
+			const hlt::Vector target;
 			hlt::EntityId dock_to;
 			hlt::Vector velocity;
 
-			MovePromise(const hlt::EntityId ship_id, const hlt::MoveType type, const hlt::EntityId dock_to, const hlt::Vector &velocity)
-					: ship_id(ship_id), type(type), dock_to(dock_to), velocity(velocity) {}
+			MovePromise(const hlt::EntityId ship_id, const hlt::MoveType type, const hlt::EntityId dock_to, const hlt::Vector &velocity, const hlt::Vector &target)
+					: ship_id(ship_id), type(type), dock_to(dock_to), velocity(velocity), target(target) {}
 
 			hlt::Move produce() const {
 				switch (type) {
@@ -36,19 +36,19 @@ namespace bot {
 			}
 
 			static MovePromise noop() {
-				return {0, hlt::MoveType::Noop, 0, hlt::Vector()};
+				return {0, hlt::MoveType::Noop, 0, hlt::Vector(), hlt::Vector()};
 			}
 
 			static MovePromise dock(const hlt::EntityId ship_id, const hlt::EntityId dock_to) {
-				return {ship_id, hlt::MoveType::Dock, dock_to, hlt::Vector()};
+				return {ship_id, hlt::MoveType::Dock, dock_to, hlt::Vector(), hlt::Vector()};
 			}
 
 			static MovePromise undock(const hlt::EntityId ship_id) {
-				return {ship_id, hlt::MoveType::Undock, 0, hlt::Vector()};
+				return {ship_id, hlt::MoveType::Undock, 0, hlt::Vector(), hlt::Vector()};
 			}
 
-			static MovePromise thrust(const hlt::EntityId ship_id, const hlt::Vector &velocity) {
-				return {ship_id, hlt::MoveType::Thrust, 0, velocity};
+			static MovePromise thrust(const hlt::EntityId ship_id, const hlt::Vector &velocity, const hlt::Vector &target) {
+				return {ship_id, hlt::MoveType::Thrust, 0, velocity, target};
 			}
 		};
 
@@ -96,14 +96,12 @@ namespace bot {
 
 		class FastNavigator : public Navigator {
 		protected:
-			navigation::NavigationCoordinator coordinator;
-
 			MovePromise promise_dock_planet(const hlt::Ship *ship, const hlt::Planet *planet) override;
 
 			MovePromise promise_attack_ship(const hlt::Ship *ship, const hlt::Ship *target) override;
 
 		public:
-			explicit FastNavigator(Observer &observer) : Navigator(observer), coordinator(navigation::NavigationCoordinator(observer)) {}
+			explicit FastNavigator(Observer &observer) : Navigator(observer) {}
 
 			std::vector<hlt::Move> produce_moves() override;
 		};
