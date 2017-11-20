@@ -13,7 +13,6 @@ namespace bot {
 		class SmarterCommander : public StrongerCommander {
 		protected:
 			std::shared_ptr<hlt::Planet> home_base = nullptr;
-			navigation::NavigationCoordinator coordinator;
 
 			void clean() override;
 
@@ -28,8 +27,7 @@ namespace bot {
 			std::vector<hlt::Move> produce_moves() override;
 
 		public:
-			SmarterCommander(Observer &observer, navigation::Navigator *navigator)
-					: StrongerCommander(observer, navigator), coordinator(navigation::NavigationCoordinator(observer)) {}
+			SmarterCommander(Observer &observer, navigation::Navigator *navigator) : StrongerCommander(observer, navigator) {}
 		};
 	};
 }

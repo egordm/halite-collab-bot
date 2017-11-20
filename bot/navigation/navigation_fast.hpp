@@ -7,70 +7,72 @@
 
 #include <sstream>
 #include <algorithm>
+#include <math.hpp>
 #include "../../hlt/move.hpp"
 #include "../../hlt/map.hpp"
 #include "../utils.h"
 #include "../sorting.h"
+#include "collision_checking.hpp"
 
 using namespace std::placeholders;
 
 namespace bot {
 	namespace navigation {
 		namespace fast {
-			//TODO: idea. Pick one tangent left or right and keep picking till a clear trajectory is set
-
 			constexpr double BYPASS_MARGIN = 0.1;
 
-			static std::pair<bool, hlt::Vector>
-			correct_route(Observer &observer, const hlt::Vector &a, const hlt::Vector &b, bool correct_left,
-			              unsigned int max_corrections, std::vector<hlt::EntityIdentifier> &ignore_list) {
-				if (max_corrections == 0) return std::make_pair(false, b);
+			class Path {
+			protected:
+				Observer &observer;
+				std::vector<hlt::EntityIdentifier> &ignore_list;
 
-				std::vector<std::shared_ptr<hlt::Entity>> obst;
-				for (const auto &kv : observer.getMap()->planets) {
-					const auto dist_trajec = kv.second->pos.dist_line(a, b);
-					if (dist_trajec < hlt::constants::SHIP_RADIUS + kv.second->radius) obst.push_back(kv.second);
-				}
-				for (const auto &kv : observer.getMap()->ships) {
-					if(kv.second->docking_status == hlt::ShipDockingStatus::Undocked /*&& kv.second->owner_id == observer.my_id*/) continue;
-					const auto dist_trajec = kv.second->pos.dist_line(a, b);
-					if (dist_trajec < hlt::constants::SHIP_RADIUS + kv.second->radius) obst.push_back(kv.second);
-				}
-				for(const auto &ignore : ignore_list) utils::erase_if(obst, std::bind(sorting::filter_by_identifier, ignore, _1));
-				if (obst.empty()) return std::make_pair(true, b);
+				hlt::nullable<hlt::Vector>
+				correct_route(const hlt::Vector &a, const hlt::Vector &b, bool correct_left, unsigned int max_corrections) {
+					if (max_corrections == 0) return {b, false};
 
-				auto closest_obstacle = *std::min_element(obst.begin(), obst.end(), std::bind(sorting::sort_by_distance, a, _1, _2));
-				auto tangents = a.tangents(closest_obstacle->pos, closest_obstacle->radius + hlt::constants::SHIP_RADIUS + BYPASS_MARGIN);
+					std::vector<std::pair<hlt::Entity *, hlt::Vector>> obst;
+					check_collisions(observer.get_planets(), a, b, ignore_list, obst);
+					check_collisions(observer.get_ships(), a, b, ignore_list, obst);
+					if (obst.empty()) return {b, true};
 
-				if (correct_left) return correct_route(observer, a, tangents.first, correct_left, max_corrections - 1, ignore_list);
-				return correct_route(observer, a, tangents.second, correct_left, max_corrections - 1, ignore_list);
-			};
+					auto closest_obstacle = *std::min_element(obst.begin(), obst.end(),
+					                                          std::bind(sorting::sort_obst_by_distance, a, _1, _2));
 
-			static hlt::Move navigate_towards(Observer &observer, hlt::Ship *ship, const hlt::Vector &target,
-			                                  std::vector<hlt::EntityIdentifier> &ignore_list) {
-				ignore_list.push_back(ship->identify());
-				auto correction_left = correct_route(observer, ship->pos, target, true, 20, ignore_list);
-				auto correction_right = correct_route(observer, ship->pos, target, false, 20, ignore_list);
+					auto tangents = a.tangents(closest_obstacle.second,
+					                           closest_obstacle.first->radius + hlt::constants::SHIP_RADIUS + BYPASS_MARGIN);
 
-				hlt::Vector corrected_target = target;
-				if (correction_left.first && correction_right.first) {
-					if (ship->pos.dist(correction_left.second) + target.dist(correction_left.second) <
-					    ship->pos.dist(correction_right.second) + target.dist(correction_right.second)) {
-						corrected_target = correction_left.second;
-					} else {
-						corrected_target = correction_right.second;
+					if(a.in_radius(closest_obstacle.second, closest_obstacle.first->radius + hlt::constants::SHIP_RADIUS + BYPASS_MARGIN)) {
+						return {a.closest_point(closest_obstacle.second, closest_obstacle.first->radius + hlt::constants::SHIP_RADIUS + BYPASS_MARGIN), true};
 					}
-				} else {
-					if (correction_left.first) corrected_target = correction_left.second;
-					if (correction_right.first) corrected_target = correction_right.second;
+
+					return correct_route(a, correct_left ? tangents.first : tangents.second, correct_left, max_corrections - 1);
 				}
 
-				const double angle = std::round(hlt::rad_to_deg(ship->pos.angle_between(corrected_target)));
-				const unsigned int speed = static_cast<const unsigned int>(std::min(7, std::max(0,
-				                                                                                static_cast<const int &>(std::round(ship->pos.dist(target))))));
+			public:
+				Path(Observer &observer, std::vector<hlt::EntityIdentifier> &ignore_list) : observer(observer), ignore_list(ignore_list) {}
 
-				return hlt::Move::thrust(ship->entity_id, speed, static_cast<const int>(angle));
-			}
+				MovePromise navigate(const hlt::Ship *ship, const hlt::Vector &target) {
+					ignore_list.push_back(ship->identify());
+					auto correction_left = correct_route(ship->pos, target, true, 20);
+					auto correction_right = correct_route(ship->pos, target, false, 20);
+
+					hlt::Vector corrected_target = target;
+					if (correction_left.second && correction_right.second) {
+						if (ship->pos.dist(correction_left.first) + target.dist(correction_left.first) <
+						    ship->pos.dist(correction_right.first) + target.dist(correction_right.first)) {
+							corrected_target = correction_left.first;
+						} else {
+							corrected_target = correction_right.first;
+						}
+					} else {
+						if (correction_left.second) corrected_target = correction_left.first;
+						if (correction_right.second) corrected_target = correction_right.first;
+					}
+
+					return MovePromise::thrust(ship->entity_id,
+					                           math::resize_line(ship->pos, corrected_target, hlt::constants::MAX_SPEED) - ship->pos);
+				}
+			};
 		}
 	}
 }

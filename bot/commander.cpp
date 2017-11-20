@@ -43,10 +43,10 @@ std::vector<hlt::Move> bot::Commander::produce_moves() {
 #if DEBUG_BOT
 		hlt::Log::log(kv.second->str());
 #endif
-		ret.push_back(kv.second->move(observer, navigator));
+		kv.second->produce_move(navigator);
 	}
 
-	return ret;
+	return navigator->produce_moves();
 }
 
 bool bot::Commander::add_assignment(const std::shared_ptr<bot::Assignment> &assignment) {

@@ -13,7 +13,9 @@
 
 namespace bot {
 	namespace sorting {
-
+		static bool sort_obst_by_distance(const hlt::Vector &pos, const std::pair<hlt::Entity *, hlt::Vector> &e1, const std::pair<hlt::Entity *, hlt::Vector> &e2) {
+			return (pos.dist_sq(e1.second)) < pos.dist_sq(e2.second) && e1.first->is_alive();
+		}
 
 		static bool sort_by_distance(const hlt::Vector &pos, const std::shared_ptr<hlt::Entity> &e1, const std::shared_ptr<hlt::Entity> &e2) {
 			return (pos.dist_sq(e1->pos)) < pos.dist_sq(e2->pos) && e1->is_alive();

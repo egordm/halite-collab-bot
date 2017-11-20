@@ -31,9 +31,9 @@ namespace bot {
 		explicit Assignment(const std::shared_ptr<hlt::Ship> ship) : ship(ship) {}
 
 	public:
-		const std::shared_ptr<hlt::Ship> &get_ship() const { return ship; }
+		const std::shared_ptr<hlt::Ship> get_ship() const { return ship; }
 
-		virtual hlt::Move move(Observer &observer, navigation::Navigator *navigator) const { return hlt::Move::noop(); };
+		virtual void produce_move(navigation::Navigator *navigator) const = 0;
 
 		virtual bool is_valid(Observer &observer) const { return get_ship()->is_alive(); }
 
@@ -75,7 +75,7 @@ namespace bot {
 		ColonizeAssignment(const std::shared_ptr<hlt::Ship> &ship, const std::shared_ptr<hlt::Planet> &target)
 				: TargetedAssignment(ship, target) {}
 
-		hlt::Move move(Observer &observer, navigation::Navigator *navigator) const override;
+		void produce_move(navigation::Navigator *navigator) const override;
 
 		bool is_valid(Observer &observer) const override {
 			return TargetedAssignment::is_valid(observer) && !get_target(observer)->is_full()
@@ -94,7 +94,7 @@ namespace bot {
 		AttackShipAssignment(const std::shared_ptr<hlt::Ship> &ship, const std::shared_ptr<hlt::Ship> &target)
 				: TargetedAssignment(ship, target) {}
 
-		hlt::Move move(Observer &observer, navigation::Navigator *navigator) const override;
+		void produce_move(navigation::Navigator *navigator) const override;
 
 		unsigned int max_count(Observer &observer) const override { return 2; }
 

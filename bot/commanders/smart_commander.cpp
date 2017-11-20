@@ -4,7 +4,6 @@
 
 #include <algorithm>
 #include <cmath>
-#include "../navigation/navigation_advanced.hpp"
 #include "../sorting.h"
 #include "../constants.h"
 #include "../utils.h"
@@ -110,43 +109,14 @@ namespace bot {
 				hlt::Log::log("Undocking");
 			}
 
-			for (const auto &ship : observer.get_my_ships()) {
-				ship->vel = hlt::Vector();
-			}
-
 			// TODO: get vels of all objects around.
 			// Get all collision points
 			// use expand tangent algorythm
-			hlt::entity_map<hlt::Move> move_map;
 			for (const auto &kv : assignments) {
-				const auto &move = kv.second->move(observer, navigator);
-				if (move.type != hlt::MoveType::Thrust) {
-					kv.second->get_ship()->docking_status = hlt::ShipDockingStatus::Docked;
-					ret.push_back(move);
-					continue;
-				}
-
-/*				kv.second->get_ship()->vel = move.get_velocity();
-				move_map.emplace(kv.second->get_ship()->entity_id, move);*/
+				kv.second->produce_move(navigator);
 			}
 
-			for (const auto &kv : assignments) {
-				const auto &move = kv.second->move(observer, navigator);
-				if (move.type == hlt::MoveType::Thrust) {
-					kv.second->get_ship()->vel = move.get_velocity();
-					move_map.emplace(kv.second->get_ship()->entity_id, move);
-				}
-			}
-
-			coordinator.sync_observations();
-			const auto new_velocities = coordinator.calculate_velocities();
-			for (const auto &kv : move_map) {
-				if (kv.second.type != hlt::MoveType::Thrust) continue;
-				ret.push_back(navigation::create_thrust(kv.second.ship_id, new_velocities.at(kv.second.ship_id)));
-			}
-
-
-			return ret;
+			return navigator->produce_moves();
 		}
 	};
 }

@@ -12,16 +12,12 @@
 using namespace std::placeholders;
 
 namespace bot {
-	hlt::Move ColonizeAssignment::move(Observer &observer, navigation::Navigator *navigator) const {
-		return navigator->dock_planet(get_ship(), get_target(observer));
+	void ColonizeAssignment::produce_move(navigation::Navigator *navigator) const {
+		navigator->dock_planet(get_ship().get(), get_target(navigator->get_observer()).get());
 	}
 
-	hlt::Move AttackShipAssignment::move(Observer &observer, navigation::Navigator *navigator) const {
-		return navigator->attack_ship(get_ship(), get_target(observer));
-	}
-
-	static bool comparator(const std::shared_ptr<hlt::Ship> &a, const std::shared_ptr<hlt::Ship> &b) {
-		return true;
+	void AttackShipAssignment::produce_move(navigation::Navigator *navigator) const {
+		navigator->attack_ship(get_ship().get(), get_target(navigator->get_observer()).get());
 	}
 
 	const std::shared_ptr<hlt::Ship> AttackPlanetAssignment::get_target(Observer &observer) const {
@@ -44,13 +40,6 @@ namespace bot {
 
 	unsigned int AttackPlanetAssignment::max_count(Observer &observer) const {
 		return 9001;
-		// TODO: revisit
-		auto ndocked = get_target_planet()->docked_ships.size();
-		auto nproduction = ndocked * hlt::constants::PER_SHIP_PRODUCTION * constants::ATTACK_PLANET_ASSIGNMENT_MULTIPLIER;
-		auto nenemies = observer.get_ships(get_target_planet()->pos, get_target_planet()->radius + constants::ATTACK_PLANET_CHECK_RADIUS,
-		                                   hlt::enemy_mask).size();
-
-		return static_cast<unsigned int>(std::ceil(ndocked + nproduction + nenemies));
 	}
 
 	const std::shared_ptr<hlt::Ship> DefendPlanetAssignment::get_target(Observer &observer) const {

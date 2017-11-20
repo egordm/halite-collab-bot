@@ -18,6 +18,7 @@ namespace bot {
 	namespace navigation {
 
 		NavigationCoordinator::NavigationCoordinator(Observer &observer) : observer(observer), simulator(new RVO::RVOSimulator()) {
+			simulator->setTimeStep(1.0f);
 		}
 
 		NavigationCoordinator::~NavigationCoordinator() {
@@ -55,8 +56,8 @@ namespace bot {
 			simulator->setAgentPrefVelocity(agent_id, convert(ship->vel));
 
 			const bool do_sim = ship->docking_status == hlt::ShipDockingStatus::Undocked && ship->owner_id == observer.my_id;
-			simulator->setAgentNeighborDist(agent_id, do_sim ? constants::NEIGHBOR_DIST : 0);
-			simulator->setAgentMaxNeighbors(agent_id, do_sim ? constants::MAX_NEIGHBOURS : 0);
+			simulator->setAgentNeighborDist(agent_id, constants::NEIGHBOR_DIST);
+			simulator->setAgentMaxNeighbors(agent_id, constants::MAX_NEIGHBOURS);
 			simulator->setAgentTimeHorizon(agent_id, do_sim ? constants::TIME_HORIZON : 0);
 			simulator->setAgentTimeHorizonObst(agent_id, do_sim ? constants::TIME_HORIZON_OBSTACLE : 0);
 		}

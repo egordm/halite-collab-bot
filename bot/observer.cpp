@@ -116,11 +116,12 @@ namespace bot {
 			if(std::find(ret.begin(), ret.end(), enemy) != ret.end()) continue;
 			auto target_point = math::resize_line(enemy->pos, enemy->pos + enemy->vel, constants::DEFEND_SEARCH_RADIUS_DIRECTIONAL);
 			std::vector <hlt::EntityIdentifier> ignore;
-			auto obstacles = navigation::check_collisions(planets, enemy->pos, target_point, ignore);
+
+			std::vector<std::pair<hlt::Entity *, hlt::Vector>> obstacles;
+			navigation::check_collisions(planets, enemy->pos, target_point, ignore, obstacles);
 			if(obstacles.size() != 1) continue;
 			if(obstacles.begin()->first->is_same(planet)) {
 				ret.push_back(enemy);
-				hlt::Log::log("Enemy is targeting us!");
 			}
 		}
 
