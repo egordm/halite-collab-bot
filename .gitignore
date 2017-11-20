@@ -3,6 +3,7 @@ cmake-build-debug
 *.hlt
 *.stackdump
 testing/sandbox/hlt_client
+testing/sandbox/chlorine 1.0.4 win64
 *.zip
 
 # Created by .ignore support plugin (hsz.mobi)
