@@ -22,11 +22,7 @@ namespace bot {
 
 		hlt::Move LegacyNavigator::attack_ship(const std::shared_ptr<hlt::Ship> &ship, const std::shared_ptr<hlt::Ship> &target) {
 			auto target_pos = ship->pos.closest_point(target->pos, target->radius + hlt::constants::WEAPON_RADIUS - 2);
-#if ALLOW_KAMIKAZE
-			if(ship->health < target->health) {
-				target_pos = target->pos;
-			}
-#endif
+
 			auto ret = hlt::navigation::navigate_ship_towards_target(observer.getMap(), ship.get(), target_pos, hlt::constants::MAX_SPEED,
 			                                                         true, 100, 0.02);
 			return ret.second ? ret.first : hlt::Move::noop();
@@ -39,18 +35,14 @@ namespace bot {
 
 			auto target_pos = ship->pos.closest_point(planet->pos, planet->radius + 1);
 			std::vector<hlt::EntityIdentifier> ignore_list {planet->identify()};
-			return navigation::fast::navigate_towards(observer.getMap(), ship.get(), target_pos, ignore_list);
+			return navigation::fast::navigate_towards(observer, ship.get(), target_pos, ignore_list);
 		}
 
 		hlt::Move FastNavigator::attack_ship(const std::shared_ptr<hlt::Ship> &ship, const std::shared_ptr<hlt::Ship> &target) {
-			auto target_pos = ship->pos.closest_point(target->pos, target->radius + hlt::constants::WEAPON_RADIUS - 2);
-#if ALLOW_KAMIKAZE
-			if(ship->health < target->health) {
-				target_pos = target->pos;
-			}
-#endif
+			auto target_pos = ship->pos.closest_point(target->pos, target->radius + hlt::constants::WEAPON_RADIUS/2);
+
 			std::vector<hlt::EntityIdentifier> ignore_list {target->identify()};
-			return navigation::fast::navigate_towards(observer.getMap(), ship.get(), target_pos, ignore_list);
+			return navigation::fast::navigate_towards(observer, ship.get(), target_pos, ignore_list);
 		}
 
 		hlt::Move FastSmartNavigator::dock_planet(const std::shared_ptr<hlt::Ship> &ship, const std::shared_ptr<hlt::Planet> &planet) {
@@ -58,14 +50,14 @@ namespace bot {
 				return hlt::Move::dock(ship->entity_id, planet->entity_id);
 			}
 
-			auto target_pos = ship->pos.closest_point(planet->pos, planet->radius + 1);
+			auto target_pos = ship->pos.closest_point(planet->pos, planet->radius + 3);
 			std::vector<hlt::EntityIdentifier> ignore_list {planet->identify()};
 
 			return navigation::FastPath(observer, ignore_list).navigate(ship.get(), target_pos);
 		}
 
 		hlt::Move FastSmartNavigator::attack_ship(const std::shared_ptr<hlt::Ship> &ship, const std::shared_ptr<hlt::Ship> &target) {
-			auto target_pos = ship->pos.closest_point(target->pos, target->radius + hlt::constants::WEAPON_RADIUS - 2);
+			auto target_pos = ship->pos.closest_point(target->pos, target->radius + hlt::constants::WEAPON_RADIUS - 4);
 			std::vector<hlt::EntityIdentifier> ignore_list {/*target->identify()*/};
 
 			return navigation::FastPath(observer, ignore_list).navigate(ship.get(), target_pos);

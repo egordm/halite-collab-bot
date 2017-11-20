@@ -5,6 +5,7 @@
 #ifndef HALITE_ORION_SMART_COMMANDER_H
 #define HALITE_ORION_SMART_COMMANDER_H
 
+#include <navigation/collision_avoidance.h>
 #include "../commander.h"
 
 namespace bot {
@@ -12,6 +13,7 @@ namespace bot {
 		class SmarterCommander : public StrongerCommander {
 		protected:
 			std::shared_ptr<hlt::Planet> home_base = nullptr;
+			navigation::NavigationCoordinator coordinator;
 
 			void clean() override;
 
@@ -26,7 +28,8 @@ namespace bot {
 			std::vector<hlt::Move> produce_moves() override;
 
 		public:
-			SmarterCommander(Observer &observer, navigation::Navigator *navigator) : StrongerCommander(observer, navigator) {}
+			SmarterCommander(Observer &observer, navigation::Navigator *navigator)
+					: StrongerCommander(observer, navigator), coordinator(navigation::NavigationCoordinator(observer)) {}
 		};
 	};
 }
