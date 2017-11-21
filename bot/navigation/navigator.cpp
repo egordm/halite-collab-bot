@@ -34,21 +34,21 @@ namespace bot {
 			auto target_pos = ship->pos.closest_point(planet->pos, ship->radius + planet->radius+ hlt::constants::DOCK_RADIUS - 1);
 			std::vector<hlt::EntityIdentifier> ignore_list {planet->identify()};
 
-			return navigation::fast::Path(observer, ignore_list).navigate(ship, target_pos);
+			return navigation::FastPath(observer, ignore_list).navigate(ship, target_pos);
 		}
 
 		MovePromise FastNavigator::promise_attack_ship(const hlt::Ship *ship, const hlt::Ship *target) {
 			auto target_pos = ship->pos.closest_point(target->pos, ship->radius + target->radius + hlt::constants::WEAPON_RADIUS - 1);
 
 			std::vector<hlt::EntityIdentifier> ignore_list {target->identify()};
-			return navigation::fast::Path(observer, ignore_list).navigate(ship, target_pos);
+			return navigation::fast::FastPath(observer, ignore_list).navigate(ship, target_pos);
 		}
 
 		std::vector<hlt::Move> FastNavigator::produce_moves() {
-			for (const auto &ship : observer.get_my_ships()) {
+			/*for (const auto &ship : observer.get_my_ships()) { //TODO: ship correction
 				ship->vel = hlt::Vector();
 			}
-
+*/
 			std::vector<hlt::Move> ret;
 			hlt::entity_map<MovePromise> move_map;
 			for(const auto &move_promise : move_promises) {
@@ -61,6 +61,8 @@ namespace bot {
 					ret.push_back(move_promise.produce());
 				}
 			}
+
+
 
 			for (const auto &kv : move_map) {
 				auto promise = kv.second;

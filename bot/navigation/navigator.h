@@ -71,12 +71,16 @@ namespace bot {
 				return ret;
 			}
 
-			void dock_planet(const hlt::Ship *ship, const hlt::Planet *planet) {
-				move_promises.push_back(promise_dock_planet(ship, planet));
+			MovePromise dock_planet(const hlt::Ship *ship, const hlt::Planet *planet) {
+				auto promise = promise_dock_planet(ship, planet);
+				move_promises.push_back(promise);
+				return promise;
 			}
 
-			void attack_ship(const hlt::Ship *ship, const hlt::Ship *target) {
-				move_promises.push_back(promise_attack_ship(ship, target));
+			MovePromise attack_ship(const hlt::Ship *ship, const hlt::Ship *target) {
+				auto promise = promise_attack_ship(ship, target);
+				move_promises.push_back(promise);
+				return promise;
 			}
 
 			Observer &get_observer() const {
