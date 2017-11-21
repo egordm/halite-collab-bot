@@ -34,7 +34,7 @@ namespace bot {
 			auto target_pos = ship->pos.closest_point(planet->pos, ship->radius + planet->radius+ hlt::constants::DOCK_RADIUS - 1);
 			std::vector<hlt::EntityIdentifier> ignore_list {planet->identify()};
 
-			return navigation::FastPath(observer, ignore_list).navigate(ship, target_pos);
+			return navigation::FastPath(observer, ignore_list, 0).navigate(ship, target_pos);
 		}
 
 		MovePromise FastNavigator::promise_attack_ship(const hlt::Ship *ship, const hlt::Ship *target) {

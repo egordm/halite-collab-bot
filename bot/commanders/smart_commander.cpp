@@ -109,11 +109,18 @@ namespace bot {
 				hlt::Log::log("Undocking");
 			}
 
+			for (const auto &ship : observer.get_my_ships()) { //TODO: ship correction
+				ship->vel = hlt::Vector();
+			}
+
 			// TODO: get vels of all objects around.
 			// Get all collision points
 			// use expand tangent algorythm
 			for (const auto &kv : assignments) {
-				kv.second->produce_move(navigator);
+				auto promise = kv.second->produce_move(navigator);
+				if(promise.type == hlt::MoveType::Thrust) {
+					observer.get_ship(kv.first)->vel = promise.velocity; // TODO: bad practise
+				}
 			}
 
 			return navigator->produce_moves();
