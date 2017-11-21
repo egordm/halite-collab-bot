@@ -33,7 +33,7 @@ namespace bot {
 	public:
 		const std::shared_ptr<hlt::Ship> get_ship() const { return ship; }
 
-		virtual void produce_move(navigation::Navigator *navigator) const = 0;
+		virtual navigation::MovePromise produce_move(navigation::Navigator *navigator) const = 0;
 
 		virtual bool is_valid(Observer &observer) const { return get_ship()->is_alive(); }
 
@@ -75,7 +75,7 @@ namespace bot {
 		ColonizeAssignment(const std::shared_ptr<hlt::Ship> &ship, const std::shared_ptr<hlt::Planet> &target)
 				: TargetedAssignment(ship, target) {}
 
-		void produce_move(navigation::Navigator *navigator) const override;
+		navigation::MovePromise produce_move(navigation::Navigator *navigator) const override;
 
 		bool is_valid(Observer &observer) const override {
 			return TargetedAssignment::is_valid(observer) && !get_target(observer)->is_full()
@@ -94,7 +94,7 @@ namespace bot {
 		AttackShipAssignment(const std::shared_ptr<hlt::Ship> &ship, const std::shared_ptr<hlt::Ship> &target)
 				: TargetedAssignment(ship, target) {}
 
-		void produce_move(navigation::Navigator *navigator) const override;
+		navigation::MovePromise produce_move(navigation::Navigator *navigator) const override;
 
 		unsigned int max_count(Observer &observer) const override { return 2; }
 

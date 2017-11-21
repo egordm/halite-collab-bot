@@ -12,12 +12,12 @@
 using namespace std::placeholders;
 
 namespace bot {
-	void ColonizeAssignment::produce_move(navigation::Navigator *navigator) const {
-		navigator->dock_planet(get_ship().get(), get_target(navigator->get_observer()).get());
+	navigation::MovePromise ColonizeAssignment::produce_move(navigation::Navigator *navigator) const {
+		return navigator->dock_planet(get_ship().get(), get_target(navigator->get_observer()).get());
 	}
 
-	void AttackShipAssignment::produce_move(navigation::Navigator *navigator) const {
-		navigator->attack_ship(get_ship().get(), get_target(navigator->get_observer()).get());
+	navigation::MovePromise AttackShipAssignment::produce_move(navigation::Navigator *navigator) const {
+		return navigator->attack_ship(get_ship().get(), get_target(navigator->get_observer()).get());
 	}
 
 	const std::shared_ptr<hlt::Ship> AttackPlanetAssignment::get_target(Observer &observer) const {
