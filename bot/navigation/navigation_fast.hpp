@@ -22,7 +22,7 @@ namespace bot {
         struct MovePromise {
             const hlt::EntityId ship_id;
             const hlt::MoveType type;
-            const hlt::Vector target;
+            hlt::Vector target;
             hlt::EntityId dock_to;
             hlt::Vector velocity;
 
@@ -66,8 +66,6 @@ namespace bot {
 
 
         constexpr double BYPASS_MARGIN = 0.2;
-        constexpr double SHIP_COLLISION_CHECK_RADIUS = hlt::constants::MAX_SPEED + 2 * hlt::constants::SHIP_RADIUS;
-        constexpr double SHIP_BYPASS_MARGIN = 0.3;
 
         // TODO: hitmap for path planning
         class FastPath {
