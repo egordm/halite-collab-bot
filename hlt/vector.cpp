@@ -146,7 +146,7 @@ namespace hlt {
 
     Vector Vector::NAN_VEC = Vector(std::numeric_limits<double>::quiet_NaN(), std::numeric_limits<double>::quiet_NaN());
 
-	bool Vector::isnan() {
+	bool Vector::isnan() const {
 		return std::isnan(x) || std::isnan(y);
 	}
 }

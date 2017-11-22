@@ -56,7 +56,7 @@ namespace hlt {
 
         Vector operator*(double u) const;
 
-	    bool isnan();
+	    bool isnan() const;
 
         friend std::ostream &operator<<(std::ostream &out, const Vector &location);
 
