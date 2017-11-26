@@ -65,8 +65,8 @@ namespace bot {
 
 		static hlt::Vector trajectory_intersection(const hlt::Vector &a1, const hlt::Vector &a2, const hlt::Vector &b1,
 											const hlt::Vector &b2) {
-			const auto l1 = math::find_line(a1, b1);
-			const auto l2 = math::find_line(b2, b2);
+			const auto l1 = math::find_line(a1, a2);
+			const auto l2 = math::find_line(b1, b2);
 			return intersection(l1, l2);
 		}
 	}

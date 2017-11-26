@@ -24,7 +24,7 @@ namespace hlt {
 
         Vector closest_point(const Vector &center, double radius) const;
 
-        std::pair<Vector, Vector> tangents(const Vector &center, double radius) const;
+        std::pair<Vector, Vector> tangents(const Vector &center, const double radius) const;
 
         double angle() const;
 
@@ -57,6 +57,8 @@ namespace hlt {
         Vector operator*(double u) const;
 
 	    bool isnan() const;
+
+	    bool is_zero() const;
 
         friend std::ostream &operator<<(std::ostream &out, const Vector &location);
 
