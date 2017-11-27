@@ -115,8 +115,7 @@ namespace bot {
 
 			for (const auto &kv : assignments) {
 				auto promise = kv.second->produce_move(navigator);
-				if(promise.type == hlt::MoveType::Noop) continue;
-				observer.get_ship(promise.ship_id)->pos = promise.velocity + observer.get_ship(promise.ship_id)->pos;
+				if(promise.type == hlt::MoveType::Thrust) observer.get_ship(promise.ship_id)->vel = promise.velocity;
 			}
 
 			return navigator->produce_moves();

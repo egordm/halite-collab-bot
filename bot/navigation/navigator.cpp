@@ -33,7 +33,7 @@ namespace bot {
                 return MovePromise::dock(ship->entity_id, planet->entity_id);
             }
 
-            auto target_pos = ship->pos.closest_point(planet->pos, ship->radius + planet->radius + hlt::constants::DOCK_RADIUS /2);
+            auto target_pos = ship->pos.closest_point(planet->pos, ship->radius + planet->radius + 1);
             std::vector<hlt::EntityIdentifier> ignore_list{planet->identify()};
 
             return navigation::FastPath(observer, ignore_list, hlt::constants::MAX_SPEED).navigate(ship, target_pos);
