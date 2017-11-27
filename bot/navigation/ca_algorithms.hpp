@@ -12,11 +12,13 @@
 #include <math.hpp>
 #include <map>
 #include <sorting.h>
+#include <algorithm>
+#include <sstream>
 
 using namespace std::placeholders;
 
 namespace bot { namespace navigation { namespace rvo {
-	constexpr double UNCERTAINTY_ANGLE = 0.02;
+	constexpr double UNCERTAINTY_ANGLE = 0.005;
 
 	class VelocityObstacle {
 		/**
@@ -49,6 +51,8 @@ namespace bot { namespace navigation { namespace rvo {
 		}
 
 		bool inside(const hlt::Vector &v) const {
+			if(v == apex) return false;
+
 			const auto ptv = v - apex;
 			const auto pa = atan2(ptv.y, ptv.x);
 			auto pf = atan2(second_edge.y, second_edge.x);
@@ -109,6 +113,7 @@ namespace bot { namespace navigation { namespace rvo {
 
 	// TODO: make a custom struct for that
 	static const std::map<int, std::pair<int, std::vector<int>>> BRUTEFORCE_BASE_STEPS = {
+			{8, {1, {7, 6, 4, 2}}},
 			{30, {3, {7, 6, 4, 2}}},
 			{60, {6, {7, 6, 4, 2}}},
 			{50, {10, {7, 4}}}
@@ -126,11 +131,11 @@ namespace bot { namespace navigation { namespace rvo {
 		hlt::Vector v_cand;
 		std::vector<hlt::Vector> v_candidates;
 
-		while (step_group != BRUTEFORCE_BASE_STEPS.end() && step < step_group->first) {
-			angle_delta += step_group->second.first;
+		while (step_group != BRUTEFORCE_BASE_STEPS.end() || step < step_group->first) {
+			angle_delta += step_group->second.first; // TODO: perform speed steps on delta 0
 
 			for (const auto speed : step_group->second.second) {
-				if (speed > base_speed) continue;// TODO: unnecessary there is a betetr approach. Use target point
+				//if (speed > base_speed) continue;// TODO: unnecessary there is a betetr approach. Use target point
 
 				// TODO: duplicate code is bad
 				v_cand = hlt::Vector::from_angle(hlt::deg_to_rad(base_angle + angle_delta), speed);
@@ -149,6 +154,9 @@ namespace bot { namespace navigation { namespace rvo {
 
 		if (!in_vos({0,0}, obstacles)) v_candidates.emplace_back(0,0); // Place zero vector :S
 
+		if(v_candidates.empty()) return {};
+
+		// todo: FIX CORNERCASE
 		return *std::min_element(v_candidates.begin(), v_candidates.end(), std::bind(sorting::sort_vec_by_distance, pref_vel, _1, _2));
 
 	}
