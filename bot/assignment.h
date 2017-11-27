@@ -45,7 +45,6 @@ namespace bot {
 
 		virtual std::string str() {
 			std::stringstream ss;
-			ss << "Assigned ship: " << ship->entity_id << " Assignment Type: " << get_type();
 			return ss.str();
 		}
 	};

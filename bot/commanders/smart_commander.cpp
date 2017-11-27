@@ -106,21 +106,17 @@ namespace bot {
 				if (ship->docking_status == hlt::ShipDockingStatus::Undocked) continue;
 				if (observer.get_planet(ship->docked_planet)->can_build_ships()) continue;
 				ret.push_back(hlt::Move::undock(ship->entity_id));
-				hlt::Log::log("Undocking");
 			}
+
 
 			for (const auto &ship : observer.get_my_ships()) { //TODO: ship correction
 				ship->vel = hlt::Vector();
 			}
 
-			// TODO: get vels of all objects around.
-			// Get all collision points
-			// use expand tangent algorythm
 			for (const auto &kv : assignments) {
 				auto promise = kv.second->produce_move(navigator);
-				if(promise.type == hlt::MoveType::Thrust) {
-					observer.get_ship(kv.first)->vel = promise.velocity; // TODO: bad practise
-				}
+				if(promise.type == hlt::MoveType::Noop) continue;
+				observer.get_ship(promise.ship_id)->pos = promise.velocity + observer.get_ship(promise.ship_id)->pos;
 			}
 
 			return navigator->produce_moves();
