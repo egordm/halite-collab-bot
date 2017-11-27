@@ -33,34 +33,24 @@ namespace bot {
                 return MovePromise::dock(ship->entity_id, planet->entity_id);
             }
 
-            auto target_pos = ship->pos.closest_point(planet->pos,
-                                                      ship->radius + planet->radius + hlt::constants::DOCK_RADIUS - 1);
+            auto target_pos = ship->pos.closest_point(planet->pos, ship->radius + planet->radius + hlt::constants::DOCK_RADIUS /2);
             std::vector<hlt::EntityIdentifier> ignore_list{planet->identify()};
 
-            return navigation::FastPath(observer, ignore_list, 0).navigate(ship, target_pos);
+            return navigation::FastPath(observer, ignore_list, hlt::constants::MAX_SPEED).navigate(ship, target_pos);
         }
 
         MovePromise FastNavigator::promise_attack_ship(const hlt::Ship *ship, const hlt::Ship *target) {
-            auto target_pos = ship->pos.closest_point(target->pos,
-                                                      ship->radius + target->radius + hlt::constants::WEAPON_RADIUS -
-                                                      1);
+            auto target_pos = ship->pos.closest_point(target->pos, ship->radius + target->radius + hlt::constants::WEAPON_RADIUS / 2);
 
             std::vector<hlt::EntityIdentifier> ignore_list{target->identify()};
             return navigation::FastPath(observer, ignore_list, hlt::constants::MAX_SPEED).navigate(ship, target_pos);
         }
 
         std::vector<hlt::Move> FastNavigator::produce_moves() {
-            for (const auto &ship : observer.get_my_ships()) { //TODO: ship correction
-                ship->vel = hlt::Vector();
-            }
-
-
-            for (const auto &move_promise : move_promises)
-                observer.get_ship(move_promise.ship_id)->vel = move_promise.velocity;
-            corrector.correct_moves(move_promises);
-
             std::vector<hlt::Move> ret;
-            for (const auto &move_promise : move_promises) ret.push_back(move_promise.produce());
+            for (const auto &move_promise : move_promises) {
+	            ret.push_back(move_promise.produce());
+            }
 
             move_promises.clear();
             return ret;

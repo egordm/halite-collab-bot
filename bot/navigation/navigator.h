@@ -8,7 +8,7 @@
 
 #include "../../hlt/move.hpp"
 #include "../observer.h"
-#include "navigation_thorough.hpp"
+#include "navigation_fast.hpp"
 #include <cmath>
 
 namespace bot {
@@ -61,14 +61,12 @@ namespace bot {
 
 		class FastNavigator : public Navigator {
 		protected:
-			NavigationCorrector corrector;
-
 			MovePromise promise_dock_planet(const hlt::Ship *ship, const hlt::Planet *planet) override;
 
 			MovePromise promise_attack_ship(const hlt::Ship *ship, const hlt::Ship *target) override;
 
 		public:
-			explicit FastNavigator(Observer &observer) : Navigator(observer), corrector(NavigationCorrector(observer)) {}
+			explicit FastNavigator(Observer &observer) : Navigator(observer) {}
 
 			std::vector<hlt::Move> produce_moves() override;
 		};
