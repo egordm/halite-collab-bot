@@ -8,7 +8,7 @@
 #include "../hlt/map.hpp"
 #include "observer.h"
 #include "navigation/navigator.h"
-#include "commander.h"
+#include "commanders/commander.h"
 
 namespace bot {
     class Bot {

@@ -3,14 +3,14 @@
 //
 
 #include <iostream>
-#include "commanders/smart_commander.h"
+#include <commanders/centred_commander.h>
 #include "bot.h"
 
 
 namespace bot {
 	Bot::Bot(hlt::PlayerId id, hlt::Map *map)
 			: observer(Observer(id, map)),
-			  commander(new commanding::SmarterCommander(observer, new navigation::FastNavigator(observer))) {
+			  commander(new commanding::CentredCommander(observer, new navigation::FastNavigator(observer))) {
 
 	}
 
