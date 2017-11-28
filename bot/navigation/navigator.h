@@ -67,8 +67,6 @@ namespace bot {
 
 		public:
 			explicit FastNavigator(Observer &observer) : Navigator(observer) {}
-
-			std::vector<hlt::Move> produce_moves() override;
 		};
 	}
 }

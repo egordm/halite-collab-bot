@@ -45,15 +45,5 @@ namespace bot {
             std::vector<hlt::EntityIdentifier> ignore_list{target->identify()};
             return navigation::FastPath(observer, ignore_list, hlt::constants::MAX_SPEED).navigate(ship, target_pos);
         }
-
-        std::vector<hlt::Move> FastNavigator::produce_moves() {
-            std::vector<hlt::Move> ret;
-            for (const auto &move_promise : move_promises) {
-	            ret.push_back(move_promise.produce());
-            }
-
-            move_promises.clear();
-            return ret;
-        }
     }
 }
