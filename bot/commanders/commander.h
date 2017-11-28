@@ -10,11 +10,18 @@
 #include "navigation/navigator.h"
 #include "assignment.h"
 
+
+
 namespace bot {
+	namespace commanding { namespace behaviours {
+		class BaseBehaviour;
+	}}
+
 	class Commander {
 	protected:
 		Observer &observer;
 		navigation::Navigator *navigator;
+		std::vector<commanding::behaviours::BaseBehaviour*> behaviours;
 
 		hlt::entity_map<std::shared_ptr<bot::Assignment>> assignments;
 
@@ -22,37 +29,22 @@ namespace bot {
 
 		virtual void clean();
 
-		virtual void assign();
+		virtual void produce_assignments();
 
 		virtual std::vector<hlt::Move> produce_moves();
 
-		virtual void assign(const std::shared_ptr<hlt::Ship> &ship) {}
-
 	public:
-
 		virtual ~Commander();
 
 		virtual std::vector<hlt::Move> command();
 
+		bool assign(const std::shared_ptr<bot::Assignment> &assignment);
 
-		bool add_assignment(const std::shared_ptr<bot::Assignment> &assignment);
-	};
+		Observer &get_observer() const { return observer; }
 
-	class JuniorCommander : public Commander {
-	protected:
-		void assign(const std::shared_ptr<hlt::Ship> &ship) override;
+		navigation::Navigator *get_navigator() const { return navigator; }
 
-	public:
-		JuniorCommander(Observer &observer, navigation::Navigator *navigator) : Commander(observer, navigator) {}
-
-	};
-
-	class StrongerCommander : public Commander {
-	protected:
-		void assign(const std::shared_ptr<hlt::Ship> &ship) override;
-
-	public:
-		StrongerCommander(Observer &observer, navigation::Navigator *navigator) : Commander(observer, navigator) {}
+		const hlt::entity_map<std::shared_ptr<bot::Assignment>> &get_assignments() const { return assignments; }
 	};
 };
 
